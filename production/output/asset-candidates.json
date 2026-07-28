@@ -1,0 +1,77 @@
+[
+  {
+    "asset_id": "char-hunter",
+    "result": {
+      "asset_id": "char-hunter",
+      "query_used": "sci-fi hunter character rigged | sci-fi character game ready",
+      "candidates": [
+        {
+          "title": "3D Cyberpunk Game Ready Character",
+          "url": "https://rosstinley-thorpe.itch.io/3d-cyberpunk-game-ready-character",
+          "marketplace": "other",
+          "author": "RossTinley-Thorpe",
+          "price": "Free",
+          "license": "Standard itch.io terms / Free to use",
+          "fit_score": 92,
+          "rationale": "Sleek sci-fi character model rigged with Mixamo and verified in Unreal Engine 5, featuring a high-mobility silhouette for gunslinger profile readability.",
+          "ip_risk": "low",
+          "license_ok_for_course": "yes",
+          "requires_human_verification": true
+        },
+        {
+          "title": "Sci-fi character: Blue Wanderer",
+          "url": "https://welenwhite.itch.io/sci-fi-character-blue-wanderer",
+          "marketplace": "other",
+          "author": "WelenWhite",
+          "price": "Free",
+          "license": "Permits commercial & non-commercial use with modification",
+          "fit_score": 88,
+          "rationale": "Lean agile sci-fi wanderer with built-in shooting and locomotion animations; offers strong 2.5D profile legibility.",
+          "ip_risk": "low",
+          "license_ok_for_course": "yes",
+          "requires_human_verification": true
+        },
+        {
+          "title": "3D sci-fi character bald comando",
+          "url": "https://gamegland.itch.io/3d-sci-fi-character-bald-comando",
+          "marketplace": "other",
+          "author": "Game Gland",
+          "price": "$1.00",
+          "license": "Commercial and non-commercial project use permitted with attribution",
+          "fit_score": 85,
+          "rationale": "Game-ready 2k-vert sci-fi soldier rigged with Blender Rigify and Mixamo retargeting support for high-mobility gunslinger movement.",
+          "ip_risk": "low",
+          "license_ok_for_course": "yes",
+          "requires_human_verification": true
+        },
+        {
+          "title": "Universal Base Characters",
+          "url": "https://quaternius.itch.io/universal-base-characters",
+          "marketplace": "other",
+          "author": "Quaternius",
+          "price": "Free",
+          "license": "Creative Commons Zero v1.0 Universal (CC0)",
+          "fit_score": 80,
+          "rationale": "CC0 game-ready rigged humanoid characters (~13k tris) optimized for animation retargeting in UE5, providing a customizable base mesh for cloth/hood attachments.",
+          "ip_risk": "low",
+          "license_ok_for_course": "yes",
+          "requires_human_verification": true
+        },
+        {
+          "title": "RobotGirl FREE for Unreal Unity and Blender",
+          "url": "https://repeatloader.itch.io/robotgirl-free-for-unreal-unity-and-blender",
+          "marketplace": "other",
+          "author": "repeatloader",
+          "price": "Free",
+          "license": "Free for personal and commercial use",
+          "fit_score": 78,
+          "rationale": "Hard-surface sci-fi character model with 5 LODs, pre-rigged with Mixamo animations and UE5 compatibility for agile movement.",
+          "ip_risk": "low",
+          "license_ok_for_course": "yes",
+          "requires_human_verification": true
+        }
+      ],
+      "notes": "Sourced 5 rigged game-ready 3D character candidate pages from marketplace web browsing during this session. All candidates feature humanoid rigging compatible with Mixamo/Unreal Engine retargeting and fulfill the 2.5D side-profile legibility criteria for the agile Hunter class."
+    }
+  }
+]
