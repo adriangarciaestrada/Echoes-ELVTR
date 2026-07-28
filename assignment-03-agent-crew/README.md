@@ -1,110 +1,101 @@
 # Echoes — Development-Time Agent Crew
 
-A multi-agent system that produces development-time content for **Echoes**, a
-2.5D sci-fi metroidvania built in Unreal Engine 5.7.4. Twelve specialised agents
-coordinate: a content crew drives a **generate → deterministically validate →
-semantically review** pipeline whose artifacts import into the game as Unreal
-DataTables, and one (the Asset Scout) sources marketplace art from the project's
-asset manifest.
+**ELVTR "Multi-Agent AI for Game Development" — Assignment #3 (Build an Agent Crew).**
 
-> ELVTR "Multi-Agent AI for Game Development" — Assignment #3 (Build an Agent Crew).
+A twelve-agent system that produces **development-time** content for **Echoes**, a
+2.5D sci-fi metroidvania in Unreal Engine 5.7.4. The crew runs a
+**generate → deterministically validate → semantically review** pipeline whose JSON
+artifacts import into the game as Unreal **DataTables**.
 
----
-
-## What game is this for?
-
-**Echoes.** One 15–25 minute map that plays as two different games depending on
-the class chosen (agile *Hunter* vs. heavyweight *Titan*), ending in a single
-boss fight against **La Costurera**. The design promise is *"asymmetry budgets
-difficulty, never possibility"* — nothing is class-impossible, and the two
-classes must stay provably fair.
-
-## What the crew produces for it
-
-All output is emitted as structured JSON, passed through a deterministic Python
-gate, and imported into UE 5.7.4 as DataTables. **The shipped game makes zero
-LLM calls** — runtime AI is classical GOAP and deterministic Blueprints; the
-agents exist only at development time.
-
-| Artifact | Produced by | Consumed in-engine as |
-|---|---|---|
-| Room geometry / gate / checkpoint specs | Level Designer | Level layout DataTables |
-| Enemy encounter specs | Encounter Designer | Spawn DataTables |
-| Bilingual EN/ES lore records | Lore Scribe | `ST_Lore` String Tables |
-| Boss GOAP brain + scripted fallback | Boss-Brain Designer | GOAP/Blueprint tables |
-| Player control scheme + game-feel parameters | Controls & Game-Feel Designer | `DT_PlayerFeel` DataTable |
-| HUD / menu UMG specs | UI Designer | UMG widgets + `ST_UI` |
-| Blueprint recipes + DataTable import scripts | Coder | Gameplay Blueprints |
-| Per-class balance / fairness report | Adversarial QA Crew | Tuning decisions |
-| Marketplace asset candidate shortlists | Asset Scout | Approved 3D / VFX / audio / UI assets |
-
-Art is **marketplace / free assets only** (no original 3D art). The Asset Scout
-sources candidates; a human approves each one and signs off its licence.
+> **The shipped game makes zero runtime LLM calls.** Runtime AI is classical GOAP +
+> deterministic Blueprints; the agents exist only at development time.
 
 ---
 
-## Architecture
+## Where the graded evidence lives (read this first)
+
+All **twelve** agents are fully specified in [`agents/`](agents/) and routed to their
+model lane by the orchestrator. To keep the submission focused and reproducible, the
+**runnable evidence is concentrated on one flagship pipeline — the three-agent
+room-production trio:**
+
+> **01 Level Designer → (gate) → 02 Encounter Designer → (gate) → 03 Room Reviewer**
+
+That run is committed under [`production/output/`](production/output/):
+
+- `SeqA_06_room.json`, `SeqA_06_encounter.json` — the validated artifacts
+- `usage_log.jsonl` — per-call model + token/cost log (proof the three agents really ran)
+
+Run it yourself with `python3 agents/runner.py --pipeline-room`. The other nine agents
+are specified, lane-routed, and part of the architecture below, but their outputs are
+not the focus of this submission.
+
+---
+
+## Two model lanes — how agents connect to different models
+
+The orchestrator (`runner.py`) shells out to **two official subscription CLIs — no API
+keys, no per-token billing.** Each agent is auto-routed to its lane:
+
+| Lane | CLI | Subscription | Live web | Role |
+|---|---|---|---|---|
+| **Claude** | `claude` | Claude Pro Team | no | reasoning / review / coding-heavy agents |
+| **Gemini** | `agy` | Antigravity / Gemini Pro | **yes** | fast structured bulk generation + web sourcing |
+
+A third "lane" is **not a model at all**: `validators.py`, a deterministic Python gate.
+It enforces the countable rules (room/enemy budgets, checkpoint spacing, cross-class gate
+contamination, banned terms, string overflow) *before* anything reaches an LLM reviewer or
+the engine — so a language model is **never trusted for arithmetic**.
+
+---
+
+## Architecture — how the agents connect to each other
 
 ```mermaid
 flowchart TD
-    subgraph orch["Orchestrator — runner.py (subscription CLIs, no API keys)"]
+    subgraph ORCH["Orchestrator — runner.py · two subscription CLIs, no API keys"]
         direction LR
-        LEG1["Claude Pro Team lane · claude CLI"]:::claude
-        LEG2["Antigravity / Gemini Pro lane · agy CLI"]:::gemini
+        LC["claude CLI · Claude Pro Team"]:::claude
+        LG["agy CLI · Antigravity / Gemini Pro"]:::gemini
     end
 
-    subgraph p1["Phase 1 — Pre-build design &amp; red-team"]
-        A09["09 Adversarial Design Critic<br/>Opus 4.8"]:::claude
-        A06["06 Boss-Brain Designer<br/>Sonnet 5"]:::claude
-        SPECS[("GDD / Obsidian vault specs")]
-        A09 -->|attacks specs on paper| SPECS
-        A06 -->|GOAP + scripted_fallback| SPECS
-        A09 -.reviews.-> A06
+    subgraph P1["Phase 1 — Pre-build design & red-team"]
+        A09["09 Adversarial Design Critic · Opus 4.8"]:::claude
+        A06["06 Boss-Brain Designer · Sonnet 5"]:::claude
+        A09 -.red-teams.-> A06
     end
 
-    subgraph p2["Phase 2 — Generate → deterministic gate → semantic review"]
-        A01["01 Level Designer<br/>Gemini 3.6 Flash"]:::gemini
-        A02["02 Encounter Designer<br/>Gemini 3.6 Flash"]:::gemini
-        A04["04 Lore Scribe<br/>Sonnet 4.6"]:::gemini
-        GATE{{"validators.py<br/>DETERMINISTIC HARD GATE<br/>room · encounter · text"}}:::gate
-        A03["03 Room Reviewer<br/>Haiku 4.5"]:::claude
-        A05["05 Style &amp; IP Guard<br/>Haiku 4.5"]:::claude
-
+    subgraph P2["Phase 2 — Generate to deterministic gate to semantic review  (FLAGSHIP)"]
+        A01["01 Level Designer · Gemini 3.6 Flash"]:::gemini
+        A02["02 Encounter Designer · Gemini 3.6 Flash"]:::gemini
+        A04["04 Lore Scribe · Sonnet 4.6"]:::gemini
+        GATE{{"validators.py — DETERMINISTIC HARD GATE"}}:::gate
+        A03["03 Room Reviewer · Haiku 4.5"]:::claude
+        A05["05 Style & IP Guard · Haiku 4.5"]:::claude
         A01 -->|RoomSpec JSON| GATE
         A02 -->|EncounterSpec JSON| GATE
         A04 -->|LoreRecord JSON| GATE
-        GATE -->|FAIL: errors fed back, retry| A01
-        GATE -->|FAIL: errors fed back, retry| A02
-        GATE -->|FAIL: errors fed back, retry| A04
-        GATE -->|PASS: room / encounter| A03
+        GATE -->|FAIL: exact errors fed back, retry| A01
+        GATE -->|PASS: room + encounter| A03
         GATE -->|PASS: text| A05
     end
 
-    subgraph p3["Phase 3 — Implementation, asset sourcing &amp; balance QA"]
-        A07["07 UI Designer<br/>Gemini 3.6 Flash"]:::gemini
-        A08["08 Coder<br/>Sonnet 5"]:::claude
-        A10["10 Adversarial QA Crew<br/>Gemini 3.1 Pro"]:::gemini
-        A11["11 Asset Scout<br/>Gemini 3.1 Pro · web browsing"]:::gemini
-        MAN[("asset-manifest.json")]
-        CAND[("asset-candidates.json<br/>human-approved")]
-        SEAM[["Python seam<br/>JSON → CSV → UE DataTables"]]
-        UE["Unreal Engine 5.7.4<br/>(0 runtime LLM calls)"]
-        BAL[("Balance &amp; fairness report")]
-
-        A07 -->|UMG spec| A08
-        A03 -->|validated + reviewed specs| SEAM
-        A05 -->|clean strings| SEAM
-        SPECS --> A08
-        ACTRL["12 Controls &amp; Game-Feel Designer<br/>Sonnet 5"]:::claude
-        ACTRL -->|DT_PlayerFeel| SEAM
-        A08 -->|config-driven Blueprints| UE
+    subgraph P3["Phase 3 — Implementation, assets & balance QA"]
+        A12["12 Controls & Game-Feel · Sonnet 5"]:::claude
+        A07["07 UI Designer · Gemini 3.6 Flash"]:::gemini
+        A08["08 Coder · Sonnet 5"]:::claude
+        A10["10 Adversarial QA Crew · Gemini 3.1 Pro"]:::gemini
+        A11["11 Asset Scout · Gemini 3.1 Pro (web)"]:::gemini
+        SEAM[["JSON to CSV to UE DataTables"]]:::gate
+        UE["Unreal Engine 5.7.4 · 0 runtime LLM calls"]
+        A03 --> SEAM
+        A05 --> SEAM
+        A12 --> SEAM
+        A07 --> A08
+        A08 --> UE
         SEAM --> UE
-        MAN --> A11
-        A11 -->|browses Fab / Sketchfab / freesound| CAND
-        CAND -->|approved marketplace assets| UE
-        UE -->|raw telemetry logs| A10
-        A10 -->|only from real logs| BAL
-        A10 -.feel sweep validates.-> ACTRL
+        A11 -->|human-approved assets| UE
+        UE -->|telemetry| A10
     end
 
     classDef claude fill:#ece3ff,stroke:#6b46c1,color:#111;
@@ -112,112 +103,141 @@ flowchart TD
     classDef gate fill:#fff3bf,stroke:#b7791f,color:#111;
 ```
 
-**Legend:** purple = Claude Pro Team lane (`claude` CLI); green = Antigravity /
-Gemini Pro lane (`agy` CLI); amber = deterministic Python gate (no model).
+**Pipeline shape (generate → validate → judge).** A generator emits JSON → the
+deterministic gate validates it and, on failure, **feeds the exact errors back to the
+generator to retry** → only validated content reaches the LLM reviewer, which adds the
+*semantic* judgment a rule engine cannot (unintended exploits, dead space, disguised IP,
+tone drift). Nothing invalid can reach the engine. Wired chains in `runner.py`:
+
+- `01 → validate:room → 03`
+- `02 → validate:encounter → 03`
+- **`01 → validate:room → 02 → validate:encounter → 03`** ← the flagship room-production chain
+- `04 → validate:text → 05`
 
 ---
 
-## How it works
+## The crew — all twelve agents
 
-1. **Two subscription lanes, no API keys.** The orchestrator (`runner.py`) shells
-   out to two official headless CLIs, each authenticated against a different
-   subscription: `claude` (Claude Pro Team) and `agy` (Antigravity / Gemini Pro).
-   No SDKs and no per-token API keys are used. Each agent is routed to its lane
-   automatically. The `agy` lane also provides live web browsing, which the Asset
-   Scout uses to source marketplace art; the `claude` lane has no web access.
-2. **Minimal context.** Each agent declares a `## Required Vault Context` section
-   listing only the design notes it needs; the orchestrator auto-injects those
-   notes and nothing else. Canonical data (banned terms, enemy roster, budgets)
-   is read from the vault as the single source of truth — never hard-coded in a
-   prompt, so it cannot drift.
-3. **Generate → validate → judge.** Generator output is checked by
-   `validators.py`, a deterministic Python gate. On failure the exact errors are
-   fed back to the generator and it retries; only validated content is forwarded
-   to the LLM reviewer, which adds the *semantic* judgment a rule engine cannot
-   (unintended exploits, dead space, disguised IP). Nothing invalid can reach the
-   engine.
+Each agent owns exactly one stage; **none can be removed without breaking a pipeline.**
+For each: *what it does · input → output · model (lane) · why that model.*
+
+### Phase 1 — Pre-build design & red-team
+- **09 · Adversarial Design Critic** — red-teams feature specs, rooms and boss mechanics
+  *on paper* before anything is built, hunting unwinnable states, trivial exploits and
+  logical contradictions. *A spec under review → Markdown risk/exploit report.*
+  **Claude Opus 4.8 (Claude lane)** — adversarial red-teaming rewards the deepest reasoning
+  to surface subtle edge cases before build time is spent.
+- **06 · Boss-Brain Designer** — formulates the GOAP state spaces, goal-utility formulas,
+  action preconditions/effects and blackboard rules for La Costurera and her two revived
+  Knights, plus a scripted-pattern fallback the slice can ship without GOAP.
+  *Boss design + blackboard spec → `GOAPBrain` JSON.* **Claude Sonnet 5 (Claude lane)** —
+  multi-agent GOAP state spaces and utility formulas need systems-level, formal-state reasoning.
+
+### Phase 2 — Generate → deterministic gate → semantic review  *(the flagship trio lives here)*
+- **01 · Level Designer** ⭐ — proposes room layouts, platforms, gates, checkpoints and
+  camera bounds. *Room brief + world/gate notes → `RoomSpec` JSON.*
+  **Gemini 3.6 Flash (Gemini lane)** — emitting numeric coordinate arrays and rigid JSON
+  geometry is a fast, structured task; schema conformance is enforced downstream by the
+  deterministic validator, so bulk level output stays off the Claude subscription.
+- **02 · Encounter Designer** ⭐ — places enemy combinations from the closed archetype
+  palette within per-room budgets to test both classes asymmetrically. *Room + enemy-palette
+  notes → `EncounterSpec` JSON.* **Gemini 3.6 Flash (Gemini lane)** — placing spawns against
+  budgets is a fast, data-driven task; kept off the Claude subscription.
+- **03 · Room Reviewer** ⭐ — the *semantic* second layer over the validator: design-intent,
+  unintended exploits, asymmetry health, and reachability caveats it flags for in-engine QA
+  rather than asserting. *Validated room + encounter JSON → `ReviewReport` JSON.*
+  **Claude Haiku 4.5 (Claude lane)** — fast, disciplined rule-following for a bounded review
+  pass without prompt drift.
+- **04 · Lore Scribe** — a RAG agent writing bilingual EN/ES environmental lore, murals and
+  terminal logs aligned to the cosmology bible. *Lore brief + lore bible → `LoreRecord` JSON.*
+  **Claude Sonnet 4.6 (Antigravity/Gemini lane)** — bilingual lore with equivalent poetic
+  weight (not linear translation) needs Sonnet-tier prose sensibility.
+- **05 · Style & IP Guard** — the *semantic* compliance layer over the deterministic
+  term/length check: tone drift and disguised-IP a regex cannot catch. *Text record →
+  `AuditReport` JSON.* **Claude Haiku 4.5 (Claude lane)** — fast, disciplined tone/semantic
+  auditing without prompt drift.
+
+### Phase 3 — Implementation, asset sourcing & balance QA
+- **07 · UI Designer** — lays out HUD, menus, class-selection and run-summary screens as
+  UMG specs wired to EN/ES String Tables. *Screen brief + HUD notes → `UMGSpec` JSON.*
+  **Gemini 3.6 Flash (Gemini lane)** — mapping UMG widget properties to a data layout is
+  fast and structured; kept off the Claude subscription.
+- **08 · Coder** — translates approved specs into modular, config-driven Blueprints and
+  Python DataTable importers (every tunable read from a DataTable). *Approved spec →
+  Blueprint recipes + import scripts.* **Claude Sonnet 5 (Claude lane)** — editor-automation
+  Python and precise Blueprint node logic demand top coding accuracy and correct UE API usage.
+- **12 · Controls & Game-Feel Designer** — owns the verb→button scheme (Enhanced Input) and
+  the game-feel tunables that make "movement is the reward" tactile. *Control scheme + feel
+  notes → `DT_PlayerFeel` rows → CSV → DataTable.* **Claude Sonnet 5 (Claude lane)** — feel
+  tuning (coyote time, i-frame windows, cancel priority, jump arcs) is judgment-heavy systems
+  design where small numbers change how the whole game feels.
+- **10 · Adversarial QA Crew** — analyzes telemetry from the headless bot-playtest harness
+  and checks the build against the balance contract; it does **not** run the bots or invent
+  telemetry. *Raw telemetry logs → balance report JSON.* **Gemini 3.1 Pro (Gemini lane)** —
+  a large context window to ingest bulk logs and summarize them, off the Claude subscription.
+- **11 · Asset Scout** — researches real marketplace/free assets for one manifest entry and
+  returns ranked candidates for human licence sign-off. *Manifest entry + constraints →
+  `AssetCandidateList` JSON.* **Gemini 3.1 Pro, web (Gemini lane)** — the only agent that
+  needs live browsing; the `agy` lane has working headless web access (the `claude` lane does
+  not), and Pro adds the judgment to read licences and assess IP safety.
 
 ---
 
-## The crew — roles, I/O, and why each is load-bearing
+## Model-choice philosophy (why the mix)
 
-| # | Agent | Input | Output | Lane · Model | Gate / Reviewer |
-|---|---|---|---|---|---|
-| 01 | [Level Designer](agents/01-level-designer.md) | Room brief + world/gate notes | `RoomSpec` JSON | Gemini · `gemini-3.6-flash` | validate:room → 03 |
-| 02 | [Encounter Designer](agents/02-encounter-designer.md) | Room + enemy palette notes | `EncounterSpec` JSON | Gemini · `gemini-3.6-flash` | validate:encounter → 03 |
-| 03 | [Room Reviewer](agents/03-room-reviewer.md) | Validated room/encounter JSON | Semantic `ReviewReport` JSON | Claude · `claude-haiku-4-5` | — (semantic layer) |
-| 04 | [Lore Scribe](agents/04-lore-scribe.md) | Lore node brief + lore bible | Bilingual `LoreRecord` JSON | Gemini(Antigravity) · `claude-sonnet-4-6` | validate:text → 05 |
-| 05 | [Style & IP Guard](agents/05-style-ip-guard.md) | Text record | `AuditReport` JSON | Claude · `claude-haiku-4-5` | — (semantic layer) |
-| 06 | [Boss-Brain Designer](agents/06-boss-brain-designer.md) | Boss design + blackboard spec | `GOAPBrain` JSON (+ scripted fallback) | Claude · `claude-sonnet-5` | 09 |
-| 07 | [UI Designer](agents/07-ui-designer.md) | Screen brief + HUD notes | `UMGSpec` JSON | Gemini · `gemini-3.6-flash` | 08 |
-| 08 | [Coder](agents/08-coder.md) | Approved design spec | Blueprint recipes + import scripts | Claude · `claude-sonnet-5` | build/test harness |
-| 09 | [Adversarial Design Critic](agents/09-adversarial-design-critic.md) | A design spec under review | Markdown risk/exploit report | Claude · `claude-opus-4-8` | human lead |
-| 10 | [Adversarial QA Crew](agents/10-adversarial-qa-crew.md) | Raw headless-bot telemetry | Balance report JSON | Gemini · `gemini-3.1-pro` | balance contract |
-| 11 | [Asset Scout](agents/11-asset-scout.md) | Asset-manifest entry + constraints | Ranked candidate shortlist JSON | Gemini · `gemini-3.1-pro` (web) | human approval |
-| 12 | [Controls & Game-Feel Designer](agents/12-controls-game-feel-designer.md) | Control scheme + feel notes | `DT_PlayerFeel` parameters — JSON → DataTable | Claude · `claude-sonnet-5` | QA Crew (feel sweep) |
+The routing is deliberate, not incidental — cost, capability and web access are matched to
+each task, and correctness is never left to the model where a rule can decide it:
 
-**No agent is removable without breaking a pipeline.** Each owns exactly one
-stage: drop **01/02/04** and the corresponding artifact (rooms, encounters,
-lore) is never produced; drop **`validators.py`** and malformed or over-budget
-content reaches the engine; drop **03/05** and exploits or disguised-IP text ship
-unreviewed; drop **06** and the boss has no brain; drop **07/08** and there is no
-UI or no config-driven implementation; drop **09** and design flaws are found
-only after build time is spent; drop **10** and class fairness is never measured;
-drop **11** and every marketplace asset must be sourced and licence-checked by
-hand; drop **12** and the "movement is the reward" pillar has no owner — the
-control scheme and feel parameters fall back to ad-hoc values in the Coder's tasks.
+- **Gemini 3.6 Flash** → fast, high-volume, *structured* JSON (levels, encounters, UI).
+  A deterministic gate guarantees correctness downstream, so the cheapest fast model is
+  enough and bulk generation stays off the Claude subscription.
+- **Claude Haiku 4.5** → bounded, disciplined *semantic review* (Room Reviewer, Style Guard)
+  — cheap and drift-resistant for a rule-following pass.
+- **Claude Sonnet 5 / 4.6** → *judgment-heavy* systems, code and prose (Boss-Brain, Coder,
+  Game-Feel, bilingual Lore).
+- **Claude Opus 4.8** → the *deepest adversarial reasoning* (pre-build Design Critic).
+- **Gemini 3.1 Pro** → *large-context* telemetry analysis and *live web browsing* (QA Crew,
+  Asset Scout).
+- **`validators.py` (no model)** → every countable rule, so no LLM is trusted for arithmetic.
 
 ---
 
 ## Running it
 
-Requires the two CLIs authenticated against their subscriptions (`claude` and
-`agy`), and is run from the repository root.
+Requires the two CLIs authenticated against their subscriptions (`claude`, `agy`), run from
+this folder.
 
 ```bash
-# List the roster, lanes and models
-python3 agents/runner.py --list
-
-# Run a single agent (auto-injects its minimal vault context)
-python3 agents/runner.py --agent 04 --input "Write one Mural fragment for Room_SeqA_02"
-
-# Run a full generate → validate → judge pipeline (retries on validation failure)
-python3 agents/runner.py --pipeline --agent 02 \
-  --input "Design a corridor encounter for Room_SeqA_03" --output enc_SeqA_03.json
-
-# Chain THREE LLM agents in one run: Level Designer → Encounter Designer → Room Reviewer
-python3 agents/runner.py --pipeline-room \
-  --input "Produce a Segment A combat room (Room_SeqA_04)" --output SeqA_04
-
-# Validate a spec directly with the deterministic gate
-python3 agents/validators.py --kind encounter --file production/output/enc_SeqA_03.json
-
-# Source marketplace assets for the manifest (web browsing on the agy lane)
-python3 agents/runner.py --scout --phase R3 --priority P0
+python3 agents/runner.py --list                        # roster, lanes and models
+python3 agents/runner.py --pipeline --agent 01 \        # one agent: generate to validate to review
+  --input "Design a Segment A shared traversal room"
+python3 agents/runner.py --pipeline-room \              # the flagship 3-agent chain
+  --input "Produce a Segment A combat room" --output SeqA_07
+python3 agents/validators.py --kind room --file production/output/SeqA_06_room.json
 ```
 
-Pipeline mappings: `01 → validate:room → 03`, `02 → validate:encounter → 03`,
-`04 → validate:text → 05`. The room-production chain (`--pipeline-room`) runs
-three LLM agents in a single pass — `01 Level → validate:room → 02 Encounter →
-validate:encounter → 03 Reviewer` — handing each validated artifact to the next.
+---
 
-> **Reproducibility note.** The crew consumes two personal subscriptions through
-> locally-authenticated CLIs, so a fresh clone cannot execute it without those
-> accounts. Sample validated outputs and a per-call token log are committed under
-> `production/output/` as evidence of a working run.
+## Reproducibility
+
+The crew consumes two personal subscriptions through locally-authenticated CLIs, so a fresh
+clone cannot execute it without those accounts. The committed `production/output/` artifacts
+and `usage_log.jsonl` are the evidence of a working run — headlined by the three-agent
+`SeqA_06` flagship.
 
 ---
 
 ## Repository layout
 
 ```
-agents/
-  runner.py            Orchestrator — routes agents to subscription CLIs, runs the pipeline and the scout
-  validators.py        Deterministic hard gate (room / encounter / text)
-  NN-*.md              The 12 agent specs (role, model, required vault context, system prompt)
-  README.md            This file
-vault/                 Obsidian design notes — single source of truth injected as context
-production/
-  asset-manifest.json  The assets the slice needs (Asset Scout input)
-  output/              Validated artifacts, asset-candidates.json, usage_log.jsonl (proof of run)
+assignment-03-agent-crew/
+  README.md              This document
+  agents/
+    NN-*.md              The 12 agent specs (role, model, required vault context, system prompt)
+    runner.py            Orchestrator — routes each agent to its subscription CLI; runs the pipelines
+    validators.py        Deterministic hard gate (room / encounter / text)
+  vault/                 Design notes — the single source of truth injected as agent context
+  production/
+    asset-manifest.json  Assets the slice needs (Asset Scout input)
+    output/              Validated artifacts + usage_log.jsonl (proof of run); SeqA_06 = flagship
 ```
