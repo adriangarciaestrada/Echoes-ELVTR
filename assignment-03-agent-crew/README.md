@@ -135,19 +135,6 @@ wired to an LLM reviewer.
 Each agent owns exactly one stage; **none can be removed without breaking a pipeline.**
 For each: *what it does · input → output · model (lane) · why that model.*
 
-### Phase 1 — Pre-build design & red-team
-- **09 · Adversarial Design Critic** — red-teams feature specs, rooms and boss mechanics
-  *on paper* before anything is built, hunting unwinnable states, trivial exploits and
-  logical contradictions. *A spec under review → Markdown risk/exploit report.*
-  **Claude Opus 4.8 (Claude lane)** — adversarial red-teaming rewards the deepest reasoning
-  to surface subtle edge cases before build time is spent.
-- **06 · Boss-Brain Designer** — formulates the GOAP state spaces, goal-utility formulas,
-  action preconditions/effects and blackboard rules for La Costurera and her two revived
-  Knights, plus a scripted-pattern fallback the slice can ship without GOAP.
-  *Boss design + blackboard spec → `GOAPBrain` JSON.* **Claude Sonnet 5 (Claude lane)** —
-  multi-agent GOAP state spaces and utility formulas need systems-level, formal-state reasoning.
-
-### Phase 2 — Generate → deterministic gate → semantic review  *(the flagship trio lives here)*
 - **01 · Level Designer** ⭐ — proposes room layouts, platforms, gates, checkpoints and
   camera bounds. *Room brief + world/gate notes → `RoomSpec` JSON.*
   **Gemini 3.6 Flash (Gemini lane)** — emitting numeric coordinate arrays and rigid JSON
@@ -170,8 +157,11 @@ For each: *what it does · input → output · model (lane) · why that model.*
   term/length check: tone drift and disguised-IP a regex cannot catch. *Text record →
   `AuditReport` JSON.* **Claude Haiku 4.5 (Claude lane)** — fast, disciplined tone/semantic
   auditing without prompt drift.
-
-### Phase 3 — Implementation, asset sourcing & balance QA
+- **06 · Boss-Brain Designer** — formulates the GOAP state spaces, goal-utility formulas,
+  action preconditions/effects and blackboard rules for La Costurera and her two revived
+  Knights, plus a scripted-pattern fallback the slice can ship without GOAP.
+  *Boss design + blackboard spec → `GOAPBrain` JSON.* **Claude Sonnet 5 (Claude lane)** —
+  multi-agent GOAP state spaces and utility formulas need systems-level, formal-state reasoning.
 - **07 · UI Designer** — lays out HUD, menus, class-selection and run-summary screens as
   UMG specs wired to EN/ES String Tables. *Screen brief + HUD notes → `UMGSpec` JSON.*
   **Gemini 3.6 Flash (Gemini lane)** — mapping UMG widget properties to a data layout is
@@ -180,11 +170,11 @@ For each: *what it does · input → output · model (lane) · why that model.*
   Python DataTable importers (every tunable read from a DataTable). *Approved spec →
   Blueprint recipes + import scripts.* **Claude Sonnet 5 (Claude lane)** — editor-automation
   Python and precise Blueprint node logic demand top coding accuracy and correct UE API usage.
-- **12 · Controls & Game-Feel Designer** — owns the verb→button scheme (Enhanced Input) and
-  the game-feel tunables that make "movement is the reward" tactile. *Control scheme + feel
-  notes → `DT_PlayerFeel` rows → CSV → DataTable.* **Claude Sonnet 5 (Claude lane)** — feel
-  tuning (coyote time, i-frame windows, cancel priority, jump arcs) is judgment-heavy systems
-  design where small numbers change how the whole game feels.
+- **09 · Adversarial Design Critic** — red-teams feature specs, rooms and boss mechanics
+  *on paper* before anything is built, hunting unwinnable states, trivial exploits and
+  logical contradictions. *A spec under review → Markdown risk/exploit report.*
+  **Claude Opus 4.8 (Claude lane)** — adversarial red-teaming rewards the deepest reasoning
+  to surface subtle edge cases before build time is spent.
 - **10 · Adversarial QA Crew** — analyzes telemetry from the headless bot-playtest harness
   and checks the build against the balance contract; it does **not** run the bots or invent
   telemetry. *Raw telemetry logs → balance report JSON.* **Gemini 3.1 Pro (Gemini lane)** —
@@ -194,6 +184,11 @@ For each: *what it does · input → output · model (lane) · why that model.*
   `AssetCandidateList` JSON.* **Gemini 3.1 Pro, web (Gemini lane)** — the only agent that
   needs live browsing; the `agy` lane has working headless web access (the `claude` lane does
   not), and Pro adds the judgment to read licences and assess IP safety.
+- **12 · Controls & Game-Feel Designer** — owns the verb→button scheme (Enhanced Input) and
+  the game-feel tunables that make "movement is the reward" tactile. *Control scheme + feel
+  notes → `DT_PlayerFeel` rows → CSV → DataTable.* **Claude Sonnet 5 (Claude lane)** — feel
+  tuning (coyote time, i-frame windows, cancel priority, jump arcs) is judgment-heavy systems
+  design where small numbers change how the whole game feels.
 
 ---
 
