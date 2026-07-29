@@ -238,6 +238,5 @@ assignment-03-agent-crew/
     validators.py        Deterministic hard gate (room / encounter / text)
   vault/                 Design notes — the single source of truth injected as agent context
   production/
-    asset-manifest.json  Assets the slice needs (Asset Scout input)
     output/              Validated artifacts + usage_log.jsonl (proof of run); SeqA_06 = flagship
 ```
