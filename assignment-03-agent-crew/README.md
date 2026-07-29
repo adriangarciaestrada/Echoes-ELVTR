@@ -53,6 +53,11 @@ the engine — so a language model is **never trusted for arithmetic**.
 
 ## Architecture — how the agents connect to each other
 
+![Agent crew pipeline — generate, validate, review, import](docs/architecture.png)
+
+<details>
+<summary>Mermaid source of the diagram</summary>
+
 ```mermaid
 %%{init: {'theme':'base','flowchart':{'nodeSpacing':38,'rankSpacing':46,'htmlLabels':true},'themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','edgeLabelBackground':'#eef1f5','fontSize':'14px','fontFamily':'system-ui, -apple-system, Segoe UI, sans-serif'}}}%%
 flowchart TD
@@ -98,6 +103,11 @@ flowchart TD
     classDef engine fill:#e7edf3,stroke:#5b6b7e,color:#12161c;
     classDef human  fill:#ffffff,stroke:#12161c,stroke-width:2px,color:#12161c;
 ```
+
+*The image above is rendered with Mermaid 11.15. Older Mermaid builds (including the
+one some markdown viewers embed) resolve the feedback-loop cycles differently and may
+scramble the stage order — the committed PNG pins the intended layout.*
+</details>
 
 *Every artifact walks the same four stages: a generator emits JSON, the deterministic gate validates it (all six spec kinds), an LLM reviewer plus a human sign-off judge it, and the import gate only lets zero-error DataTables into the engine. Failures loop back to the generating agent, never forward. The running build is watched by QA telemetry, and the Asset Scout's candidates enter through the same human sign-off. All twelve agents and their models are in the roster below.*
 
