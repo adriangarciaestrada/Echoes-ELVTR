@@ -52,55 +52,58 @@ the engine — so a language model is **never trusted for arithmetic**.
 ## Architecture — how the agents connect to each other
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','fontSize':'14px'}}}%%
 flowchart TD
-    subgraph ORCH["Orchestrator — runner.py · two subscription CLIs, no API keys"]
-        direction LR
-        LC["claude CLI · Claude Pro Team"]:::claude
-        LG["agy CLI · Antigravity / Gemini Pro"]:::gemini
-    end
+    ORCH["Orchestrator · runner.py — two subscription CLIs (claude · agy), no API keys"]:::orch
+    ORCH --> P1
 
-    subgraph P1["Phase 1 — Pre-build design & red-team"]
+    subgraph P1["Phase 1 · Pre-build design and red-team"]
+        direction TB
         A09["09 Adversarial Design Critic · Opus 4.8"]:::claude
         A06["06 Boss-Brain Designer · Sonnet 5"]:::claude
         A09 -.red-teams.-> A06
     end
+    P1 --> P2
 
-    subgraph P2["Phase 2 — Generate to deterministic gate to semantic review  (FLAGSHIP)"]
+    subgraph P2["Phase 2 · Generate to deterministic gate to semantic review · FLAGSHIP"]
+        direction TB
         A01["01 Level Designer · Gemini 3.6 Flash"]:::gemini
         A02["02 Encounter Designer · Gemini 3.6 Flash"]:::gemini
         A04["04 Lore Scribe · Sonnet 4.6"]:::gemini
-        GATE{{"validators.py — DETERMINISTIC HARD GATE"}}:::gate
+        GATE{{"validators.py · DETERMINISTIC HARD GATE"}}:::gate
         A03["03 Room Reviewer · Haiku 4.5"]:::claude
-        A05["05 Style & IP Guard · Haiku 4.5"]:::claude
+        A05["05 Style and IP Guard · Haiku 4.5"]:::claude
         A01 -->|RoomSpec JSON| GATE
         A02 -->|EncounterSpec JSON| GATE
         A04 -->|LoreRecord JSON| GATE
-        GATE -->|FAIL: exact errors fed back, retry| A01
+        GATE -->|FAIL: errors fed back, retry| A01
         GATE -->|PASS: room + encounter| A03
         GATE -->|PASS: text| A05
     end
+    P2 --> P3
 
-    subgraph P3["Phase 3 — Implementation, assets & balance QA"]
-        A12["12 Controls & Game-Feel · Sonnet 5"]:::claude
+    subgraph P3["Phase 3 · Implementation, assets and balance QA"]
+        direction TB
+        A12["12 Controls and Game-Feel · Sonnet 5"]:::claude
         A07["07 UI Designer · Gemini 3.6 Flash"]:::gemini
         A08["08 Coder · Sonnet 5"]:::claude
+        A11["11 Asset Scout (web) · Gemini 3.1 Pro"]:::gemini
         A10["10 Adversarial QA Crew · Gemini 3.1 Pro"]:::gemini
-        A11["11 Asset Scout · Gemini 3.1 Pro (web)"]:::gemini
         SEAM[["JSON to CSV to UE DataTables"]]:::gate
-        UE["Unreal Engine 5.7.4 · 0 runtime LLM calls"]
-        A03 --> SEAM
-        A05 --> SEAM
-        A12 --> SEAM
+        UE["Unreal Engine 5.7.4 · 0 runtime LLM calls"]:::engine
         A07 --> A08
+        A12 --> SEAM
         A08 --> UE
         SEAM --> UE
         A11 -->|human-approved assets| UE
         UE -->|telemetry| A10
     end
 
-    classDef claude fill:#ece3ff,stroke:#6b46c1,color:#111;
-    classDef gemini fill:#d9f2e3,stroke:#2f855a,color:#111;
-    classDef gate fill:#fff3bf,stroke:#b7791f,color:#111;
+    classDef orch   fill:#eef1f5,stroke:#8a94a3,color:#12161c;
+    classDef engine fill:#e7edf3,stroke:#5b6b7e,color:#12161c;
+    classDef claude fill:#ece3ff,stroke:#6b46c1,color:#1a1030;
+    classDef gemini fill:#d9f2e3,stroke:#2f855a,color:#0f2a1c;
+    classDef gate   fill:#fff3bf,stroke:#b7791f,color:#3a2a05;
 ```
 
 **Pipeline shape (generate → validate → judge).** A generator emits JSON → the
