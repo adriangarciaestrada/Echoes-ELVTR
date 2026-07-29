@@ -52,59 +52,34 @@ the engine — so a language model is **never trusted for arithmetic**.
 ## Architecture — how the agents connect to each other
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','edgeLabelBackground':'#eef1f5','fontSize':'14px','fontFamily':'system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}}%%
+%%{init: {'theme':'base','themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','edgeLabelBackground':'#eef1f5','fontSize':'15px','fontFamily':'system-ui, -apple-system, Segoe UI, sans-serif'}}}%%
 flowchart TD
-    ORCH["Orchestrator · runner.py"]:::orch
-    ORCH --> P1
-
-    subgraph P1["Phase 1 · Pre-build design and red-team"]
+    subgraph GEN["Generator agents — each emits a JSON spec"]
         direction TB
-        A09["09 Design Critic · Opus 4.8"]:::claude
-        A06["06 Boss-Brain · Sonnet 5"]:::claude
-        A09 -.reviews.-> A06
+        A01["01 Level Designer  ★"]:::gemini
+        A02["02 Encounter Designer  ★"]:::gemini
+        A04["04 Lore Scribe"]:::gemini
     end
-    P1 --> P2
-
-    subgraph P2["Phase 2 · Generate · gate · review — FLAGSHIP"]
+    GEN -->|JSON spec| GATE
+    GATE{{"validators.py — deterministic gate"}}:::gate
+    GATE -.->|invalid: errors returned, agent retries| GEN
+    GATE -->|valid JSON| REV
+    subgraph REV["Semantic reviewers — emit JSON reports"]
         direction TB
-        A01["01 Level Designer · Flash"]:::gemini
-        A02["02 Encounter Designer · Flash"]:::gemini
-        A04["04 Lore Scribe · Sonnet"]:::gemini
-        GATE{{"validators.py · hard gate"}}:::gate
-        A03["03 Room Reviewer · Haiku"]:::claude
-        A05["05 Style and IP Guard · Haiku"]:::claude
-        A01 -->|RoomSpec| GATE
-        A02 -->|Encounter| GATE
-        A04 -->|Lore| GATE
-        GATE -->|fail, retry| A01
-        GATE -->|pass| A03
-        GATE -->|pass| A05
+        A03["03 Room Reviewer  ★"]:::claude
+        A05["05 Style and IP Guard"]:::claude
     end
-    P2 --> P3
+    REV -->|approved JSON| SEAM
+    SEAM[["JSON to CSV to Unreal DataTables"]]:::gate
+    SEAM --> UE["Unreal Engine 5.7.4 · 0 runtime LLM calls"]:::engine
 
-    subgraph P3["Phase 3 · Implementation and QA"]
-        direction TB
-        A12["12 Game-Feel · Sonnet 5"]:::claude
-        A07["07 UI Designer · Flash"]:::gemini
-        A08["08 Coder · Sonnet 5"]:::claude
-        A11["11 Asset Scout · Pro"]:::gemini
-        A10["10 QA Crew · Pro"]:::gemini
-        SEAM[["JSON to CSV to DataTables"]]:::gate
-        UE["Unreal Engine 5.7.4"]:::engine
-        A07 --> A08
-        A12 --> SEAM
-        A08 --> UE
-        SEAM --> UE
-        A11 -->|assets| UE
-        UE -->|telemetry| A10
-    end
-
-    classDef orch   fill:#eef1f5,stroke:#8a94a3,color:#12161c;
-    classDef engine fill:#e7edf3,stroke:#5b6b7e,color:#12161c;
-    classDef claude fill:#ece3ff,stroke:#6b46c1,color:#1a1030;
     classDef gemini fill:#d9f2e3,stroke:#2f855a,color:#0f2a1c;
+    classDef claude fill:#ece3ff,stroke:#6b46c1,color:#1a1030;
     classDef gate   fill:#fff3bf,stroke:#b7791f,color:#3a2a05;
+    classDef engine fill:#e7edf3,stroke:#5b6b7e,color:#12161c;
 ```
+
+*The diagram shows the core content pipeline. **Most agents emit JSON**; three spec types (room, encounter, lore) pass the deterministic gate. All twelve agents and their models are in the roster below.*
 
 **Pipeline shape (generate → validate → judge).** A generator emits JSON → the
 deterministic gate validates it and, on failure, **feeds the exact errors back to the
