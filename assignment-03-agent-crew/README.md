@@ -52,25 +52,25 @@ the engine — so a language model is **never trusted for arithmetic**.
 ## Architecture — how the agents connect to each other
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','edgeLabelBackground':'#eef1f5','fontSize':'15px','fontFamily':'system-ui, -apple-system, Segoe UI, sans-serif'}}}%%
+%%{init: {'theme':'base','flowchart':{'padding':12,'nodeSpacing':45,'rankSpacing':50,'htmlLabels':true},'themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','edgeLabelBackground':'#eef1f5','fontSize':'15px','fontFamily':'system-ui, -apple-system, Segoe UI, sans-serif'}}}%%
 flowchart TD
-    subgraph GEN["Generator agents — each emits a JSON spec"]
+    subgraph GEN["Generators — emit JSON specs"]
         direction TB
         A01["01 Level Designer  ★"]:::gemini
         A02["02 Encounter Designer  ★"]:::gemini
         A04["04 Lore Scribe"]:::gemini
     end
     GEN -->|JSON spec| GATE
-    GATE{{"validators.py — deterministic gate"}}:::gate
-    GATE -.->|invalid: errors returned, agent retries| GEN
+    GATE["validators.py — deterministic gate"]:::gate
+    GATE -.->|invalid: errors returned, retry| GEN
     GATE -->|valid JSON| REV
-    subgraph REV["Semantic reviewers — emit JSON reports"]
+    subgraph REV["Reviewers — emit JSON reports"]
         direction TB
         A03["03 Room Reviewer  ★"]:::claude
         A05["05 Style and IP Guard"]:::claude
     end
     REV -->|approved JSON| SEAM
-    SEAM[["JSON to CSV to Unreal DataTables"]]:::gate
+    SEAM["JSON to CSV to Unreal DataTables"]:::gate
     SEAM --> UE["Unreal Engine 5.7.4 · 0 runtime LLM calls"]:::engine
 
     classDef gemini fill:#d9f2e3,stroke:#2f855a,color:#0f2a1c;
