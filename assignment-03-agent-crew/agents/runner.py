@@ -89,6 +89,7 @@ PIPELINE = {
     "01": {"validator": "room",      "reviewer": "03"},
     "02": {"validator": "encounter", "reviewer": "03"},
     "04": {"validator": "text",      "reviewer": "05"},
+    "06": {"validator": "goap",      "reviewer": "09"},
 }
 
 

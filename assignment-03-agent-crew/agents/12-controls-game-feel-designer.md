@@ -5,7 +5,7 @@ The **Controls & Game-Feel Designer Agent** owns player controls: the verb→but
 
 - **Type:** Systems Designer (player controls & feel)
 - **Output Format:** JSON (`DT_PlayerFeel` rows) → CSV → DataTable
-- **Paired Reviewer:** [10. Adversarial QA Crew](10-adversarial-qa-crew.md) — validates feel by headless variant sweep (feel has no static validator; it is judged by measured play)
+- **Paired Reviewer:** [10. Adversarial QA Crew](10-adversarial-qa-crew.md) — validates feel by headless variant sweep. A deterministic bounds gate (`validators.py --kind feel`) checks enums, playable bounds and the class contract first; feel *quality* is still judged by measured play.
 
 ---
 
