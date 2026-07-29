@@ -42,9 +42,11 @@ keys, no per-token billing.** Each agent is auto-routed to its lane:
 | **Claude** | `claude` | Claude Pro Team | no | reasoning / review / coding-heavy agents |
 | **Gemini** | `agy` | Antigravity / Gemini Pro | **yes** | fast structured bulk generation + web sourcing |
 
-A third "lane" is **not a model at all**: `validators.py`, a deterministic Python gate.
+A third "lane" is **not a model at all**: `validators.py`, a deterministic Python gate
+covering all six spec kinds (`room`, `encounter`, `text`, `goap`, `umg`, `feel`).
 It enforces the countable rules (room/enemy budgets, checkpoint spacing, cross-class gate
-contamination, banned terms, string overflow) *before* anything reaches an LLM reviewer or
+contamination, banned terms, string overflow, blackboard-key integrity, excluded HUD
+elements, feel bounds and the class contract) *before* anything reaches an LLM reviewer or
 the engine — so a language model is **never trusted for arithmetic**.
 
 ---
@@ -52,34 +54,52 @@ the engine — so a language model is **never trusted for arithmetic**.
 ## Architecture — how the agents connect to each other
 
 ```mermaid
-%%{init: {'theme':'base','flowchart':{'padding':12,'nodeSpacing':45,'rankSpacing':50,'htmlLabels':true},'themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','edgeLabelBackground':'#eef1f5','fontSize':'15px','fontFamily':'system-ui, -apple-system, Segoe UI, sans-serif'}}}%%
+%%{init: {'theme':'base','flowchart':{'nodeSpacing':38,'rankSpacing':46,'htmlLabels':true},'themeVariables':{'background':'#ffffff','primaryColor':'#eef1f5','primaryTextColor':'#12161c','primaryBorderColor':'#8a94a3','lineColor':'#5b6b7e','edgeLabelBackground':'#eef1f5','fontSize':'14px','fontFamily':'system-ui, -apple-system, Segoe UI, sans-serif'}}}%%
 flowchart TD
-    subgraph GEN["Generators — emit JSON specs"]
-        direction TB
-        A01["01 Level Designer  ★"]:::gemini
-        A02["02 Encounter Designer  ★"]:::gemini
+    subgraph GEN["1 · GENERATE — agents emit JSON only"]
+        A01["01 Level Designer"]:::gemini
+        A02["02 Encounter Designer"]:::gemini
         A04["04 Lore Scribe"]:::gemini
+        A06["06 Boss-Brain"]:::claude
+        A07["07 UI Designer"]:::gemini
+        A12["12 Game-Feel"]:::claude
+        A01 ~~~ A02 ~~~ A04
+        A06 ~~~ A07 ~~~ A12
     end
-    GEN -->|JSON spec| GATE
-    GATE["validators.py — deterministic gate"]:::gate
-    GATE -.->|invalid: errors returned, retry| GEN
-    GATE -->|valid JSON| REV
-    subgraph REV["Reviewers — emit JSON reports"]
-        direction TB
-        A03["03 Room Reviewer  ★"]:::claude
-        A05["05 Style and IP Guard"]:::claude
+
+    GEN -->|structured JSON| VAL["2 · VALIDATE<br/>validators.py — deterministic gate<br/>room · encounter · text · goap · umg · feel"]:::gate
+    VAL -.->|"invalid: exact errors back to author"| GEN
+
+    VAL -->|valid JSON| REV
+    subgraph REV["3 · REVIEW — semantic + human"]
+        direction LR
+        A03["03 Room Reviewer"]:::claude
+        A05["05 Style &amp; IP Guard"]:::claude
+        A09["09 Design Critic"]:::claude
+        HUM{{"Human sign-off<br/>approve / reject"}}:::human
+        A03 --> HUM
+        A05 --> HUM
+        A09 --> HUM
     end
-    REV -->|approved JSON| SEAM
-    SEAM["JSON to CSV to Unreal DataTables"]:::gate
-    SEAM --> UE["Unreal Engine 5.7.4 · 0 runtime LLM calls"]:::engine
+    HUM -.->|"rejected: design feedback"| GEN
+
+    HUM -->|approved| CONV["JSON → CSV conversion script<br/>(authored by 08 Coder, human-reviewed)"]:::claude
+    CONV --> CHK{"4 · IMPORT GATE<br/>DataTable loads with zero errors?"}:::gate
+    CHK -->|PASS| UE["UE 5.7.4 asset folder<br/>DataTables · 0 runtime LLM"]:::engine
+    CHK -.->|"FAIL: fix spec or prompt, regenerate"| GEN
+
+    UE -->|telemetry| A10["10 QA Crew"]:::gemini
+    A10 -.->|balance findings| HUM
+    A11["11 Asset Scout"]:::gemini -->|"ranked candidates + licences"| HUM
 
     classDef gemini fill:#d9f2e3,stroke:#2f855a,color:#0f2a1c;
     classDef claude fill:#ece3ff,stroke:#6b46c1,color:#1a1030;
     classDef gate   fill:#fff3bf,stroke:#b7791f,color:#3a2a05;
     classDef engine fill:#e7edf3,stroke:#5b6b7e,color:#12161c;
+    classDef human  fill:#ffffff,stroke:#12161c,stroke-width:2px,color:#12161c;
 ```
 
-*The diagram shows the core content pipeline. **Most agents emit JSON**; three spec types (room, encounter, lore) pass the deterministic gate. All twelve agents and their models are in the roster below.*
+*Every artifact walks the same four stages: a generator emits JSON, the deterministic gate validates it (all six spec kinds), an LLM reviewer plus a human sign-off judge it, and the import gate only lets zero-error DataTables into the engine. Failures loop back to the generating agent, never forward. The running build is watched by QA telemetry, and the Asset Scout's candidates enter through the same human sign-off. All twelve agents and their models are in the roster below.*
 
 **Pipeline shape (generate → validate → judge).** A generator emits JSON → the
 deterministic gate validates it and, on failure, **feeds the exact errors back to the
@@ -91,6 +111,12 @@ tone drift). Nothing invalid can reach the engine. Wired chains in `runner.py`:
 - `02 → validate:encounter → 03`
 - **`01 → validate:room → 02 → validate:encounter → 03`** ← the flagship room-production chain
 - `04 → validate:text → 05`
+- `06 → validate:goap → 09`
+
+The `umg` and `feel` gates run standalone (`validators.py --kind umg|feel`): agent 07's
+paired counterpart (08 Coder) is an implementer, not a reviewer, and agent 12's feel values
+are judged by the QA Crew's headless sweep after a static bounds check — so neither is
+wired to an LLM reviewer.
 
 ---
 
@@ -213,7 +239,7 @@ assignment-03-agent-crew/
   agents/
     NN-*.md              The 12 agent specs (role, model, required vault context, system prompt)
     runner.py            Orchestrator — routes each agent to its subscription CLI; runs the pipelines
-    validators.py        Deterministic hard gate (room / encounter / text)
+    validators.py        Deterministic hard gate (room / encounter / text / goap / umg / feel)
   vault/                 Design notes — the single source of truth injected as agent context
   production/
     output/              Validated artifacts + usage_log.jsonl (proof of run); SeqA_06 = flagship
