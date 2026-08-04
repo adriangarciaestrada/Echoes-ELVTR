@@ -17,4 +17,4 @@ The world must feel Destiny-adjacent but ship 100% legally clean in both English
 | Guardians | **Weavers** | The player class lore skin |
 
 ## Enforcement
-The **Style & IP Guard Agent (05)** audits all generated text payloads against this table. Any match on banned terms results in an automatic `BLOCKED` status.
+The **Style & IP Guard Agent (05)** audits all generated text payloads against this table. Any match on banned terms results in an automatic `FLAGGED` status (the agent's schema statuses are `APPROVED | FLAGGED`).

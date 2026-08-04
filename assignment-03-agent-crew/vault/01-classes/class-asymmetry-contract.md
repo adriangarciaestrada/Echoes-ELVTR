@@ -13,7 +13,7 @@ Every action verb lives on the **exact same button** for both classes, but the v
 - **100% Clearability:** Nothing in the world, room geometry, or boss fight is class-impossible.
 - **Asymmetric Friction:**
   - Proximity Bomber punishes slow Titan; trivial for Hunter.
-  - Teleport Tank punishes dodge-reliant Hunter; tested by Titan shield.
+  - Blink Tank punishes dodge-reliant Hunter; tested by Titan shield.
   - Shieldbearer is hopped over by Hunter, broken through by Titan.
 - **Boss Adaptation:**
   - La Costurera sharpens *her* predictive volleys against Hunter.

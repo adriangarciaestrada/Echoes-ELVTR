@@ -5,7 +5,8 @@ The **UI Designer Agent** lays out HUD elements, menus, class-selection, and run
 
 - **Type:** Layout Generator
 - **Output Format:** JSON (`UMGSpecSchema`)
-- **Paired Implementation:** [08. Coder](08-coder.md)
+- **Paired Implementation:** [08. Coder](08-coder.md) — implements approved specs; no LLM
+  reviewer is wired. The deterministic gate runs standalone: `validators.py --kind umg`.
 
 ---
 

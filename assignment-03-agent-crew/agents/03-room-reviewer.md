@@ -5,7 +5,9 @@ The **Room Reviewer Agent** is the *semantic* review layer for room and encounte
 
 - **Type:** Semantic Reviewer (second layer, not the sole gate)
 - **Output Format:** JSON (`ReviewReportSchema`)
-- **Input:** `RoomSpecJSON` + `EncounterSpecJSON` (and, ideally, the Python validator's result)
+- **Input:** `RoomSpecJSON` + `EncounterSpecJSON` in the flagship room chain; the solo
+  chains (`01 →` or `02 →`) submit one spec at a time (and, ideally, the Python
+  validator's result)
 
 ---
 

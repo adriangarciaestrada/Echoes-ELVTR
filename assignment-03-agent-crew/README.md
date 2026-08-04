@@ -27,10 +27,12 @@ That run is committed under [`production/output/`](production/output/):
   three-agent evidence set: both validated artifacts plus the Room Reviewer's
   `ReviewReport` (status `NEEDS_INENGINE_CHECK`, deferring reachability to in-engine QA
   exactly as its spec mandates)
-- `usage_log.jsonl` — the run's per-call model + token/cost log (proof the three agents
-  really ran)
+- `usage_log.jsonl` — the run's per-call log: agent, lane and model for every call, plus
+  tokens/cost where the CLI reports them (the Claude lane does; the `agy` CLI does not
+  expose token counts)
 
-Run it yourself with `python3 agents/runner.py --pipeline-room --output SeqA_08`. The other nine agents
+Run it yourself with `python3 agents/runner.py --pipeline-room --input "Produce a
+Segment A combat room" --output SeqA_08`. The other nine agents
 are specified, lane-routed, and part of the architecture below, but their outputs are
 not the focus of this submission.
 
@@ -113,7 +115,7 @@ one some markdown viewers embed) resolve the feedback-loop cycles differently an
 scramble the stage order — the committed PNG pins the intended layout.*
 </details>
 
-*Every artifact walks the same four stages: a generator emits JSON, the deterministic gate validates it (all six spec kinds), an LLM reviewer plus a human sign-off judge it, and the import gate only lets zero-error DataTables into the engine. Failures loop back to the generating agent, never forward. The running build is watched by QA telemetry, and the Asset Scout's candidates enter through the same human sign-off. All twelve agents and their models are in the roster below.*
+*Every artifact walks the same four stages: a generator emits JSON, the deterministic gate validates it (all six spec kinds), an LLM reviewer plus a human sign-off judge it, and the import gate only lets zero-error DataTables into the engine. Failures loop back to the generating agent, never forward. The running build is watched by QA telemetry, and the Asset Scout's candidates enter through the same human sign-off. Node colors encode the CLI **lane**, not the model: green = Antigravity/`agy` lane, purple = Claude CLI lane — so 04 Lore Scribe is green even though its model is Claude Sonnet 4.6, because it runs on the `agy` lane. All twelve agents and their models are in the roster below.*
 
 **Pipeline shape (generate → validate → judge).** A generator emits JSON → the
 deterministic gate validates it and, on failure, **feeds the exact errors back to the
@@ -221,11 +223,18 @@ Requires the two CLIs authenticated against their subscriptions (`claude`, `agy`
 this folder.
 
 ```bash
-python3 agents/runner.py --list                        # roster, lanes and models
-python3 agents/runner.py --pipeline --agent 01 \        # one agent: generate to validate to review
+# roster, lanes and models
+python3 agents/runner.py --list
+
+# one agent: generate -> validate -> review
+python3 agents/runner.py --pipeline --agent 01 \
   --input "Design a Segment A shared traversal room"
-python3 agents/runner.py --pipeline-room \              # the flagship 3-agent chain
+
+# the flagship 3-agent chain
+python3 agents/runner.py --pipeline-room \
   --input "Produce a Segment A combat room" --output SeqA_08
+
+# deterministic gate, standalone
 python3 agents/validators.py --kind room --file production/output/SeqA_07_room.json
 ```
 
@@ -250,6 +259,8 @@ assignment-03-agent-crew/
     runner.py            Orchestrator — routes each agent to its subscription CLI; runs the pipelines
     validators.py        Deterministic hard gate (room / encounter / text / goap / umg / feel)
   vault/                 Design notes — the single source of truth injected as agent context
+  docs/
+    architecture.png     Rendered architecture diagram (mermaid source embedded above)
   production/
     output/              The single committed SeqA_07 run: room + encounter + review + usage_log.jsonl
 ```

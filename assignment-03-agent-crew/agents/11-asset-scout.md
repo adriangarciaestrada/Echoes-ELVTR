@@ -5,7 +5,10 @@ The **Asset Scout Agent** researches real, purchasable/free game assets that sat
 
 - **Type:** Web research / sourcing
 - **Output Format:** JSON (`AssetCandidateList`)
-- **Input:** One asset entry from `production/asset-manifest.json` + the manifest's global constraints
+- **Input:** One asset entry from `production/asset-manifest.json` + the manifest's global
+  constraints. The manifest lives with the capstone production files and is **not part of
+  this submission** — like the other non-flagship agents, the Scout is specified and
+  lane-routed here but its runnable evidence is out of scope.
 - **Paired Reviewer:** Human developer (approval + license sign-off)
 
 ---

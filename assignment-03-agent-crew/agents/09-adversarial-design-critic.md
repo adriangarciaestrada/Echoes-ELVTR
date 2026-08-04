@@ -5,7 +5,8 @@ The **Adversarial Design Critic Agent** red-teams feature specs, room designs, a
 
 - **Type:** Critic / Red-Teamer (Pre-Build)
 - **Output Format:** Markdown risk matrix & exploit report
-- **Paired Role:** Human Lead / Design Review
+- **Paired Role:** Human Lead / Design Review; wired reviewer of the Boss-Brain's output
+  in the `06 → validate:goap → 09` chain
 
 ---
 

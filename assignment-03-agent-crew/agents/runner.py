@@ -2,7 +2,7 @@
 """
 Echoes — Python Agent Orchestrator (runner.py)
 
-Dispatches the 10 development-time agents defined in this directory, routing
+Dispatches the twelve development-time agents defined in this directory, routing
 each one to its assigned model. Every call is served by a SUBSCRIPTION account
 through an official headless CLI — no LLM SDKs and no per-token API keys are
 involved, so subscription quota is what pays for the work.
