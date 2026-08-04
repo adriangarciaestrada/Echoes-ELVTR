@@ -460,6 +460,10 @@ def run_room_pipeline(room_brief: str, retries: int, timeout: int, output_prefix
     if output_prefix:
         (OUTPUT_DIR / f"{output_prefix}_room.json").write_text(json.dumps(room, indent=2, ensure_ascii=False), encoding="utf-8")
         (OUTPUT_DIR / f"{output_prefix}_encounter.json").write_text(json.dumps(enc, indent=2, ensure_ascii=False), encoding="utf-8")
+        rev_parsed = extract_json(rev_raw)
+        (OUTPUT_DIR / f"{output_prefix}_review.json").write_text(
+            json.dumps(rev_parsed, indent=2, ensure_ascii=False) if rev_parsed else rev_raw,
+            encoding="utf-8")
 
     print("\n" + "=" * 82)
     print(f"✅ ROOM PRODUCED — 3 LLM agents coordinated without crashing: {n01} → {n02} → {n03}")
@@ -474,7 +478,7 @@ def run_room_pipeline(room_brief: str, retries: int, timeout: int, output_prefix
     print("\nSEMANTIC REVIEW (Room Reviewer, combined):")
     print(rev_raw)
     if output_prefix:
-        print(f"\n✅ Saved: {OUTPUT_DIR}/{output_prefix}_room.json, {output_prefix}_encounter.json")
+        print(f"\n✅ Saved: {OUTPUT_DIR}/{output_prefix}_room.json, {output_prefix}_encounter.json, {output_prefix}_review.json")
 
 
 def run_scout(phase: Optional[str], priority: Optional[str], limit: Optional[int], timeout: int):

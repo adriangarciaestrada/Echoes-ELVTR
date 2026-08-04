@@ -1,0 +1,22 @@
+{
+  "room_id": "room_segment_a_combat_01",
+  "status": "NEEDS_INENGINE_CHECK",
+  "findings": [
+    {
+      "code": "REACHABILITY_UNVERIFIABLE",
+      "message": "Shieldbearer clearance for both classes requires in-engine verification: Hunter must double-jump from platform_mid_center (z=600) with sufficient vertical clearance over Shieldbearer at floor level (z=0); Titan must build charge-bash from room entry with ~400u unobstructed runway before reaching Shieldbearer at x=2000. Confirm with actual jump arc physics, enemy hitbox height, and bash impact validation.",
+      "location": {
+        "x": 2000,
+        "z": 0
+      }
+    },
+    {
+      "code": "REACHABILITY_UNVERIFIABLE",
+      "message": "Ledge Gunner sightline coverage to floor approach: Both Gunners (x=1800, z=600 and x=2800, z=900) must have verified downward LOS to z=0 floor level where Shieldbearer creates the chokepoint. Encounter design intent requires crossfire friction during approach for both classes; confirm platform geometry and camera frustums enable intended targeting coverage or rebalance archetype placement.",
+      "location": {
+        "x": 2300,
+        "z": 450
+      }
+    }
+  ]
+}

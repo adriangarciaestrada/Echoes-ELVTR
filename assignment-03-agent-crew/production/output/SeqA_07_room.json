@@ -1,0 +1,53 @@
+{
+  "room_id": "room_segment_a_combat_01",
+  "segment": "SegmentA_Shared",
+  "dimensions": {
+    "width": 4000,
+    "height": 1500
+  },
+  "platforms": [
+    {
+      "id": "platform_floor_main",
+      "x": 0,
+      "z": 0,
+      "width": 4000,
+      "is_one_way": false
+    },
+    {
+      "id": "platform_low_left",
+      "x": 600,
+      "z": 300,
+      "width": 800,
+      "is_one_way": true
+    },
+    {
+      "id": "platform_mid_center",
+      "x": 1600,
+      "z": 600,
+      "width": 800,
+      "is_one_way": true
+    },
+    {
+      "id": "platform_high_right",
+      "x": 2600,
+      "z": 900,
+      "width": 800,
+      "is_one_way": true
+    }
+  ],
+  "gates": [
+    {
+      "id": "gate_segment_a_exit",
+      "x": 3800,
+      "z": 0,
+      "required_tool": "Keycard"
+    }
+  ],
+  "checkpoints": [],
+  "camera_bounds": {
+    "min_x": 0,
+    "max_x": 4000,
+    "min_z": 0,
+    "max_z": 1500
+  }
+}

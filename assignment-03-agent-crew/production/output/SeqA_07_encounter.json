@@ -1,0 +1,39 @@
+{
+  "room_id": "room_segment_a_combat_01",
+  "encounter_budget": {
+    "total_enemies": 3,
+    "archetype_count": 2
+  },
+  "spawns": [
+    {
+      "id": "spawn_shieldbearer_01",
+      "archetype": "Shieldbearer",
+      "position": {
+        "x": 2000,
+        "z": 0
+      },
+      "patrol_range": 100,
+      "facing_direction": "Left"
+    },
+    {
+      "id": "spawn_ledge_gunner_01",
+      "archetype": "Ledge Gunner",
+      "position": {
+        "x": 1800,
+        "z": 600
+      },
+      "patrol_range": 150,
+      "facing_direction": "Left"
+    },
+    {
+      "id": "spawn_ledge_gunner_02",
+      "archetype": "Ledge Gunner",
+      "position": {
+        "x": 2800,
+        "z": 900
+      },
+      "patrol_range": 150,
+      "facing_direction": "Left"
+    }
+  ]
+}
