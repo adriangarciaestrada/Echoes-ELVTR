@@ -27,8 +27,8 @@ That run is committed under [`production/output/`](production/output/):
   three-agent evidence set: both validated artifacts plus the Room Reviewer's
   `ReviewReport` (status `NEEDS_INENGINE_CHECK`, deferring reachability to in-engine QA
   exactly as its spec mandates)
-- `SeqA_06_room.json`, `SeqA_06_encounter.json` — an earlier validated run of the same chain
-- `usage_log.jsonl` — per-call model + token/cost log (proof the three agents really ran)
+- `usage_log.jsonl` — the run's per-call model + token/cost log (proof the three agents
+  really ran)
 
 Run it yourself with `python3 agents/runner.py --pipeline-room --output SeqA_08`. The other nine agents
 are specified, lane-routed, and part of the architecture below, but their outputs are
@@ -225,7 +225,7 @@ python3 agents/runner.py --list                        # roster, lanes and model
 python3 agents/runner.py --pipeline --agent 01 \        # one agent: generate to validate to review
   --input "Design a Segment A shared traversal room"
 python3 agents/runner.py --pipeline-room \              # the flagship 3-agent chain
-  --input "Produce a Segment A combat room" --output SeqA_07
+  --input "Produce a Segment A combat room" --output SeqA_08
 python3 agents/validators.py --kind room --file production/output/SeqA_07_room.json
 ```
 
@@ -251,5 +251,5 @@ assignment-03-agent-crew/
     validators.py        Deterministic hard gate (room / encounter / text / goap / umg / feel)
   vault/                 Design notes — the single source of truth injected as agent context
   production/
-    output/              Validated artifacts + usage_log.jsonl (proof of run); SeqA_07 = flagship
+    output/              The single committed SeqA_07 run: room + encounter + review + usage_log.jsonl
 ```
