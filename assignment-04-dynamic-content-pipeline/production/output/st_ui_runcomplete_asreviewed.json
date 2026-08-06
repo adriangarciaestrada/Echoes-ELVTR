@@ -1,0 +1,32 @@
+{
+  "table": "ST_UI",
+  "records": [
+    {
+      "key": "ST_UI.RunComplete_Time",
+      "screens": [
+        "Screen_RunComplete"
+      ],
+      "widget_class": "StatLabel",
+      "text_en": "Time Survived",
+      "text_es": "Tiempo de Supervivencia",
+      "source_chunks": [
+        "vault/07-ui-and-controls/hud-and-screens.md#Screen Roster",
+        "vault/07-ui-and-controls/hud-and-screens.md#Cut Features — Denylist"
+      ]
+    },
+    {
+      "key": "ST_UI.RunComplete_SecondRun",
+      "screens": [
+        "Screen_RunComplete"
+      ],
+      "widget_class": "ProseBlock",
+      "text_en": "You saw one half. A door stayed sealed, and nooks stayed out of reach, waiting for the other class.",
+      "text_es": "Solo viste una mitad. Una puerta se te vedó; rincones que tu clase no puede alcanzar — esperan a la otra.",
+      "source_chunks": [
+        "vault/07-ui-and-controls/hud-and-screens.md#Screen Roster",
+        "vault/04-world/room-constraints.md#The visibility rule",
+        "vault/04-world/world-structure.md#Route Description"
+      ]
+    }
+  ]
+}

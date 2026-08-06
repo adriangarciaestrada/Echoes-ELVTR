@@ -1,0 +1,21 @@
+{
+  "table": "ST_UI",
+  "screen_id": "Screen_RunComplete",
+  "status": "REVISE",
+  "findings": [
+    {
+      "code": "SOFTWARE_VOICE",
+      "key": "ST_UI.RunComplete_Time",
+      "message": "'Completion Time' is generic software copy that could appear unchanged in any game's results screen. A Run-Complete screen in Echoes is designed to 'sell the second run' and carry narrative weight—every element should sound like it belongs in this game specifically. The stat label should reflect the exploration and survival experience rather than generic completion metrics.",
+      "quote_from_source": "This screen carries the replay hook of the entire slice in a paragraph, and it is the one place where the writing is doing narrative work rather than staying out of the way.",
+      "suggestion": "'Time Survived' / 'Tiempo de Supervivencia'—reframes the stat to emphasize survival and exploration rather than generic completion metrics."
+    },
+    {
+      "code": "ES_TRANSLATED",
+      "key": "ST_UI.RunComplete_SecondRun",
+      "message": "The Spanish is clause-for-clause structurally parallel to English: 'A door stayed sealed, and nooks stayed out of reach' maps exactly to 'Una puerta quedó sellada, y quedaron rincones fuera de alcance.' This suggests translation-first authoring rather than origin-written Spanish. The text reads as English wearing Spanish rather than as a language authoring the message independently.",
+      "quote_from_source": "Spanish that mirrors English clause for clause has failed even when it fits.",
+      "suggestion": "Vary clause structure to let Spanish phrasing drive the expression: 'Solo viste una mitad. Una puerta se te vedó; rincones que tu clase no puede alcanzar — esperan a la otra.' This preserves meaning while breaking English parallelism and using Spanish-first structure."
+    }
+  ]
+}

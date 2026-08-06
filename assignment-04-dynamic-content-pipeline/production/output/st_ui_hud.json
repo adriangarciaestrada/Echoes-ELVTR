@@ -1,0 +1,29 @@
+{
+  "table": "ST_UI",
+  "records": [
+    {
+      "key": "ST_UI.HUD_Interact",
+      "screens": [
+        "HUD_Main"
+      ],
+      "widget_class": "Prompt",
+      "text_en": "<Interact>",
+      "text_es": "<Interact>",
+      "source_chunks": [
+        "vault/07-ui-and-controls/hud-and-screens.md#Minimalist Dread HUD Philosophy"
+      ]
+    },
+    {
+      "key": "ST_UI.HUD_KeycardUnlock",
+      "screens": [
+        "HUD_Main"
+      ],
+      "widget_class": "Prompt",
+      "text_en": "<Interact> Unlock",
+      "text_es": "<Interact> Desbloquear",
+      "source_chunks": [
+        "vault/07-ui-and-controls/hud-and-screens.md#Minimalist Dread HUD Philosophy"
+      ]
+    }
+  ]
+}

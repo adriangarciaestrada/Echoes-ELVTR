@@ -1,0 +1,68 @@
+{
+  "table": "ST_UI",
+  "records": [
+    {
+      "key": "ST_UI.Pause_Resume",
+      "screens": [
+        "Screen_Pause"
+      ],
+      "widget_class": "MenuLabel",
+      "text_en": "Resume",
+      "text_es": "Continuar",
+      "source_chunks": [
+        "vault/07-ui-and-controls/hud-and-screens.md#Screen Roster",
+        "vault/07-ui-and-controls/ui-constraints.md#Screens have jobs"
+      ]
+    },
+    {
+      "key": "ST_UI.Pause_Controls",
+      "screens": [
+        "Screen_Pause"
+      ],
+      "widget_class": "MenuLabel",
+      "text_en": "Controls",
+      "text_es": "Controles",
+      "source_chunks": [
+        "vault/07-ui-and-controls/ui-constraints.md#Screens have jobs"
+      ]
+    },
+    {
+      "key": "ST_UI.Pause_Accessibility",
+      "screens": [
+        "Screen_Pause"
+      ],
+      "widget_class": "MenuLabel",
+      "text_en": "Accessibility",
+      "text_es": "Accesibilidad",
+      "source_chunks": [
+        "vault/07-ui-and-controls/hud-and-screens.md#Screen Roster",
+        "vault/07-ui-and-controls/ui-constraints.md#Accessibility is a valve, not a mode"
+      ]
+    },
+    {
+      "key": "ST_UI.Pause_Language",
+      "screens": [
+        "Screen_Pause"
+      ],
+      "widget_class": "MenuLabel",
+      "text_en": "Language",
+      "text_es": "Idioma",
+      "source_chunks": [
+        "vault/07-ui-and-controls/ui-constraints.md#Screens have jobs"
+      ]
+    },
+    {
+      "key": "ST_UI.Pause_ExitRun",
+      "screens": [
+        "Screen_Pause"
+      ],
+      "widget_class": "MenuLabel",
+      "text_en": "Exit Run",
+      "text_es": "Abandonar",
+      "source_chunks": [
+        "vault/07-ui-and-controls/hud-and-screens.md#Screen Roster",
+        "vault/07-ui-and-controls/ui-constraints.md#Screens have jobs"
+      ]
+    }
+  ]
+}

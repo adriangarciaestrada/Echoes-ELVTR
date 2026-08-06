@@ -1,0 +1,7 @@
+{
+  "table": "ST_UI",
+  "screen_id": "Screen_RunComplete",
+  "status": "PASS",
+  "findings": [],
+  "_pass": "second, after the two first-pass findings were applied"
+}

@@ -1,0 +1,18 @@
+{
+  "kind": "strings",
+  "status": "FAIL",
+  "error_count": 2,
+  "warning_count": 0,
+  "errors": [
+    {
+      "code": "ERR_OVER_CAP",
+      "message": "23 chars exceeds the StatLabel cap of 20 (source: ui-budgets.md)",
+      "path": "records[0].text_es"
+    },
+    {
+      "code": "ERR_UI_OVERFLOW",
+      "message": "text_es (23 chars) exceeds its allowance of 19 for a 13-char text_en (source: ui-budgets.md)",
+      "path": "records[0].text_es"
+    }
+  ]
+}
