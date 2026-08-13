@@ -1,0 +1,704 @@
+[
+  {
+    "score": 13,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "+12 blocks encounter_designer_agent, enemy_crawler, enemy_ledge_gunner, enemy_shieldbearer, enemy_walking_bomb, enemy_blink_tank",
+      "-2 lands in asset"
+    ],
+    "feature": {
+      "id": "enemy_stats_datatable",
+      "name": "DT_EnemyStats (TTK tiers, HP per archetype)",
+      "source": "vault/02-enemies/*.md",
+      "layer": "asset",
+      "symbols": [
+        "DT_EnemyStats"
+      ],
+      "assets": [
+        "DT_EnemyStats"
+      ],
+      "depends_on": [],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 7,
+    "reasons": [
+      "+4 already referenced — scanned/Source/Echoes/GoapBlackboardTypes.h names it, nothing implements it",
+      "+3 the scoped GDD requires it for the slice",
+      "-0 lands in cpp"
+    ],
+    "feature": {
+      "id": "boss_goap_knight_brain",
+      "name": "Knight GOAP goals (pincer/flank/protect)",
+      "source": "vault/03-bosses/goap-blackboard-spec.md",
+      "layer": "cpp",
+      "symbols": [
+        "ProtectWitch",
+        "FlankTitanShield"
+      ],
+      "assets": [],
+      "depends_on": [
+        "boss_goap_blackboard"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 7,
+    "reasons": [
+      "+4 already referenced — scanned/Source/Echoes/GoapBlackboardTypes.h names it, nothing implements it",
+      "+3 the scoped GDD requires it for the slice",
+      "-0 lands in cpp"
+    ],
+    "feature": {
+      "id": "boss_goap_witch_brain",
+      "name": "La Costurera director GOAP goals",
+      "source": "vault/03-bosses/goap-blackboard-spec.md",
+      "layer": "cpp",
+      "symbols": [
+        "PredictHunterDodge",
+        "MaintainWeave"
+      ],
+      "assets": [],
+      "depends_on": [
+        "boss_goap_blackboard"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 7,
+    "reasons": [
+      "+4 already referenced — agents/goal_coder.py names it, nothing implements it",
+      "+3 the scoped GDD requires it for the slice",
+      "-0 lands in python"
+    ],
+    "feature": {
+      "id": "level_designer_agent",
+      "name": "Level Designer agent (room layout proposals)",
+      "source": "GDD-course-scope.md §8",
+      "layer": "python",
+      "symbols": [
+        "03-level-designer.md"
+      ],
+      "assets": [],
+      "depends_on": [
+        "roomspec_schema"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 5,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "+2 blocks beacon_checkpoint",
+      "-0 lands in cpp"
+    ],
+    "feature": {
+      "id": "health_pip_component",
+      "name": "Segmented health pip component (hits-to-die)",
+      "source": "GDD-course-scope.md §4.4",
+      "layer": "cpp",
+      "symbols": [
+        "UHealthComponent",
+        "HitsToDie",
+        "OnHealthChanged"
+      ],
+      "assets": [],
+      "depends_on": [],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 4,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "+2 blocks hunter_grapple_knife",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "grapple_anchor_prop",
+      "name": "Grapple anchor point (Hunter traversal marker)",
+      "source": "vault/04-world/junction-and-gates.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_GrappleAnchor",
+        "anchor_socket"
+      ],
+      "assets": [
+        "prop-grapple-anchor"
+      ],
+      "depends_on": [],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-0 lands in python"
+    ],
+    "feature": {
+      "id": "branch_sealing_reachability_check",
+      "name": "Branch-sealing unreachability proof (opposite class gate)",
+      "source": "GDD-course-scope.md §6 (decided Jul 20)",
+      "layer": "python",
+      "symbols": [
+        "reachability_validator",
+        "unreachable_by_tool"
+      ],
+      "assets": [],
+      "depends_on": [
+        "roomspec_validator_gate"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-0 lands in python"
+    ],
+    "feature": {
+      "id": "coder_agent_pipeline",
+      "name": "Coder agent (config-driven Blueprint implementation + tests)",
+      "source": "GDD-course-scope.md §8",
+      "layer": "python",
+      "symbols": [
+        "builder/judge law"
+      ],
+      "assets": [],
+      "depends_on": [
+        "room_reviewer_agent",
+        "style_ip_guard_agent"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "boss_scripted_fallback_patterns",
+      "name": "Per-class scripted boss pattern fallback (70/30 split)",
+      "source": "GDD-course-scope.md §9.1 cut line 2",
+      "layer": "blueprint",
+      "symbols": [
+        "BT_LaCosturera_Fallback"
+      ],
+      "assets": [],
+      "depends_on": [
+        "boss_la_costurera_witch",
+        "boss_revived_knights"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "camera_rig_2_5d",
+      "name": "2.5D side-scroller CameraRig with room-bound clamping",
+      "source": "GDD-course-scope.md §5.1",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_CameraRig",
+        "CameraBounds"
+      ],
+      "assets": [],
+      "depends_on": [
+        "plane_constrained_movement",
+        "roomspec_schema"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "hunter_dodge_iframes",
+      "name": "Hunter dodge with invincibility frames",
+      "source": "vault/01-classes/hunter-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "DodgeIFrames",
+        "bIsInvulnerable"
+      ],
+      "assets": [
+        "vfx-ability-set"
+      ],
+      "depends_on": [
+        "game_feel_component",
+        "enhanced_input_config"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "hunter_hand_cannon",
+      "name": "Hunter hand cannon (semi-auto primary)",
+      "source": "vault/01-classes/hunter-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_HandCannon",
+        "MuzzleFlashSocket"
+      ],
+      "assets": [
+        "weapon-hand-cannon"
+      ],
+      "depends_on": [
+        "enhanced_input_config"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "hunter_sticky_grenade",
+      "name": "Hunter sticky burst grenade",
+      "source": "vault/01-classes/hunter-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_StickyGrenade",
+        "GrenadeCooldown"
+      ],
+      "assets": [
+        "vfx-ability-set"
+      ],
+      "depends_on": [
+        "enhanced_input_config"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "keycard_door_prop",
+      "name": "Keycard door + pickup",
+      "source": "vault/00-core/asset-inventory.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_KeycardDoor",
+        "BP_KeycardPickup"
+      ],
+      "assets": [
+        "prop-keycard-door"
+      ],
+      "depends_on": [],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "narrative_envelope_beats",
+      "name": "Four-beat narrative envelope (opening cards, class-select lore, arrival, closing bookend)",
+      "source": "GDD-course-scope.md §8.2",
+      "layer": "blueprint",
+      "symbols": [
+        "OpeningCards",
+        "ClosingBookend"
+      ],
+      "assets": [],
+      "depends_on": [
+        "string_table_st_lore",
+        "class_select_screen"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "titan_area_grenade",
+      "name": "Titan sustained area-damage grenade",
+      "source": "vault/01-classes/titan-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_AreaGrenade",
+        "GrenadeCooldown"
+      ],
+      "assets": [
+        "vfx-ability-set"
+      ],
+      "depends_on": [
+        "enhanced_input_config"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "titan_auto_rifle",
+      "name": "Titan auto rifle (sustained hitscan primary)",
+      "source": "vault/01-classes/titan-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_AutoRifle",
+        "MuzzleFlashSocket"
+      ],
+      "assets": [
+        "weapon-auto-rifle"
+      ],
+      "depends_on": [
+        "enhanced_input_config"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "titan_charge_bash",
+      "name": "Titan charge bash (wall-breaking traversal)",
+      "source": "vault/01-classes/titan-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_ChargeBash",
+        "BashRunUp"
+      ],
+      "assets": [],
+      "depends_on": [
+        "enhanced_input_config",
+        "bash_wall_prop"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "titan_lift",
+      "name": "Titan sustained vertical Lift",
+      "source": "vault/01-classes/titan-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "LiftAscend",
+        "SustainedVerticalPush"
+      ],
+      "assets": [],
+      "depends_on": [
+        "game_feel_component",
+        "enhanced_input_config"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 1,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "+4 blocks boss_door_prop, convergence_checkpoint_system",
+      "-5 itself blocked by health_pip_component",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "beacon_checkpoint",
+      "name": "Beacon checkpoint / respawn anchor",
+      "source": "GDD-course-scope.md §2.4",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_Beacon",
+        "ActivateBeacon"
+      ],
+      "assets": [
+        "prop-beacon",
+        "vfx-beacon"
+      ],
+      "depends_on": [
+        "health_pip_component"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": 1,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-2 lands in asset"
+    ],
+    "feature": {
+      "id": "hardsurface_master_material",
+      "name": "Hard-surface master material & trim sheet set",
+      "source": "vault/00-core/asset-inventory.md",
+      "layer": "asset",
+      "symbols": [],
+      "assets": [
+        "mat-hardsurface"
+      ],
+      "depends_on": [],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -2,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by enemy_stats_datatable",
+      "-0 lands in python"
+    ],
+    "feature": {
+      "id": "encounter_designer_agent",
+      "name": "Encounter Designer agent (palette-constrained combos)",
+      "source": "GDD-course-scope.md §6",
+      "layer": "python",
+      "symbols": [
+        "encounter placements"
+      ],
+      "assets": [],
+      "depends_on": [
+        "roomspec_schema",
+        "enemy_stats_datatable"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by beacon_checkpoint",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "boss_door_prop",
+      "name": "Boss door (point-of-no-return gate)",
+      "source": "vault/00-core/asset-inventory.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_BossDoor"
+      ],
+      "assets": [
+        "prop-boss-door"
+      ],
+      "depends_on": [
+        "beacon_checkpoint"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by beacon_checkpoint",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "convergence_checkpoint_system",
+      "name": "Convergence checkpoint with sealed opposite-branch exit door",
+      "source": "GDD-course-scope.md §5",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_ConvergenceDoor"
+      ],
+      "assets": [],
+      "depends_on": [
+        "beacon_checkpoint",
+        "junction_gate_system"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by enemy_stats_datatable",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "enemy_blink_tank",
+      "name": "Blink Tank archetype (teleport heavy)",
+      "source": "vault/02-enemies/blink-tank.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_BlinkTank",
+        "TeleportBehindPlayer"
+      ],
+      "assets": [
+        "enemy-blink-tank",
+        "vfx-blink"
+      ],
+      "depends_on": [
+        "enemy_stats_datatable"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by enemy_stats_datatable",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "enemy_crawler",
+      "name": "Crawler archetype (surface-following melee swarm)",
+      "source": "vault/02-enemies/crawler.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_Crawler"
+      ],
+      "assets": [
+        "enemy-crawler"
+      ],
+      "depends_on": [
+        "enemy_stats_datatable"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by enemy_stats_datatable",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "enemy_ledge_gunner",
+      "name": "Ledge Gunner archetype (elevated shooter, TTK calibration)",
+      "source": "vault/02-enemies/ledge-gunner.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_LedgeGunner",
+        "MuzzleSocket"
+      ],
+      "assets": [
+        "enemy-ledge-gunner"
+      ],
+      "depends_on": [
+        "enemy_stats_datatable"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by enemy_stats_datatable",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "enemy_shieldbearer",
+      "name": "Shieldbearer archetype (over-or-through chokepoint)",
+      "source": "vault/02-enemies/shieldbearer.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_Shieldbearer"
+      ],
+      "assets": [
+        "enemy-shieldbearer"
+      ],
+      "depends_on": [
+        "enemy_stats_datatable"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by enemy_stats_datatable",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "enemy_walking_bomb",
+      "name": "Walking Bomb archetype (proximity detonation)",
+      "source": "vault/02-enemies/walking-bomb.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_WalkingBomb",
+        "EmissivePulse"
+      ],
+      "assets": [
+        "enemy-walking-bomb"
+      ],
+      "depends_on": [
+        "enemy_stats_datatable"
+      ],
+      "required_for_slice": true
+    }
+  },
+  {
+    "score": -3,
+    "reasons": [
+      "+3 the scoped GDD requires it for the slice",
+      "-5 itself blocked by grapple_anchor_prop",
+      "-1 lands in blueprint"
+    ],
+    "feature": {
+      "id": "hunter_grapple_knife",
+      "name": "Hunter grapple chain knife traversal",
+      "source": "vault/01-classes/hunter-kit.md",
+      "layer": "blueprint",
+      "symbols": [
+        "BP_GrappleKnife",
+        "GrappleToAnchor"
+      ],
+      "assets": [
+        "weapon-grapple-knife"
+      ],
+      "depends_on": [
+        "enhanced_input_config",
+        "grapple_anchor_prop"
+      ],
+      "required_for_slice": true
+    }
+  }
+]

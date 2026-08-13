@@ -1,0 +1,989 @@
+[
+  {
+    "id": "plane_constrained_movement",
+    "name": "2.5D plane-constrained character movement",
+    "source": "vault/00-core/technical-constraints.md",
+    "layer": "cpp",
+    "symbols": [
+      "bConstrainToPlane",
+      "PlaneConstraintAxisSetting",
+      "BP_GreyBoxCharacter"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "game_feel_datatable",
+    "name": "DT_GameFeel tunables table",
+    "source": "vault/00-core/technical-constraints.md",
+    "layer": "asset",
+    "symbols": [
+      "FGameFeelRow"
+    ],
+    "assets": [
+      "DT_GameFeel",
+      "DT_GameFeel.csv"
+    ],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "game_feel_component",
+    "name": "Runtime game-feel parameter component",
+    "source": "vault/00-core/technical-constraints.md",
+    "layer": "cpp",
+    "symbols": [
+      "UGameFeelComponent",
+      "FGameFeelRow"
+    ],
+    "assets": [],
+    "depends_on": [
+      "game_feel_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "enhanced_input_config",
+    "name": "Enhanced Input actions & mapping contexts (gamepad+keyboard)",
+    "source": "GDD-course-scope.md §4.3",
+    "layer": "asset",
+    "symbols": [],
+    "assets": [
+      "IMC_Default",
+      "IA_Jump",
+      "IA_Fire",
+      "IA_Dodge",
+      "IA_TraversalKey",
+      "IA_Grenade"
+    ],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "camera_rig_2_5d",
+    "name": "2.5D side-scroller CameraRig with room-bound clamping",
+    "source": "GDD-course-scope.md §5.1",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_CameraRig",
+      "CameraBounds"
+    ],
+    "assets": [],
+    "depends_on": [
+      "plane_constrained_movement",
+      "roomspec_schema"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "health_pip_component",
+    "name": "Segmented health pip component (hits-to-die)",
+    "source": "GDD-course-scope.md §4.4",
+    "layer": "cpp",
+    "symbols": [
+      "UHealthComponent",
+      "HitsToDie",
+      "OnHealthChanged"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "hud_main_widget",
+    "name": "HUD_Main widget (pips, Titan shield meter, contextual prompts)",
+    "source": "vault/07-ui-and-controls/hud-and-screens.md",
+    "layer": "blueprint",
+    "symbols": [
+      "WBP_HUD_Main",
+      "HUD_Main"
+    ],
+    "assets": [
+      "ui-hud-kit"
+    ],
+    "depends_on": [
+      "health_pip_component",
+      "string_table_st_ui"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "grapple_anchor_prop",
+    "name": "Grapple anchor point (Hunter traversal marker)",
+    "source": "vault/04-world/junction-and-gates.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_GrappleAnchor",
+      "anchor_socket"
+    ],
+    "assets": [
+      "prop-grapple-anchor"
+    ],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "bash_wall_prop",
+    "name": "Destructible cracked wall (Titan bash marker)",
+    "source": "vault/04-world/junction-and-gates.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_BashWall",
+      "breakable_by"
+    ],
+    "assets": [
+      "prop-bash-wall"
+    ],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "beacon_checkpoint",
+    "name": "Beacon checkpoint / respawn anchor",
+    "source": "GDD-course-scope.md §2.4",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_Beacon",
+      "ActivateBeacon"
+    ],
+    "assets": [
+      "prop-beacon",
+      "vfx-beacon"
+    ],
+    "depends_on": [
+      "health_pip_component"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "keycard_door_prop",
+    "name": "Keycard door + pickup",
+    "source": "vault/00-core/asset-inventory.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_KeycardDoor",
+      "BP_KeycardPickup"
+    ],
+    "assets": [
+      "prop-keycard-door"
+    ],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_door_prop",
+    "name": "Boss door (point-of-no-return gate)",
+    "source": "vault/00-core/asset-inventory.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_BossDoor"
+    ],
+    "assets": [
+      "prop-boss-door"
+    ],
+    "depends_on": [
+      "beacon_checkpoint"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "hunter_double_jump",
+    "name": "Hunter double jump",
+    "source": "vault/01-classes/hunter-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "JumpMaxCount",
+      "DoubleJump"
+    ],
+    "assets": [],
+    "depends_on": [
+      "game_feel_component",
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "hunter_dodge_iframes",
+    "name": "Hunter dodge with invincibility frames",
+    "source": "vault/01-classes/hunter-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "DodgeIFrames",
+      "bIsInvulnerable"
+    ],
+    "assets": [
+      "vfx-ability-set"
+    ],
+    "depends_on": [
+      "game_feel_component",
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "hunter_hand_cannon",
+    "name": "Hunter hand cannon (semi-auto primary)",
+    "source": "vault/01-classes/hunter-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_HandCannon",
+      "MuzzleFlashSocket"
+    ],
+    "assets": [
+      "weapon-hand-cannon"
+    ],
+    "depends_on": [
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "hunter_grapple_knife",
+    "name": "Hunter grapple chain knife traversal",
+    "source": "vault/01-classes/hunter-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_GrappleKnife",
+      "GrappleToAnchor"
+    ],
+    "assets": [
+      "weapon-grapple-knife"
+    ],
+    "depends_on": [
+      "enhanced_input_config",
+      "grapple_anchor_prop"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "hunter_sticky_grenade",
+    "name": "Hunter sticky burst grenade",
+    "source": "vault/01-classes/hunter-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_StickyGrenade",
+      "GrenadeCooldown"
+    ],
+    "assets": [
+      "vfx-ability-set"
+    ],
+    "depends_on": [
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "titan_lift",
+    "name": "Titan sustained vertical Lift",
+    "source": "vault/01-classes/titan-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "LiftAscend",
+      "SustainedVerticalPush"
+    ],
+    "assets": [],
+    "depends_on": [
+      "game_feel_component",
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "titan_shield",
+    "name": "Titan absorbing energy shield",
+    "source": "vault/01-classes/titan-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_EnergyShield",
+      "ShieldMeter",
+      "TitanShieldActive"
+    ],
+    "assets": [
+      "vfx-ability-set"
+    ],
+    "depends_on": [
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "titan_auto_rifle",
+    "name": "Titan auto rifle (sustained hitscan primary)",
+    "source": "vault/01-classes/titan-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_AutoRifle",
+      "MuzzleFlashSocket"
+    ],
+    "assets": [
+      "weapon-auto-rifle"
+    ],
+    "depends_on": [
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "titan_charge_bash",
+    "name": "Titan charge bash (wall-breaking traversal)",
+    "source": "vault/01-classes/titan-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_ChargeBash",
+      "BashRunUp"
+    ],
+    "assets": [],
+    "depends_on": [
+      "enhanced_input_config",
+      "bash_wall_prop"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "titan_area_grenade",
+    "name": "Titan sustained area-damage grenade",
+    "source": "vault/01-classes/titan-kit.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_AreaGrenade",
+      "GrenadeCooldown"
+    ],
+    "assets": [
+      "vfx-ability-set"
+    ],
+    "depends_on": [
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "roomspec_schema",
+    "name": "RoomSpec JSON contract (cavity/solids/anchors/doors/critical_path)",
+    "source": "vault/04-world/roomspec.md",
+    "layer": "python",
+    "symbols": [
+      "room_id",
+      "cavity",
+      "critical_path",
+      "breakable_by"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "roomspec_validator_gate",
+    "name": "Deterministic RoomSpec validation gate (reach, exclusivity, variety)",
+    "source": "vault/04-world/roomspec.md",
+    "layer": "python",
+    "symbols": [
+      "validators.py",
+      "validate_room"
+    ],
+    "assets": [],
+    "depends_on": [
+      "roomspec_schema"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "room_import_pipeline",
+    "name": "RoomSpec JSON → CSV/DataTable → UE5 import pipeline",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "import_room.py"
+    ],
+    "assets": [],
+    "depends_on": [
+      "roomspec_validator_gate"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "level_designer_agent",
+    "name": "Level Designer agent (room layout proposals)",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "03-level-designer.md"
+    ],
+    "assets": [],
+    "depends_on": [
+      "roomspec_schema"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "encounter_designer_agent",
+    "name": "Encounter Designer agent (palette-constrained combos)",
+    "source": "GDD-course-scope.md §6",
+    "layer": "python",
+    "symbols": [
+      "encounter placements"
+    ],
+    "assets": [],
+    "depends_on": [
+      "roomspec_schema",
+      "enemy_stats_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "room_reviewer_agent",
+    "name": "Room Reviewer agent (paired judge for Level Designer)",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "Room Reviewer"
+    ],
+    "assets": [],
+    "depends_on": [
+      "roomspec_validator_gate"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "branch_sealing_reachability_check",
+    "name": "Branch-sealing unreachability proof (opposite class gate)",
+    "source": "GDD-course-scope.md §6 (decided Jul 20)",
+    "layer": "python",
+    "symbols": [
+      "reachability_validator",
+      "unreachable_by_tool"
+    ],
+    "assets": [],
+    "depends_on": [
+      "roomspec_validator_gate"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "junction_gate_system",
+    "name": "Junction gate (class-key-reading grapple/bash gates)",
+    "source": "vault/04-world/junction-and-gates.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_GrappleGate",
+      "BP_BashGate",
+      "required_tool"
+    ],
+    "assets": [],
+    "depends_on": [
+      "grapple_anchor_prop",
+      "bash_wall_prop"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "pocket_system",
+    "name": "Kit-gated optional pockets (exclusive & visible)",
+    "source": "vault/01-classes/class-asymmetry-contract.md",
+    "layer": "blueprint",
+    "symbols": [
+      "pockets",
+      "required_tool",
+      "contents"
+    ],
+    "assets": [],
+    "depends_on": [
+      "junction_gate_system"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "convergence_checkpoint_system",
+    "name": "Convergence checkpoint with sealed opposite-branch exit door",
+    "source": "GDD-course-scope.md §5",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_ConvergenceDoor"
+    ],
+    "assets": [],
+    "depends_on": [
+      "beacon_checkpoint",
+      "junction_gate_system"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "enemy_stats_datatable",
+    "name": "DT_EnemyStats (TTK tiers, HP per archetype)",
+    "source": "vault/02-enemies/*.md",
+    "layer": "asset",
+    "symbols": [
+      "DT_EnemyStats"
+    ],
+    "assets": [
+      "DT_EnemyStats"
+    ],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "enemy_crawler",
+    "name": "Crawler archetype (surface-following melee swarm)",
+    "source": "vault/02-enemies/crawler.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_Crawler"
+    ],
+    "assets": [
+      "enemy-crawler"
+    ],
+    "depends_on": [
+      "enemy_stats_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "enemy_ledge_gunner",
+    "name": "Ledge Gunner archetype (elevated shooter, TTK calibration)",
+    "source": "vault/02-enemies/ledge-gunner.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_LedgeGunner",
+      "MuzzleSocket"
+    ],
+    "assets": [
+      "enemy-ledge-gunner"
+    ],
+    "depends_on": [
+      "enemy_stats_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "enemy_shieldbearer",
+    "name": "Shieldbearer archetype (over-or-through chokepoint)",
+    "source": "vault/02-enemies/shieldbearer.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_Shieldbearer"
+    ],
+    "assets": [
+      "enemy-shieldbearer"
+    ],
+    "depends_on": [
+      "enemy_stats_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "enemy_walking_bomb",
+    "name": "Walking Bomb archetype (proximity detonation)",
+    "source": "vault/02-enemies/walking-bomb.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_WalkingBomb",
+      "EmissivePulse"
+    ],
+    "assets": [
+      "enemy-walking-bomb"
+    ],
+    "depends_on": [
+      "enemy_stats_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "enemy_blink_tank",
+    "name": "Blink Tank archetype (teleport heavy)",
+    "source": "vault/02-enemies/blink-tank.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_BlinkTank",
+      "TeleportBehindPlayer"
+    ],
+    "assets": [
+      "enemy-blink-tank",
+      "vfx-blink"
+    ],
+    "depends_on": [
+      "enemy_stats_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_la_costurera_witch",
+    "name": "La Costurera boss (witch, ranged volleys, invulnerability rule)",
+    "source": "vault/03-bosses/la-costurera-overview.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_LaCosturera",
+      "WitchVulnerable"
+    ],
+    "assets": [
+      "boss-la-costurera"
+    ],
+    "depends_on": [
+      "boss_goap_blackboard",
+      "boss_revive_weave_mechanic"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_revived_knights",
+    "name": "Revived Knights (boss vanguard, revive weave)",
+    "source": "vault/03-bosses/revived-knights.md",
+    "layer": "blueprint",
+    "symbols": [
+      "BP_RevivedKnight",
+      "Knight1State",
+      "Knight2State"
+    ],
+    "assets": [
+      "boss-revived-knights"
+    ],
+    "depends_on": [
+      "boss_goap_blackboard"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_goap_blackboard",
+    "name": "Shared GOAP perception blackboard",
+    "source": "vault/03-bosses/goap-blackboard-spec.md",
+    "layer": "cpp",
+    "symbols": [
+      "PlayerClass",
+      "HunterDodgeHabitScore",
+      "ReviveWeaveProgress",
+      "WitchVulnerable"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_goap_witch_brain",
+    "name": "La Costurera director GOAP goals",
+    "source": "vault/03-bosses/goap-blackboard-spec.md",
+    "layer": "cpp",
+    "symbols": [
+      "PredictHunterDodge",
+      "MaintainWeave"
+    ],
+    "assets": [],
+    "depends_on": [
+      "boss_goap_blackboard"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_goap_knight_brain",
+    "name": "Knight GOAP goals (pincer/flank/protect)",
+    "source": "vault/03-bosses/goap-blackboard-spec.md",
+    "layer": "cpp",
+    "symbols": [
+      "ProtectWitch",
+      "FlankTitanShield"
+    ],
+    "assets": [],
+    "depends_on": [
+      "boss_goap_blackboard"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_revive_weave_mechanic",
+    "name": "Diegetic revive-weave timer & dual-kill punish window",
+    "source": "vault/03-bosses/la-costurera-overview.md",
+    "layer": "blueprint",
+    "symbols": [
+      "ReviveWeaveProgress",
+      "PunishWindow"
+    ],
+    "assets": [
+      "vfx-revive-weave",
+      "vfx-weave"
+    ],
+    "depends_on": [
+      "boss_goap_blackboard"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "boss_scripted_fallback_patterns",
+    "name": "Per-class scripted boss pattern fallback (70/30 split)",
+    "source": "GDD-course-scope.md §9.1 cut line 2",
+    "layer": "blueprint",
+    "symbols": [
+      "BT_LaCosturera_Fallback"
+    ],
+    "assets": [],
+    "depends_on": [
+      "boss_la_costurera_witch",
+      "boss_revived_knights"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "ui_uispec_schema",
+    "name": "UISpec contract (UMGSpec + StringTable seam)",
+    "source": "vault/07-ui-and-controls/uispec.md",
+    "layer": "python",
+    "symbols": [
+      "UMGSpec",
+      "StringTable",
+      "string_table_key",
+      "widget_class"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "ui_rules_validator",
+    "name": "Deterministic UI/copy validation gate",
+    "source": "vault/07-ui-and-controls/ui-budgets.md",
+    "layer": "python",
+    "symbols": [
+      "ui_rules.py",
+      "load_region_denylist"
+    ],
+    "assets": [],
+    "depends_on": [
+      "ui_uispec_schema"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "terminology_guard_validator",
+    "name": "Terminology & IP guard (banned placeholder + region terms)",
+    "source": "vault/00-core/terminology-guard.md",
+    "layer": "python",
+    "symbols": [
+      "validators.py",
+      "FLAGGED",
+      "APPROVED"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "string_table_st_ui",
+    "name": "ST_UI string table (interface copy, EN/ES)",
+    "source": "vault/05-lore/bilingual-string-tables.md",
+    "layer": "asset",
+    "symbols": [
+      "ST_UI"
+    ],
+    "assets": [
+      "ST_UI"
+    ],
+    "depends_on": [
+      "ui_uispec_schema"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "string_table_st_lore",
+    "name": "ST_Lore string table (bilingual lore records)",
+    "source": "vault/05-lore/bilingual-string-tables.md",
+    "layer": "asset",
+    "symbols": [
+      "ST_Lore"
+    ],
+    "assets": [
+      "ST_Lore"
+    ],
+    "depends_on": [
+      "ui_uispec_schema"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "lore_rag_pipeline",
+    "name": "RAG lore generation pipeline (bilingual at source)",
+    "source": "vault/05-lore/architects-cosmology.md",
+    "layer": "python",
+    "symbols": [
+      "text_en",
+      "text_es",
+      "source_chunks"
+    ],
+    "assets": [],
+    "depends_on": [
+      "string_table_st_lore",
+      "terminology_guard_validator"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "class_select_screen",
+    "name": "Class Select screen (Hunter vs Titan preview)",
+    "source": "vault/07-ui-and-controls/hud-and-screens.md",
+    "layer": "blueprint",
+    "symbols": [
+      "Screen_ClassSelect"
+    ],
+    "assets": [],
+    "depends_on": [
+      "ui_uispec_schema",
+      "string_table_st_ui"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "run_complete_screen",
+    "name": "Run-Complete screen (names what the class never saw)",
+    "source": "vault/07-ui-and-controls/hud-and-screens.md",
+    "layer": "blueprint",
+    "symbols": [
+      "Screen_RunComplete"
+    ],
+    "assets": [],
+    "depends_on": [
+      "ui_uispec_schema",
+      "string_table_st_ui"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "pause_menu_screen",
+    "name": "Pause menu (remap, accessibility toggles, locale switch)",
+    "source": "vault/07-ui-and-controls/hud-and-screens.md",
+    "layer": "blueprint",
+    "symbols": [
+      "Screen_Pause",
+      "ST_UI.Pause_Resume"
+    ],
+    "assets": [],
+    "depends_on": [
+      "ui_uispec_schema",
+      "string_table_st_ui",
+      "enhanced_input_config"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "narrative_envelope_beats",
+    "name": "Four-beat narrative envelope (opening cards, class-select lore, arrival, closing bookend)",
+    "source": "GDD-course-scope.md §8.2",
+    "layer": "blueprint",
+    "symbols": [
+      "OpeningCards",
+      "ClosingBookend"
+    ],
+    "assets": [],
+    "depends_on": [
+      "string_table_st_lore",
+      "class_select_screen"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "asset_scout_agent",
+    "name": "Asset Scout agent (marketplace sourcing + licence audit)",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "11-asset-scout.md",
+      "asset-manifest.json"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "style_ip_guard_agent",
+    "name": "Style & IP Guard agent (content audit against terminology guard)",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "05-style-ip-guard.md"
+    ],
+    "assets": [],
+    "depends_on": [
+      "terminology_guard_validator"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "controls_feel_designer_agent",
+    "name": "Controls & Game-Feel Designer agent (DT_PlayerFeel authoring)",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "DT_PlayerFeel"
+    ],
+    "assets": [],
+    "depends_on": [
+      "game_feel_datatable"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "coder_agent_pipeline",
+    "name": "Coder agent (config-driven Blueprint implementation + tests)",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "builder/judge law"
+    ],
+    "assets": [],
+    "depends_on": [
+      "room_reviewer_agent",
+      "style_ip_guard_agent"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "adversarial_qa_crew_harness",
+    "name": "Adversarial QA crew (headless balance harness, win-rate/TTK/softlock reports)",
+    "source": "vault/06-balance/balance-contract.md",
+    "layer": "python",
+    "symbols": [
+      "clearability",
+      "win_rate",
+      "cause_of_death"
+    ],
+    "assets": [],
+    "depends_on": [
+      "room_import_pipeline",
+      "boss_la_costurera_witch"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "provenance_gate",
+    "name": "Provenance record for gated content (hash/approval audit)",
+    "source": "vault/08-pipeline/authoring-pipeline.md",
+    "layer": "python",
+    "symbols": [
+      "provenance.py"
+    ],
+    "assets": [],
+    "depends_on": [
+      "roomspec_validator_gate"
+    ],
+    "required_for_slice": true
+  },
+  {
+    "id": "agent_orchestrator_runner",
+    "name": "Agent orchestrator routing crew to subscription CLIs",
+    "source": "GDD-course-scope.md §8",
+    "layer": "python",
+    "symbols": [
+      "runner.py"
+    ],
+    "assets": [],
+    "depends_on": [],
+    "required_for_slice": true
+  },
+  {
+    "id": "hardsurface_master_material",
+    "name": "Hard-surface master material & trim sheet set",
+    "source": "vault/00-core/asset-inventory.md",
+    "layer": "asset",
+    "symbols": [],
+    "assets": [
+      "mat-hardsurface"
+    ],
+    "depends_on": [],
+    "required_for_slice": true
+  }
+]
