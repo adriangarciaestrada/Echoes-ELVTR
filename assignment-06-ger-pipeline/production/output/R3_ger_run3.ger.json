@@ -1,0 +1,56 @@
+{
+  "brief": "Segment A, shared path. A single standard-height hall, 2400 wide and 1200 tall, entered by a left door and left by a right door at the same level. Two alternating ledges climbing to a Titan bash pocket sealed in the right wall. No Hunter pocket.",
+  "generator": "01-level-designer",
+  "attempts": 5,
+  "budget": 5,
+  "status": "ACCEPTED",
+  "clearable": true,
+  "history": [
+    {
+      "attempt": 1,
+      "softlocks": [
+        "ERR_UNREACHABLE",
+        "ERR_NO_RUNUP"
+      ],
+      "other_errors": [
+        "ERR_OFF_GRID",
+        "ERR_OFF_GRID",
+        "ERR_OFF_GRID"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 2,
+      "softlocks": [
+        "ERR_NO_RUNUP"
+      ],
+      "other_errors": [
+        "ERR_POCKET_NOT_EXCLUSIVE",
+        "ERR_POCKET_UNSEEN"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 3,
+      "softlocks": [
+        "ERR_ONE_WAY_DROP"
+      ],
+      "other_errors": [],
+      "warnings": 0
+    },
+    {
+      "attempt": 4,
+      "softlocks": [
+        "ERR_UNREACHABLE"
+      ],
+      "other_errors": [],
+      "warnings": 0
+    },
+    {
+      "attempt": 5,
+      "softlocks": [],
+      "other_errors": [],
+      "warnings": 0
+    }
+  ]
+}

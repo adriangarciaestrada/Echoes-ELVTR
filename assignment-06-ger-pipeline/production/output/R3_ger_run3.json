@@ -1,0 +1,72 @@
+{
+  "room_id": "room_segment_a_hall_01",
+  "segment": "SegmentA_Shared",
+  "grid": 20,
+  "cavity": [
+    {
+      "id": "hall",
+      "x": 0,
+      "z": 0,
+      "width": 2400,
+      "height": 1200
+    }
+  ],
+  "solids": [
+    {
+      "id": "ledge_1",
+      "x": 700,
+      "z": 200,
+      "width": 600,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_2",
+      "x": 1600,
+      "z": 400,
+      "width": 740,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "seal_bash",
+      "x": 2340,
+      "z": 440,
+      "width": 60,
+      "height": 400,
+      "breakable_by": "Bash"
+    }
+  ],
+  "anchors": [],
+  "doors": [
+    {
+      "id": "door_in",
+      "side": "Left",
+      "at": 0,
+      "size": 200,
+      "required_tool": "None"
+    },
+    {
+      "id": "door_out",
+      "side": "Right",
+      "at": 0,
+      "size": 200,
+      "required_tool": "None"
+    }
+  ],
+  "checkpoints": [],
+  "critical_path": [
+    "door_in",
+    "hall",
+    "door_out"
+  ],
+  "pockets": [
+    {
+      "id": "pocket_titan",
+      "x": 2360,
+      "z": 440,
+      "required_tool": "Bash",
+      "contents": "HealthCache"
+    }
+  ]
+}

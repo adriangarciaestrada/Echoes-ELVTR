@@ -1,0 +1,165 @@
+{
+  "room_id": "room_segment_a_shaft_01",
+  "segment": "SegmentA_Shared",
+  "grid": 20,
+  "cavity": [
+    {
+      "x": 0,
+      "z": 0,
+      "width": 1500,
+      "height": 2400
+    },
+    {
+      "x": 1500,
+      "z": 1600,
+      "width": 500,
+      "height": 120
+    }
+  ],
+  "solids": [
+    {
+      "id": "ledge_1",
+      "x": 200,
+      "z": 160,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_2",
+      "x": 900,
+      "z": 360,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_3",
+      "x": 200,
+      "z": 560,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_4",
+      "x": 900,
+      "z": 760,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_5",
+      "x": 200,
+      "z": 960,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_6",
+      "x": 900,
+      "z": 1160,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_7",
+      "x": 900,
+      "z": 1360,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_8",
+      "x": 200,
+      "z": 1560,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_9",
+      "x": 900,
+      "z": 1760,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_10",
+      "x": 200,
+      "z": 1960,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_11",
+      "x": 500,
+      "z": 2160,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "perch_hunter",
+      "x": 1600,
+      "z": 1640,
+      "width": 300,
+      "height": 40,
+      "is_one_way": false
+    }
+  ],
+  "anchors": [
+    {
+      "id": "anchor_pocket",
+      "x": 1400,
+      "z": 1680
+    }
+  ],
+  "doors": [
+    {
+      "id": "door_in",
+      "side": "Left",
+      "at": 0,
+      "size": 200,
+      "required_tool": "None"
+    },
+    {
+      "id": "door_out",
+      "side": "Top",
+      "at": 600,
+      "size": 200,
+      "required_tool": "None"
+    }
+  ],
+  "checkpoints": [],
+  "critical_path": [
+    "door_in",
+    "ledge_1",
+    "ledge_2",
+    "ledge_3",
+    "ledge_4",
+    "ledge_5",
+    "ledge_6",
+    "ledge_7",
+    "ledge_8",
+    "ledge_9",
+    "ledge_10",
+    "ledge_11",
+    "door_out"
+  ],
+  "pockets": [
+    {
+      "id": "pocket_hunter",
+      "x": 1760,
+      "z": 1680,
+      "required_tool": "Grapple",
+      "contents": "LoreCache"
+    }
+  ]
+}

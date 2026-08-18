@@ -1,0 +1,49 @@
+{
+  "brief": "Segment A, shared path. A single standard-height hall, 2400 wide and 1200 tall, entered by a left door and left by a right door at the same level. Two alternating ledges climbing to a Titan bash pocket sealed in the right wall. No Hunter pocket.",
+  "generator": "01-level-designer",
+  "attempts": 4,
+  "budget": 5,
+  "status": "ESCALATED",
+  "clearable": false,
+  "history": [
+    {
+      "attempt": 1,
+      "softlocks": [
+        "ERR_UNREACHABLE"
+      ],
+      "other_errors": [
+        "ERR_POCKET_UNSEEN"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 2,
+      "softlocks": [
+        "ERR_ONE_WAY_DROP"
+      ],
+      "other_errors": [],
+      "warnings": 0
+    },
+    {
+      "attempt": 3,
+      "softlocks": [
+        "ERR_UNREACHABLE"
+      ],
+      "other_errors": [],
+      "warnings": 0
+    },
+    {
+      "attempt": 4,
+      "softlocks": [
+        "ERR_UNREACHABLE"
+      ],
+      "other_errors": [],
+      "warnings": 0
+    }
+  ],
+  "circuit_breaker": {
+    "tripped": "NO_PROGRESS",
+    "diagnosis": "attempt 4 failed exactly as attempt 3 did: ERR_UNREACHABLE. The generator is not able to act on this rule as it is written.",
+    "human_action": "Do not raise the retry budget — it will buy identical output. Either the rule is not stated in the injected contract, or it is stated in a way that does not tell the generator what to do instead. Read the guidance for these codes in REPAIR_GUIDANCE and put the missing half in the vault note the agent loads."
+  }
+}
