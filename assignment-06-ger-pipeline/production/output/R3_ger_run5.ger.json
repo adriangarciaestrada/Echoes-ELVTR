@@ -1,0 +1,74 @@
+{
+  "brief": "Segment A, shared path. A tight corridor that opens into a shaft the player climbs to a door in the ceiling. The shaft is THREE standard floors tall (1200), so the whole room spans at least 1000 vertical — the room budget requires it. One Hunter grapple pocket (anchor 150-200 above a standable perch) and one Titan bash pocket, both locks visible from the route.",
+  "generator": "01-level-designer",
+  "attempts": 5,
+  "budget": 5,
+  "status": "ESCALATED",
+  "clearable": true,
+  "history": [
+    {
+      "attempt": 1,
+      "softlocks": [
+        "ERR_NO_HEADROOM",
+        "ERR_NO_WAY_THROUGH",
+        "ERR_JUMP_CLIPPED",
+        "ERR_NO_RUNUP"
+      ],
+      "other_errors": [
+        "ERR_OFF_MODULE",
+        "ERR_OFF_MODULE",
+        "ERR_POCKET_NOT_EXCLUSIVE"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 2,
+      "softlocks": [
+        "ERR_NO_WAY_THROUGH",
+        "ERR_JUMP_CLIPPED"
+      ],
+      "other_errors": [
+        "ERR_DEAD_SPACE",
+        "ERR_POCKET_NOT_EXCLUSIVE"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 3,
+      "softlocks": [
+        "ERR_NO_WAY_THROUGH",
+        "ERR_JUMP_CLIPPED"
+      ],
+      "other_errors": [
+        "ERR_OFF_MODULE",
+        "ERR_DEAD_SPACE",
+        "ERR_POCKET_NOT_EXCLUSIVE"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 4,
+      "softlocks": [
+        "ERR_JUMP_CLIPPED"
+      ],
+      "other_errors": [
+        "ERR_POCKET_UNSEEN"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 5,
+      "softlocks": [],
+      "other_errors": [
+        "ERR_LADDER_CLIMB",
+        "ERR_POCKET_NOT_EXCLUSIVE"
+      ],
+      "warnings": 0
+    }
+  ],
+  "circuit_breaker": {
+    "tripped": "BUDGET",
+    "diagnosis": "5 attempts spent and still failing, but each attempt differed from the last, so the loop was still working.",
+    "human_action": "This one is worth more budget: re-run with a higher --attempts. If it stops improving the breaker will trip on NO_PROGRESS instead, which is the signal to change the prompt."
+  }
+}

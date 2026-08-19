@@ -1,0 +1,18 @@
+{
+  "schema": "echoes.provenance/1",
+  "artifact": {
+    "name": "R3_ger_run4_repaired.json",
+    "sha256": "97b4d335ff6dc1145aa22f9d8d0ddcbdc70e345a3190140392cb2115a35443c6",
+    "kind": "room",
+    "id": "room_segment_a_shaft_02"
+  },
+  "gate": {
+    "status": "PASS",
+    "error_count": 0,
+    "report_sha256": "867e965e16ac4ed2938e49bf6833c3f752f67b5629a002d4654622f807ef9ab5",
+    "rules_sha256": "774daa292c3f0887440bc923f7fd18e6ebe3057ade93d639a1e1bebcbdec6a2d",
+    "stamped_at": "2026-08-19T02:41:04+00:00"
+  },
+  "review": null,
+  "approval": null
+}

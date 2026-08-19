@@ -1,0 +1,31 @@
+{
+  "schema": "echoes.provenance/1",
+  "artifact": {
+    "name": "R3_bend_v3.json",
+    "sha256": "64fbbd28fdbedaf0c1c0bc274b5994d986850d0b12b3ae5b200ff9d792c99833",
+    "kind": "room",
+    "id": "room_segment_a_bend_02"
+  },
+  "gate": {
+    "status": "PASS",
+    "error_count": 0,
+    "report_sha256": "e1c17efb289b161fd7e6fb8ef4a48158d667cab245939e5bde24b769795fc89f",
+    "stamped_at": "2026-08-06T06:48:47+00:00"
+  },
+  "review": {
+    "status": "REVISE",
+    "finding_count": 1,
+    "finding_codes": [
+      "ILLEGIBLE"
+    ],
+    "report_sha256": "c1537e6a026f5393942ca1d9c04c59f458c18af94ad06ece25c587caebd81688"
+  },
+  "approval": {
+    "at": "2026-08-06T06:51:46+00:00",
+    "note": "El hallazgo pide marcadores visuales, que el RoomSpec no expresa por diseno: breakable_by ya etiqueta el actor como Room.Breakable y la pasada de arte le da las grietas. La queja posicional del pase anterior si quedo corregida, y la review en frio lo confirma: ledge_1 movida a x=1000 pone el muro en la linea de marcha. Base de la aprobacion: revision del spec y de la review en frio; la sala no se ha visto aun en el motor.",
+    "override": true,
+    "overridden": [
+      "ILLEGIBLE"
+    ]
+  }
+}

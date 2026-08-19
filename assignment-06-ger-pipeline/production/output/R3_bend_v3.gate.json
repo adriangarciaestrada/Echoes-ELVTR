@@ -1,0 +1,103 @@
+{
+  "kind": "room",
+  "status": "FAIL",
+  "error_count": 19,
+  "warning_count": 0,
+  "errors": [
+    {
+      "code": "ERR_NO_HEADROOM",
+      "message": "'ledge_1' offers 0 of width with 200 of clear space above it, and the character is 176 tall and 68 wide. There is nowhere on this surface to stand up",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_NO_WAY_THROUGH",
+      "message": "on 'ledge_4' the route runs from 1160 to 1126, and something hangs low enough over that stretch to stop the character, who is 176 tall. Standing room on either side of an obstruction is not a way past it",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_JUMP_CLIPPED",
+      "message": "leaving 'ledge_1' for 'ledge_2' means rising 200, and between x=1000 and x=1000 the ceiling never allows more than -1. A low ceiling clips the jump to whatever is left above the body, so this climb cannot be made",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_JUMP_CLIPPED",
+      "message": "leaving 'ledge_2' for 'ledge_3' means rising 200, and between x=1126 and x=1160 the ceiling never allows more than 184. A low ceiling clips the jump to whatever is left above the body, so this climb cannot be made",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_JUMP_CLIPPED",
+      "message": "leaving 'ledge_3' for 'ledge_4' means rising 200, and between x=1160 and x=1160 the ceiling never allows more than -1. A low ceiling clips the jump to whatever is left above the body, so this climb cannot be made",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_JUMP_CLIPPED",
+      "message": "leaving 'ledge_4' for 'ledge_5' means rising 200, and between x=1126 and x=1160 the ceiling never allows more than 184. A low ceiling clips the jump to whatever is left above the body, so this climb cannot be made",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_JUMP_CLIPPED",
+      "message": "leaving 'ledge_5' for 'ledge_6' means rising 200, and between x=1160 and x=1160 the ceiling never allows more than -1. A low ceiling clips the jump to whatever is left above the body, so this climb cannot be made",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_OFF_MODULE",
+      "message": "'high_hall_floor' stands at 1240, off the 200 climbing module. Surfaces sit on half-floors so that one landing carries one floor of climb",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_OFF_MODULE",
+      "message": "this space is 600 tall, which is neither a tight corridor (260) nor a whole number of 400 floors (400 or 800). A height that is nearly standard teaches the player only that heights are arbitrary",
+      "path": "cavity[0]"
+    },
+    {
+      "code": "ERR_OFF_MODULE",
+      "message": "this space is 1400 tall, which is neither a tight corridor (260) nor a whole number of 400 floors (1200 or 1600). A height that is nearly standard teaches the player only that heights are arbitrary",
+      "path": "cavity[1]"
+    },
+    {
+      "code": "ERR_OFF_MODULE",
+      "message": "this space is 600 tall, which is neither a tight corridor (260) nor a whole number of 400 floors (400 or 800). A height that is nearly standard teaches the player only that heights are arbitrary",
+      "path": "cavity[2]"
+    },
+    {
+      "code": "ERR_CLIMB_BLOCKED",
+      "message": "'ledge_2' overhangs 'ledge_1' by 400. Standing clear of it means jumping almost straight up, and arriving over it costs 68 of travel the jump has no height left to pay for. Either offset them horizontally — a climb between ledges alternates rather than stacks — or, if 'ledge_1' is a floor or a long run, rest 'ledge_2' on it: give it z at that surface and height 200 so it becomes a step, which nothing has to be jumped clear of",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_LADDER_CLIMB",
+      "message": "6 steps of the route in a row shuffle between two positions. That is a ladder: the player repeats one input and sees the same view from every landing. Send the climb across the room, and carve the space wide enough to let it",
+      "path": "critical_path"
+    },
+    {
+      "code": "ERR_DEAD_SPACE",
+      "message": "'ledge_1' floats 160 above what is under it, and the character needs 200 to get in there. Fill it down and let it be a step, or raise it until the space below is usable — a gap nobody can enter reads as an oversight, not as a secret",
+      "path": "solids[0]"
+    },
+    {
+      "code": "ERR_DEAD_SPACE",
+      "message": "'ledge_2' floats 160 above what is under it, and the character needs 200 to get in there. Fill it down and let it be a step, or raise it until the space below is usable — a gap nobody can enter reads as an oversight, not as a secret",
+      "path": "solids[1]"
+    },
+    {
+      "code": "ERR_DEAD_SPACE",
+      "message": "'ledge_3' floats 160 above what is under it, and the character needs 200 to get in there. Fill it down and let it be a step, or raise it until the space below is usable — a gap nobody can enter reads as an oversight, not as a secret",
+      "path": "solids[2]"
+    },
+    {
+      "code": "ERR_DEAD_SPACE",
+      "message": "'ledge_4' floats 160 above what is under it, and the character needs 200 to get in there. Fill it down and let it be a step, or raise it until the space below is usable — a gap nobody can enter reads as an oversight, not as a secret",
+      "path": "solids[3]"
+    },
+    {
+      "code": "ERR_DEAD_SPACE",
+      "message": "'ledge_5' floats 160 above what is under it, and the character needs 200 to get in there. Fill it down and let it be a step, or raise it until the space below is usable — a gap nobody can enter reads as an oversight, not as a secret",
+      "path": "solids[4]"
+    },
+    {
+      "code": "ERR_DEAD_SPACE",
+      "message": "'ledge_6' floats 160 above what is under it, and the character needs 200 to get in there. Fill it down and let it be a step, or raise it until the space below is usable — a gap nobody can enter reads as an oversight, not as a secret",
+      "path": "solids[5]"
+    }
+  ]
+}

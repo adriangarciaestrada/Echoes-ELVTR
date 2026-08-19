@@ -169,6 +169,18 @@ REPAIR_GUIDANCE: Dict[str, str] = {
         "Every coordinate is a multiple of the grid (default 20). Rectilinear geometry on a grid is what keeps "
         "irregular outlines readable and the arithmetic exact."
     ),
+    "ERR_ANCHOR_NO_LANDING": (
+        f"An anchor is a destination, not only a target: the pull ends at the anchor and the Hunter "
+        f"comes down onto whatever is underneath. There must be a surface at most "
+        f"{_n(rr.LANDING_DROP_MAX)} below the anchor, with {_n(rr.HEADROOM)} of clear space and a "
+        f"body's width to stand on. An anchor over a void, or over a perch pinned under the ceiling, "
+        "strands the class it exists for."
+    ),
+    "ERR_POCKET_NO_FOOTING": (
+        f"A reward the right class cannot stand next to is not a reward. The surface a pocket sits on "
+        f"needs {_n(rr.HEADROOM)} of clear space above it — the headroom rules guard the critical "
+        "path, and a pocket lives off it by definition, so its footing is checked separately."
+    ),
     "ERR_LADDER_CLIMB": (
         "A climb that shuffles between two positions is a ladder: the player repeats one input and sees the "
         "same view from every landing. Send the climb across the room, and carve the cavity wide enough to "

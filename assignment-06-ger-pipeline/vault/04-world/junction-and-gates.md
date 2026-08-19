@@ -25,6 +25,15 @@ run-up before the player has been told it does. It was 400u; reduced because
 room widths start at 2000 and a fifth of a small room is a high price for
 legibility already achieved sooner.
 
+**An anchor makes three promises, and placement must keep all three at once.**
+Seen from the route, out of jumping reach, and **standable on arrival**: the pull
+ends at the anchor, the Hunter comes down onto whatever is underneath, and that
+surface needs a full body of clear space — found in play when a perch hung 60
+under the ceiling and the pull ended with nowhere to stand. The three pull
+against each other (tucking an anchor over its perch hides it; raising it past
+200 above the landing turns arrival into an undecided fall), which is exactly
+why placement is the design act.
+
 **The clear line is the grapple.** An anchor behind geometry is decorative. The
 range is 800u, and the segment from the Hunter's standing position to the
 anchor must intersect nothing solid.

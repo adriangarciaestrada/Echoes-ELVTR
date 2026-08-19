@@ -21,8 +21,9 @@ keys, no paid endpoints.
 
 ## Pre-Build Declaration
 
-*Submitted before any code was written; also standing alone in
-`PRE-BUILD-DECLARATION.md`.*
+*The three required answers; also standing alone in `PRE-BUILD-DECLARATION.md`.
+The blocker they describe was found in play on 10 August, before this pipeline
+was designed around it.*
 
 **What this game generates inconsistently.** Room geometry. An agent writes a
 RoomSpec: the carved cavity, its ledges and doors, the class pockets, and the
@@ -184,14 +185,19 @@ because only one of those piles blocks the build.
 
 ## The loop, running against the real generator
 
-Three runs against agent `01-level-designer` on a subscription CLI. The full
-transcripts are in `production/output/R3_ger_run*.ger.json`.
+Six runs against agent `01-level-designer` on a subscription CLI, across two
+generations of the rule set. Full transcripts in
+`production/output/R3_ger_run*.ger.json`.
 
-| Run | Brief | Attempts | Outcome |
+| Run | Rule set | Attempts | Outcome |
 |---|---|---|---|
-| 2 | one standard-height hall with a Titan pocket | 4 | **ESCALATED** — `NO_PROGRESS` |
-| 3 | the same brief, after the fix below | 5 | **ACCEPTED** |
-| 1 | a tight corridor into a two-floor shaft, both pockets | 3 | **ACCEPTED** |
+| 2 | v1 | 4 | **ESCALATED** — `NO_PROGRESS` |
+| 3 | v1, after the evaluator fix below | 5 | **ACCEPTED** |
+| 1 | v1, harder brief | 3 | **ACCEPTED** — later invalidated by v2 |
+| 4 | v2 (two rules born from human play) | 5 | **ESCALATED** — `REGRESSION`; best attempt 1 error |
+| 5 | v2, re-briefed | 5 | **ESCALATED** — `BUDGET`, improving 4→2→2→1→0 softlocks |
+| 6 | v2, more budget | 3 | **ESCALATED** — `REGRESSION` |
+| — | v2, run 4's best repaired by hand | — | **ACCEPTED**, then human-validated |
 
 ### The escalation that found a defect in the evaluator
 
@@ -217,54 +223,130 @@ The message now names the cause:
 Run 3 is the same brief against the same model with that one message changed:
 2 softlocks → 1 → 1 → 1 → **PASS**.
 
-That is the circuit breaker earning its place. It did not merely stop a loop; its
-diagnosis named a defect in the evaluator, and repairing that is what let the
-generator finish.
+### When the rules tightened, the loop stopped converging — and said so usefully
 
-### The room the loop converged on
+After human play added two rules (next section), the same brief was run again
+under the stricter gate. Three runs, three escalations — and each trip named a
+different kind of stuck, which is the breaker doing its job rather than failing
+at it:
 
-Run 1 took the harder brief and cleared it in three attempts — **6 softlocks → 1
-→ PASS** — producing `room_segment_a_shaft_01`:
+- Run 4 tripped `REGRESSION` holding a best attempt **one error from passing**
+  (the room stood 800 tall against a 1000 budget), with the anchor rules already
+  satisfied.
+- Run 5, re-briefed with the height named, tripped `BUDGET` while still
+  improving — 4→2→2→1→0 softlocks — which is the one trip that says *spend more*.
+- Run 6, given more budget and a fuller brief, tripped `REGRESSION` again.
 
-```
-corridor 800×260  (tight: the jump is clipped, so no step of the route is jumped here)
-   ↓
-shaft 1600×1200   (three standard floors)
-   step_1  x=700    step_2  x=1400    step_3  x=800
-   step_4  x=1300   step_5  x=700          ← alternating, never stacked
-   anchor_hunter (1800,1160) → perch → Grapple pocket
-   ↓
-east chamber 400×400, sealed by seal_east → Bash pocket
-```
+At that point the `REGRESSION` playbook was followed as written: **keep the best
+attempt and repair it by hand.** Run 4's best needed its shaft raised from two
+floors to three and the climb extended to meet the ceiling. The repair is
+declared, not hidden — and the gate rejected the first two attempts at it, for
+ladder-shape, dead space, and a ceiling inside a jump arc: the same defects it
+catches in the generator. **The gate does not know whether the author is a model,
+and that is the point of a gate.** The third repair passed with zero findings and
+became `room_segment_a_shaft_02`, in
+`production/output/R3_ger_run4_repaired.json`.
 
-Both pockets are exclusive and visible from the route, no step leaves the
-guaranteed band, and the body fits on every landing. This is the shape the rules
-were written to force: the tight corridor carries no climb, and the climb
-alternates because stacking is arithmetically impossible.
+---
 
-### The honest limitation
+## Human validation, on both sides of the boundary
 
-Run 3's accepted room is **simpler than its brief asked for**. Told to build a
-climb, the generator satisfied the gate by moving the climb off the critical
-path. That is not cheating — a pocket may not sit on the critical path, so it is
-a correct reading — but it is what a loop like this does: a GER pipeline
-converges on the *cheapest* thing the evaluator accepts. The evaluator can prove
-a room is clearable. It cannot make a room ambitious, and nothing here should be
-read as claiming otherwise.
+The evaluator's verdicts were checked against play in both directions: a room it
+rejects was walked to confirm the rejection is real, and rooms it accepted were
+walked to confirm the acceptance holds. A gate validated only on rooms it
+approves is a gate play can never contradict, so the pipeline includes a
+**diagnostic mode** (`room_import.py --diagnose`) that builds a gate-rejected
+room in a fixture level precisely so a human can experience the failure.
+
+### The FAIL case, confirmed by its mechanism
+
+`room_segment_a_bend_02` — approved by a human before these rules existed, 8
+softlocks under the current gate — was walked in engine. (The superseded
+approval record travels with this submission; its note, in the original Spanish,
+ends *"la sala no se ha visto aún en el motor"* — the room has not yet been seen
+in the engine. This walk answered it.)
+
+| the gate's claim | what play found |
+|---|---|
+| 8 softlocks, `clearable = False` | "the ladder is a lock" |
+| `ERR_NO_HEADROOM`: 160 of air for a 176 body | "the platforms aren't separated enough for the character to fit between them" |
+| overhangs of 240–280 leave slivers uncovered | reached the third platform only "by exploiting small parts of the platforms" |
+| `ERR_LADDER_CLIMB`: one repeated input | "that ladder is no fun at all" |
+
+The tester stopped at the third ledge, and the slivers that allowed even that
+are exactly the widths the overhang analysis reports as uncovered: the failure
+was confirmed *by its mechanism*, not just its outcome.
+
+### The first PASS case — held, and still taught the gate a rule
+
+`room_segment_a_shaft_01`, run 1's accepted room, was walked next: the climb went
+through first try, and the tight corridor read as intended. Two observations came
+back that the gate had not made, and they are different in kind:
+
+- **"Somewhat monotonous"** is a judgment about experience, not geometry. It
+  belongs to the semantic review layer and the art pass; a deterministic
+  evaluator should not pretend to hold an opinion about it.
+- **The grapple anchor's perch hung 60 units under the ceiling** — visible,
+  correctly out of jumping reach, and impossible to stand on. The Hunter would
+  pull to the anchor and arrive nowhere. Reach, range and sight had all passed;
+  *arrival* had never been asked about.
+
+The second observation became two rules the same day. An anchor now makes three
+promises at once — seen from the route, out of jumping reach, and **standable on
+arrival** (`ERR_ANCHOR_NO_LANDING`: a surface at most 200 below the anchor with a
+full body of clear space) — and a pocket's own surface must be standable
+(`ERR_POCKET_NO_FOOTING`), because the headroom rules guard the critical path and
+a pocket lives off it by definition. The contract's worked example carried the
+same 60 units of air and is corrected: the third time a defect traced back to the
+document teaching it.
+
+### The final PASS case, validated
+
+The repaired `room_segment_a_shaft_02` was then walked under the full rule set:
+the six-step climb went through in one go, the anchor read as a place the Hunter
+would land and stand, and the high return over the shelf read as a route rather
+than a ladder. The tester's verdict: it meets everything asked of it. That room,
+with that validation, is this pipeline's accepted output.
+
+---
+
+## What keeps yesterday's PASS from outliving its rules
+
+Re-gating run 1's room exposed the last hole: the provenance record bound the
+artifact's bytes but not the law they were judged under, so a PASS issued before
+a rule existed walked through the importer while failing the current gate. Every
+gate report now carries a **fingerprint of the rule set**
+(`validators.rules_fingerprint()`), stamping records it, and the importer refuses
+a verdict whose rules have changed since:
+
+> `REFUSED — the validation rules have changed since this artifact was stamped,
+> so its PASS was issued by a gate that no longer exists. Re-run the gate,
+> re-stamp, and re-approve against the current rules.`
+
+That refusal fired for real on its first exercise: the very room a human had just
+validated was stopped at import an hour later, because the rules its PASS was
+issued under had been superseded by what that validation found. The importer and
+its tests travel under `importer/`.
 
 ---
 
 ## What was already there, and what this assignment added
 
 The generator, the deterministic gate and a retry loop predate this assignment.
-Three things are new, and each came from a failure that had already happened:
+Five things are new, and each came from a failure that had already happened:
 
 1. **Softlocks are separated from quality findings.** §7.1 is build-blocking and
    `ERR_UNIFORM_LEDGES` is not, and a flat error count hid that.
 2. **The refiner sends the constraint, not the complaint** — scoped to the codes
    that fired.
 3. **The circuit breaker replaces "run out of retries" with a diagnosis.** Three
-   named ways of being stuck, each with the action a human should take.
+   named ways of being stuck, each with the action a human should take — and each
+   was exercised for real across the six runs above.
+4. **Human validation on both sides of the boundary**, with a diagnostic mode
+   that exists so play can contradict the gate; two of the evaluator's rules were
+   born from it.
+5. **The rules fingerprint**, so a verdict cannot outlive the gate that issued
+   it.
 
 ## Running it
 

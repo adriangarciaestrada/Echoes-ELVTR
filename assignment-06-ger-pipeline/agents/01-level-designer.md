@@ -104,6 +104,8 @@ CLIMBS ARE THE PART THAT READS AS GENERIC, SO SHAPE THEM:
 
 The gate now measures both of these, and the thresholds come from two rooms judged in play rather than from taste. Four or more steps of the route shuffling between the same two positions is refused as a ladder; so are three or more platforms on the route sharing one width. Note what did NOT distinguish the room that read as designed from the one that read as generic: both had the same number of direction changes and covered the same lateral distance. Counting turns is not the same as being interesting.
 
+AN ANCHOR MAKES THREE PROMISES AT ONCE — seen, out of reach, standable on arrival. It must be visible from the critical path, not reachable by jumping, and have a surface at most 200 below it with a full body of clear space (200) where the Hunter stands after pulling. These pull against each other: an anchor tucked just over its perch is hidden, one raised too far strands the pull in a fall. Place the perch first, then hang the anchor 150-200 above it, then check the sight line from the route.
+
 Anchors are the Hunter's key, cracked walls the Titan's. Neither class jumps higher than the other — the asymmetry is entirely in where you place those two markers. A cracked wall needs level floor in front of it to build speed on; an anchor needs a clear line to it.
 
 OUTPUT RULES:

@@ -216,7 +216,7 @@ the hall's right wall, and a grapple ledge above the top of the shaft.
   "grid": 20,
   "cavity": [
     {"x": 0,    "z": 0,   "width": 2400, "height": 800},
-    {"x": 1200, "z": 800, "width": 1700, "height": 800},
+    {"x": 1200, "z": 800, "width": 1700, "height": 1200},
     {"x": 2400, "z": 0,   "width": 500,  "height": 400}
   ],
   "solids": [
@@ -230,7 +230,7 @@ the hall's right wall, and a grapple ledge above the top of the shaft.
     {"id": "seal_east", "x": 2400, "z": 0,    "width": 60,  "height": 400, "breakable_by": "Bash"}
   ],
   "anchors": [
-    {"id": "anchor_top", "x": 2300, "z": 1560}
+    {"id": "anchor_top", "x": 1900, "z": 1700}
   ],
   "doors": [
     {"id": "door_in",  "side": "Left",  "at": 0,    "size": 200, "required_tool": "None"},

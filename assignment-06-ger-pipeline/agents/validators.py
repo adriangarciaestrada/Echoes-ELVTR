@@ -40,6 +40,7 @@ Exit code 0 = PASS (no errors), 1 = FAIL. A JSON report is printed to stdout.
 """
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -648,6 +649,29 @@ def validate_room(room: Dict) -> List[Dict]:
             _err(errors, "ERR_ANCHOR_UNUSABLE", f"anchor '{a['id']}' is not within {rr.GRAPPLE_RANGE:g} "
                  "of anywhere the character can stand with a clear line to it", f"anchors[{i}]")
 
+        # An anchor is a destination, not only a target. The pull ends at the
+        # anchor and the Hunter comes down onto whatever is underneath, so there
+        # must be an underneath, close below, with room to stand. Found in play:
+        # an anchor whose perch hung 60 under the ceiling passed range and sight
+        # and stranded the class it exists for.
+        landing, drop = rr.anchor_landing(room, a)
+        if landing is None or drop > rr.LANDING_DROP_MAX:
+            _err(errors, "ERR_ANCHOR_NO_LANDING",
+                 f"anchor '{a['id']}' hangs {drop:g} above the nearest surface below it "
+                 f"(limit {rr.LANDING_DROP_MAX:g}); the pull would end in a fall the design "
+                 "never decided. Put a landing under the anchor", f"anchors[{i}]")
+        else:
+            spans = rr.standable_intervals(room, landing, needed=rr.HEADROOM)
+            body = 2 * rr.CAPSULE_RADIUS
+            spot = max(landing[0], min(a["x"], landing[1]))
+            if not any(iv[0] - body / 2 <= spot <= iv[1] + body / 2
+                       and iv[1] - iv[0] >= body for iv in spans):
+                _err(errors, "ERR_ANCHOR_NO_LANDING",
+                     f"anchor '{a['id']}' lands on '{landing[3]}', and there is no place on it "
+                     f"under the anchor with {rr.HEADROOM:g} of clear space for a "
+                     f"{rr.CAPSULE_HEIGHT:g}-tall body. The Hunter arrives and cannot stand up",
+                     f"anchors[{i}]")
+
     # ---- pockets: exclusive, and seen ------------------------------------
     base_reach = rr.reachable_from(room, path_supports, rr.RISE_SKILL, rr.GAP_SKILL)
     for i, p in enumerate(room.get("pockets") or []):
@@ -659,6 +683,19 @@ def validate_room(room: Dict) -> List[Dict]:
         if any(s[0] - 1e-6 <= p["x"] <= s[1] + 1e-6 and abs(s[2] - p["z"]) < 1e-6 for s in base_reach):
             _err(errors, "ERR_POCKET_NOT_EXCLUSIVE", f"pocket '{p.get('id')}' sits on a surface base "
                  "movement already reaches, so it is not the other class's to claim", path)
+        # A reward the right class cannot stand next to is not a reward. The
+        # headroom rules guard the critical path; a pocket lives off it by
+        # definition, so its footing has to be asked about separately.
+        footing = rr.support_under(room, p["x"], p["z"] + 1)
+        if footing is not None:
+            spans = rr.standable_intervals(room, footing, needed=rr.HEADROOM)
+            body = 2 * rr.CAPSULE_RADIUS
+            if not any(iv[0] - body / 2 <= p["x"] <= iv[1] + body / 2
+                       and iv[1] - iv[0] >= body for iv in spans):
+                _err(errors, "ERR_POCKET_NO_FOOTING",
+                     f"pocket '{p.get('id')}' sits on '{footing[3]}', which has nowhere with "
+                     f"{rr.HEADROOM:g} of clear space to stand — the class that owns this "
+                     "reward arrives and cannot collect it", path)
         # What the player is meant to see is the lock, not the prize. A cache on
         # top of a ledge is occluded by that ledge from every point below it;
         # the anchor above it, or the cracked wall beside it, is what reads.
@@ -1317,6 +1354,26 @@ VALIDATORS = {"room": validate_room, "rooms": validate_room_batch, "encounter": 
               "strings": validate_strings}
 
 
+def rules_fingerprint() -> str:
+    """One hash over the rule set a verdict was produced by.
+
+    A provenance record that stores only the artifact's hash binds what was
+    judged but not the law it was judged under. A room approved in August
+    against August's rules walked straight through September's importer while
+    failing September's gate with eight softlocks — the record said PASS because
+    PASS had been true once. Stamping the rules alongside the artifact lets the
+    importer notice that the verdict it is trusting no longer has a gate behind
+    it.
+
+    The fingerprint covers this file and the geometry it delegates to; changing
+    either is changing the law.
+    """
+    digest = hashlib.sha256()
+    for path in (Path(__file__), Path(rr.__file__)):
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Echoes deterministic content validator")
     parser.add_argument("--kind", required=True, choices=sorted(VALIDATORS), help="Spec type to validate")
@@ -1350,6 +1407,7 @@ def main():
     hard = [e for e in errors if e["code"].startswith("ERR_")]
     warns = [e for e in errors if not e["code"].startswith("ERR_")]
     report = {"kind": args.kind, "status": "PASS" if not hard else "FAIL",
+              "rules_sha256": rules_fingerprint(),
               "error_count": len(hard), "warning_count": len(warns), "errors": errors}
     print(json.dumps(report, indent=2, ensure_ascii=False))
     sys.exit(1 if hard else 0)

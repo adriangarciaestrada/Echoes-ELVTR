@@ -1,0 +1,17 @@
+{
+  "schema": "echoes.provenance/1",
+  "artifact": {
+    "name": "R3_bend_v3.json",
+    "sha256": "64fbbd28fdbedaf0c1c0bc274b5994d986850d0b12b3ae5b200ff9d792c99833",
+    "kind": "room",
+    "id": "room_segment_a_bend_02"
+  },
+  "gate": {
+    "status": "FAIL",
+    "error_count": 19,
+    "report_sha256": "487b334ae935fbdcea03eacb5bf0cab9e9d1d8bde9fa0c297c44f6f6437a10df",
+    "stamped_at": "2026-08-18T23:04:41+00:00"
+  },
+  "review": null,
+  "approval": null
+}

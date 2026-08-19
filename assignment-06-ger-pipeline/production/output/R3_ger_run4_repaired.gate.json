@@ -1,0 +1,8 @@
+{
+  "kind": "room",
+  "status": "PASS",
+  "rules_sha256": "774daa292c3f0887440bc923f7fd18e6ebe3057ade93d639a1e1bebcbdec6a2d",
+  "error_count": 0,
+  "warning_count": 0,
+  "errors": []
+}

@@ -1,0 +1,156 @@
+{
+  "room_id": "room_segment_a_bend_02",
+  "segment": "SegmentA_Shared",
+  "grid": 20,
+  "cavity": [
+    {
+      "x": 0,
+      "z": 0,
+      "width": 1600,
+      "height": 600
+    },
+    {
+      "x": 1000,
+      "z": 600,
+      "width": 600,
+      "height": 1400
+    },
+    {
+      "x": 1600,
+      "z": 1200,
+      "width": 1200,
+      "height": 600
+    },
+    {
+      "x": 1600,
+      "z": 0,
+      "width": 600,
+      "height": 400
+    }
+  ],
+  "solids": [
+    {
+      "id": "ledge_1",
+      "x": 1000,
+      "z": 160,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_2",
+      "x": 1000,
+      "z": 360,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_3",
+      "x": 1160,
+      "z": 560,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_4",
+      "x": 1040,
+      "z": 760,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_5",
+      "x": 1160,
+      "z": 960,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_6",
+      "x": 1040,
+      "z": 1160,
+      "width": 400,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "high_hall_floor",
+      "x": 1600,
+      "z": 1200,
+      "width": 1200,
+      "height": 40,
+      "is_one_way": false
+    },
+    {
+      "id": "seal_titan",
+      "x": 1600,
+      "z": 0,
+      "width": 40,
+      "height": 400,
+      "breakable_by": "Bash"
+    },
+    {
+      "id": "perch_hunter",
+      "x": 1040,
+      "z": 1760,
+      "width": 300,
+      "height": 40,
+      "is_one_way": false
+    }
+  ],
+  "anchors": [
+    {
+      "id": "anchor_hunter",
+      "x": 1200,
+      "z": 1720
+    }
+  ],
+  "doors": [
+    {
+      "id": "door_in",
+      "side": "Left",
+      "at": 0,
+      "size": 200,
+      "required_tool": "None"
+    },
+    {
+      "id": "door_out",
+      "side": "Right",
+      "at": 1200,
+      "size": 200,
+      "required_tool": "None"
+    }
+  ],
+  "checkpoints": [],
+  "critical_path": [
+    "door_in",
+    "ledge_1",
+    "ledge_2",
+    "ledge_3",
+    "ledge_4",
+    "ledge_5",
+    "ledge_6",
+    "high_hall_floor",
+    "door_out"
+  ],
+  "pockets": [
+    {
+      "id": "pocket_hunter",
+      "x": 1100,
+      "z": 1800,
+      "required_tool": "Grapple",
+      "contents": "LoreCache"
+    },
+    {
+      "id": "pocket_titan",
+      "x": 1800,
+      "z": 0,
+      "required_tool": "Bash",
+      "contents": "HealthCache"
+    }
+  ]
+}

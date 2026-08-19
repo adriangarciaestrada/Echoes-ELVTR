@@ -130,16 +130,42 @@ class PocketsAreExclusiveAndSeen(unittest.TestCase):
         self.assertNotIn("ERR_POCKET_NOT_EXCLUSIVE", codes(v.validate_room(EXAMPLE)))
 
     def test_a_hidden_key_is_refused(self):
-        # Visibility is about the lock, not the prize: move the anchor back into
-        # the shadow of the ledge it serves and the pocket stops teaching anything.
+        # Visibility is about the lock, not the prize: tuck the anchor down into
+        # the shadow of the perch it serves and the pocket stops teaching anything.
+        # (Just above the perch is exactly where a designer would innocently put
+        # it — the example itself failed here until the anchor rose to 1700.)
         room = copy.deepcopy(EXAMPLE)
-        room["anchors"][0]["x"] = 2000
+        room["anchors"][0]["z"] = 1560
         self.assertIn("ERR_POCKET_UNSEEN", codes(v.validate_room(room)))
 
     def test_a_pocket_whose_verb_has_nothing_to_act_on_is_refused(self):
         room = copy.deepcopy(EXAMPLE)
         room["anchors"] = []
         self.assertIn("ERR_POCKET_NO_MARKER", codes(v.validate_room(room)))
+
+
+class TheKeyMustDeliverItsOwner(unittest.TestCase):
+    """Found in play, in a room the gate had accepted: the Hunter's perch hung
+    60 under the ceiling, so the pull ended with nowhere to stand and the pocket
+    was unclaimable by the very class it belongs to. Reach, range and sight all
+    passed; arrival had never been asked about.
+    """
+
+    def test_a_perch_pinned_under_the_ceiling_is_refused(self):
+        room = copy.deepcopy(EXAMPLE)
+        solid(room, "perch")["z"] = 1900          # top 1940; ceiling 2000 -> 60 of air
+        room["pockets"][0]["z"] = 1940
+        self.assertIn("ERR_POCKET_NO_FOOTING", codes(v.validate_room(room)))
+
+    def test_an_anchor_with_no_landing_below_is_refused(self):
+        room = copy.deepcopy(EXAMPLE)
+        room["anchors"][0]["x"] = 1500            # over the shaft void; nearest top 900 down
+        self.assertIn("ERR_ANCHOR_NO_LANDING", codes(v.validate_room(room)))
+
+    def test_the_example_delivers_its_hunter(self):
+        found = codes(v.validate_room(EXAMPLE))
+        self.assertNotIn("ERR_ANCHOR_NO_LANDING", found)
+        self.assertNotIn("ERR_POCKET_NO_FOOTING", found)
 
 
 def corridor(room_id, x_span=2400, z_span=1000):

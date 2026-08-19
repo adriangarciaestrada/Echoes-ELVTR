@@ -1,0 +1,75 @@
+{
+  "brief": "Segment A, shared path. A tight corridor that opens into a two-floor shaft the player climbs to a door in the ceiling. One Hunter grapple pocket and one Titan bash pocket, both visible from the route.",
+  "generator": "01-level-designer",
+  "attempts": 5,
+  "budget": 5,
+  "status": "ESCALATED",
+  "clearable": true,
+  "history": [
+    {
+      "attempt": 1,
+      "softlocks": [],
+      "other_errors": [
+        "ERR_ROOM_BUDGET",
+        "ERR_IN_ROCK",
+        "ERR_POCKET_UNSEEN"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 2,
+      "softlocks": [
+        "ERR_JUMP_CLIPPED",
+        "ERR_JUMP_CLIPPED"
+      ],
+      "other_errors": [
+        "ERR_OFF_MODULE",
+        "ERR_OFF_MODULE",
+        "ERR_LADDER_CLIMB",
+        "ERR_DEAD_SPACE",
+        "ERR_POCKET_NOT_EXCLUSIVE",
+        "ERR_POCKET_NOT_EXCLUSIVE"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 3,
+      "softlocks": [],
+      "other_errors": [
+        "ERR_ROOM_BUDGET"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 4,
+      "softlocks": [],
+      "other_errors": [
+        "ERR_OFF_GRID",
+        "ERR_POCKET_NOT_EXCLUSIVE"
+      ],
+      "warnings": 0
+    },
+    {
+      "attempt": 5,
+      "softlocks": [
+        "ERR_NO_HEADROOM",
+        "ERR_NO_WAY_THROUGH",
+        "ERR_JUMP_CLIPPED",
+        "ERR_JUMP_CLIPPED"
+      ],
+      "other_errors": [
+        "ERR_OFF_GRID",
+        "ERR_OFF_MODULE",
+        "ERR_LADDER_CLIMB",
+        "ERR_DEAD_SPACE",
+        "ERR_POCKET_NOT_EXCLUSIVE"
+      ],
+      "warnings": 0
+    }
+  ],
+  "circuit_breaker": {
+    "tripped": "REGRESSION",
+    "diagnosis": "attempts 4 and 5 were both worse than attempt 3: 4 softlock(s) and 9 error(s) now, against 0 and 1 then (softlocks outrank other errors, since only they block the build). Fixing one rule is repeatedly breaking another.",
+    "human_action": "Keep the best attempt, which is saved beside the report, and repair it by hand or re-brief with the two rules named together. Rules that cannot both be satisfied by moving the same geometry usually mean the room's dimensions are wrong, not its contents."
+  }
+}

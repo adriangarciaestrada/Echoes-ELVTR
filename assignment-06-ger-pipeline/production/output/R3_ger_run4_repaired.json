@@ -1,0 +1,138 @@
+{
+  "room_id": "room_segment_a_shaft_02",
+  "segment": "SegmentA_Shared",
+  "grid": 20,
+  "cavity": [
+    {
+      "id": "corridor_1",
+      "x": 0,
+      "z": 0,
+      "width": 1000,
+      "height": 260
+    },
+    {
+      "x": 200,
+      "z": 0,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "x": 800,
+      "z": 0,
+      "width": 2400,
+      "height": 1200
+    },
+    {
+      "x": 3200,
+      "z": 0,
+      "width": 460,
+      "height": 260
+    }
+  ],
+  "solids": [
+    {
+      "id": "perch_hunter",
+      "x": 340,
+      "z": 460,
+      "width": 320,
+      "height": 40
+    },
+    {
+      "id": "step_1",
+      "x": 1000,
+      "z": 0,
+      "width": 300,
+      "height": 200
+    },
+    {
+      "id": "ledge_1",
+      "x": 1500,
+      "z": 360,
+      "width": 320,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_2",
+      "x": 2060,
+      "z": 560,
+      "width": 380,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "seal_titan",
+      "x": 3200,
+      "z": 0,
+      "width": 60,
+      "height": 260,
+      "breakable_by": "Bash"
+    },
+    {
+      "id": "ledge_3",
+      "x": 2660,
+      "z": 760,
+      "width": 380,
+      "height": 40,
+      "is_one_way": true
+    },
+    {
+      "id": "ledge_4",
+      "x": 2200,
+      "z": 960,
+      "width": 240,
+      "height": 40,
+      "is_one_way": true
+    }
+  ],
+  "anchors": [
+    {
+      "id": "anchor_1",
+      "x": 500,
+      "z": 660
+    }
+  ],
+  "doors": [
+    {
+      "id": "door_in",
+      "side": "Left",
+      "at": 0,
+      "size": 200,
+      "required_tool": "None"
+    },
+    {
+      "id": "door_out",
+      "side": "Top",
+      "at": 2240,
+      "size": 200,
+      "required_tool": "None"
+    }
+  ],
+  "checkpoints": [],
+  "critical_path": [
+    "door_in",
+    "corridor_1",
+    "step_1",
+    "ledge_1",
+    "ledge_2",
+    "ledge_3",
+    "ledge_4",
+    "door_out"
+  ],
+  "pockets": [
+    {
+      "id": "pocket_hunter",
+      "x": 450,
+      "z": 500,
+      "required_tool": "Grapple",
+      "contents": "LoreCache"
+    },
+    {
+      "id": "pocket_titan",
+      "x": 3340,
+      "z": 0,
+      "required_tool": "Bash",
+      "contents": "HealthCache"
+    }
+  ]
+}

@@ -22,6 +22,7 @@ GAP_SKILL = 730            # measured ceiling at full run speed
 RUNUP_MIN = 88             # floor needed to reach full speed from rest
 BASH_RUNUP = 250           # vault/04-world/junction-and-gates.md [TUNE]
 GRAPPLE_RANGE = 800        # vault/04-world/junction-and-gates.md
+LANDING_DROP_MAX = 200     # an anchor hangs at most this far above its landing [TUNE]
 
 # The rock a room carries around its cavity. Two joined rooms share one of these
 # rather than each keeping its own, so it is what separates their cavities.
@@ -458,6 +459,34 @@ def dead_space_under(spec: Dict, solid: Dict) -> float:
     """
     gap = solid["z"] - surface_under(spec, solid)
     return gap if EPS < gap < HEADROOM - EPS else 0.0
+
+
+def support_under(spec: Dict, x: float, z: float) -> Optional[Support]:
+    """The nearest surface directly below a point."""
+    best = None
+    for s in all_supports(spec):
+        if s[0] - EPS <= x <= s[1] + EPS and s[2] <= z + EPS:
+            if best is None or s[2] > best[2]:
+                best = s
+    return best
+
+
+def anchor_landing(spec: Dict, anchor: Dict) -> Tuple[Optional[Support], float]:
+    """Where the Hunter stands after pulling to this anchor, and the drop to it.
+
+    An anchor is a destination, not only a target: the pull ends at the anchor
+    and the character comes down onto whatever is underneath. Found in play —
+    an anchor whose surface below hangs 60 under a ceiling reads perfectly,
+    passes the range and sight rules, and strands the Hunter with nowhere to
+    stand, which makes its pocket unclaimable by the very class it belongs to.
+
+    Returns (surface, drop). No surface, or a drop past LANDING_DROP_MAX, means
+    the pull ends somewhere the design never decided.
+    """
+    surface = support_under(spec, anchor["x"], anchor["z"])
+    if surface is None:
+        return None, float("inf")
+    return surface, anchor["z"] - surface[2]
 
 
 def overhangs(a: Dict, b: Dict) -> float:
