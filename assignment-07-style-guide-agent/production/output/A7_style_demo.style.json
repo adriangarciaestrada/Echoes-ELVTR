@@ -1,0 +1,218 @@
+[
+  {
+    "brief": "the run-complete screen's closing line, told from inside the world",
+    "widget_class": "ProseBlock",
+    "attempts": 2,
+    "accepted": true,
+    "before": {
+      "text_en": "The Light guided your Ghost through the Hive nest, Guardian. The Traveler watched over this Mexican valley and its pyramid.",
+      "text_es": "La Light guio a tu Ghost por el nido Hive, Guardian. El Traveler vigilaba este valle mexicano y su pirámide."
+    },
+    "after": {
+      "text_en": "The Weave drew the Weaver onward. The Architects' vigil lies silent here—stone corridors, threads of light, the echo of ages long surrendered",
+      "text_es": "La Trama atrajo al Tejedor adelante. La vigilancia de los Arquitectos yace silenciosa aquí—pasillos de piedra, hilos de luz, el eco de épocas ya cedidas"
+    },
+    "score_before": 2.0,
+    "score_after": 10.0,
+    "rounds": [
+      {
+        "attempt": 1,
+        "record": {
+          "key": "ST_UI.RunComplete_SecondRun",
+          "text_en": "The Light guided your Ghost through the Hive nest, Guardian. The Traveler watched over this Mexican valley and its pyramid.",
+          "text_es": "La Light guio a tu Ghost por el nido Hive, Guardian. El Traveler vigilaba este valle mexicano y su pirámide.",
+          "widget_class": "ProseBlock"
+        },
+        "score": 2.0,
+        "reason": "This text is Destiny placeholder material that has not been adapted to Echoes, violating Rule 1 repeatedly and systematically across both languages. Banned placeholders in text_en: 'Light' (should be Architects or Weave), 'Ghost' (Beacon), 'Hive' (Remnants or Facets), 'Guardian' (Weaver), 'Traveler' (Architects). Identical violations in text_es. Region reference 'Mexican' / 'mexicano' violates the core setting rule (country never named); this is compounded by 'pyramid' / 'pirámide', off-allowlist iconography that invokes the exact Mesoamerican visual language the guide forbids. Rule 2 tone is broken: the text congratulates the player, addresses them as \"Guardian,\" and reads as marketing copy (\"The Light guided your Ghost\") rather than world-voice or cryptic mystery. The string ships broken under Rule 1's vault (three strike rule: placeholder + region reference + banned iconography). A rewriter must replace every placeholder with Echoes terminology, remove the country reference and pyramid, and reframe in melancholic world-voice.",
+        "deterministic_findings": [
+          {
+            "rule": "vocabulary",
+            "field": "text_en",
+            "detail": "banned placeholder 'Ghost' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_en",
+            "detail": "banned placeholder 'Hive' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_en",
+            "detail": "banned placeholder 'Light' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_en",
+            "detail": "banned placeholder 'Mexican' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_en",
+            "detail": "banned placeholder 'Traveler' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_en",
+            "detail": "banned placeholder 'pyramid' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_en",
+            "detail": "region reference 'Mexican'; the country is never named"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_es",
+            "detail": "banned placeholder 'Ghost' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_es",
+            "detail": "banned placeholder 'Hive' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_es",
+            "detail": "banned placeholder 'Light' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_es",
+            "detail": "banned placeholder 'Traveler' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_es",
+            "detail": "banned placeholder 'mexicano' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_es",
+            "detail": "banned placeholder 'pirámide' appears in shipped text"
+          },
+          {
+            "rule": "vocabulary",
+            "field": "text_es",
+            "detail": "region reference 'mexicano'; the country is never named"
+          }
+        ]
+      },
+      {
+        "attempt": 2,
+        "record": {
+          "key": "ST_UI.RunComplete_SecondRun",
+          "text_en": "The Weave drew the Weaver onward. The Architects' vigil lies silent here—stone corridors, threads of light, the echo of ages long surrendered",
+          "text_es": "La Trama atrajo al Tejedor adelante. La vigilancia de los Arquitectos yace silenciosa aquí—pasillos de piedra, hilos de luz, el eco de épocas ya cedidas",
+          "widget_class": "ProseBlock"
+        },
+        "score": 10.0,
+        "reason": "Every rule is met. Rule 1: vocabulary is correct—\"Weaver,\" \"Weave,\" and \"Architects\" are the proper replacements; no banned terminology or region references. Rule 2: tone is precisely right—sci-fi melancholic with ancient architectural mystery, cryptic yet diegetically grounded. \"The Weave drew the Weaver onward\" establishes ominous mystery without player address. \"Vigil lies silent\" is atmospheric abandonment, not cheerful. The imagery (stone, threads of light, echo, surrendered epochs) carries geological and luminous weight, speaking from within the world. No exclamation marks, no congratulation, no marketing register, no modern idiom. Rule 3: English 148 characters, Spanish 157 characters—both well under 240. No terminal punctuation, no ALL CAPS, key absent from text. The wording reaches beyond acceptable; the two-sentence structure and diction evoke the BioShock Infinite melancholy that anchors the game's voice.",
+        "deterministic_findings": []
+      }
+    ],
+    "violation_class": "vocabulary and IP"
+  },
+  {
+    "brief": "the Titan's tagline on the class-select screen",
+    "widget_class": "ClassTagline",
+    "attempts": 2,
+    "accepted": true,
+    "before": {
+      "text_en": "Awesome tank build, champ!",
+      "text_es": "¡Tanque increíble, campeón!"
+    },
+    "after": {
+      "text_en": "The Weaver of echoes",
+      "text_es": "La Tejedora de ecos"
+    },
+    "score_before": 3.0,
+    "score_after": 10.0,
+    "rounds": [
+      {
+        "attempt": 1,
+        "record": {
+          "key": "ST_UI.ClassSelect_TitanTagline",
+          "text_en": "Awesome tank build, champ!",
+          "text_es": "¡Tanque increíble, campeón!",
+          "widget_class": "ClassTagline"
+        },
+        "score": 3.0,
+        "reason": "Rule 2 is systematically violated. The tone is cheerful and congratulatory (\"Awesome,\" \"increíble\"), belonging to a modern game's reward UI rather than Echoes' sci-fi melancholic world. Exclamation marks are banned; neither \"Awesome tank build, champ!\" nor \"¡Tanque increíble, campeón!\" should use them. The text addresses the player casually (\"champ\"/\"campeón\") and as a gamer (\"tank build\"), treating them as external to the world rather than speaking from inside it. \"Awesome\" and \"increíble\" are marketing register, not the diegetically grounded voice required. The entire piece reads as a modern FPS UI congratulating a loadout choice, not as text from an ancient, silent, decaying civilization.",
+        "deterministic_findings": []
+      },
+      {
+        "attempt": 2,
+        "record": {
+          "key": "ST_UI.ClassSelect_TitanTagline",
+          "text_en": "The Weaver of echoes",
+          "text_es": "La Tejedora de ecos",
+          "widget_class": "ClassTagline"
+        },
+        "score": 10.0,
+        "reason": "Every rule met. No banned placeholders (Traveler, Ghost, Crota, etc.), no regional references, both languages under the 48-character hard cap (20 and 19 respectively). Tone is exactly right: cryptic and melancholic, diegetically grounded in the Weave—it invites mystery without cheerfulness or marketing register. Format is clean: no terminal punctuation, no ALL CAPS, key absent from text. The phrase captures the character's essence within the world's logic rather than addressing the player.",
+        "deterministic_findings": []
+      }
+    ],
+    "violation_class": "tone"
+  },
+  {
+    "brief": "the pause-menu label for abandoning the current run",
+    "widget_class": "MenuLabel",
+    "attempts": 2,
+    "accepted": true,
+    "before": {
+      "text_en": "Abandon the current run and return to the main menu!",
+      "text_es": "Abandonar la partida actual y volver al menú principal para empezar de nuevo!"
+    },
+    "after": {
+      "text_en": "Unweave",
+      "text_es": "Destejer"
+    },
+    "score_before": 2.0,
+    "score_after": 10.0,
+    "rounds": [
+      {
+        "attempt": 1,
+        "record": {
+          "key": "ST_UI.Pause_ExitRun",
+          "text_en": "Abandon the current run and return to the main menu!",
+          "text_es": "Abandonar la partida actual y volver al menú principal para empezar de nuevo!",
+          "widget_class": "MenuLabel"
+        },
+        "score": 2.0,
+        "reason": "The string breaks three rules fatally and cannot ship.\n\n**Rule 3 (Length):** English 52 characters vs. cap 20 (32 over); Spanish 77 characters vs. cap 20 (57 over). As stated in the guide, any string over its cap is a hard-ship blocker. MenuLabel is a constrained widget and this text is nearly 4× the width allowed.\n\n**Rule 3 (Punctuation):** \"Interface text carries no terminal punctuation.\" Both versions end with exclamation marks, which are terminal punctuation and forbidden.\n\n**Rule 2 (Tone):** The exclamation marks create urgency and directness (\"Abandon... and return... !\") that clashes with the required tone of \"sci-fi melancholic, ancient architectural mystery, cryptic yet diegetically grounded.\" The instruction register — commanding the player, celebrating their action with a punctuation shout — is explicitly forbidden. The text should not address the player as a player, and it should speak from inside the world or not at all. A menu label abandoning a run should be flat, world-embedded, not a cheer or order.\n\nThe core problem: this reads like an instruction or tutorial button. Echoes is a mystery, not an instruction manual.",
+        "deterministic_findings": [
+          {
+            "rule": "length",
+            "field": "text_en",
+            "detail": "52 characters against a cap of 20 for MenuLabel — 32 to cut"
+          },
+          {
+            "rule": "length",
+            "field": "text_es",
+            "detail": "77 characters against a cap of 20 for MenuLabel — 57 to cut"
+          },
+          {
+            "rule": "length",
+            "field": "text_es",
+            "detail": "Spanish is 77 against English 52, past the allowance of 67"
+          }
+        ]
+      },
+      {
+        "attempt": 2,
+        "record": {
+          "key": "ST_UI.Pause_ExitRun",
+          "text_en": "Unweave",
+          "text_es": "Destejer",
+          "widget_class": "MenuLabel"
+        },
+        "score": 10.0,
+        "reason": "Rule 1 — vocabulary is clean; \"Unweave\" uses the core Weave concept correctly (not a banned placeholder). Rule 2 — tone is exactly right: melancholic, diegetically grounded, mysterious in the way the setting demands. The action name treats exiting as a weaving act, reinforcing that the player is a Weaver inhabiting this world, not a gamer using a button. No cheerfulness, no marketing register. Rule 3 — \"Unweave\" (7 chars) and \"Destejer\" (8 chars) both fit comfortably under the 20-char MenuLabel cap; no terminal punctuation, no ALL CAPS. This text ships today.",
+        "deterministic_findings": []
+      }
+    ],
+    "violation_class": "format and length"
+  }
+]
