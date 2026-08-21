@@ -81,6 +81,28 @@ MAX_ATTEMPTS = 3
 TONE_NOTE = VAULT / "05-lore" / "architects-cosmology.md"
 TERMS_NOTE = VAULT / "00-core" / "terminology-guard.md"
 BUDGET_NOTE = VAULT / "07-ui-and-controls" / "ui-budgets.md"
+FUNCTION_NOTE = VAULT / "07-ui-and-controls" / "ui-constraints.md"
+
+# Which screen a widget class belongs to, so the screen's job can be applied.
+# From vault/07-ui-and-controls/hud-and-screens.md via uispec.md.
+WIDGET_SCREEN = {
+    "Prompt": "HUD_Main",
+    "MenuLabel": "Screen_Pause",
+    "OptionValue": "Screen_Pause",
+    "OptionDescription": "Screen_Pause",
+    "ClassName": "Screen_ClassSelect",
+    "ClassTagline": "Screen_ClassSelect",
+    "StatLabel": "Screen_RunComplete",
+    "ProseBlock": "Screen_RunComplete",
+}
+
+# The one job each screen has, quoted from ui-constraints.md "Screens have jobs".
+SCREEN_HEADING = {
+    "HUD_Main": "`HUD_Main`",
+    "Screen_ClassSelect": "Class Select",
+    "Screen_Pause": "Pause",
+    "Screen_RunComplete": "Run-Complete",
+}
 
 
 # --------------------------------------------------------------------------
@@ -107,6 +129,27 @@ def _term_table() -> List[str]:
         if "Banned Region" in line:
             break
     return rows
+
+
+def _screen_job(screen: Optional[str]) -> str:
+    """The one job the screen has, quoted from the constraints note.
+
+    Copy that serves a different job is wrong even when it is well written, so
+    the guide has to say which screen the string is for.
+    """
+    if not screen:
+        return ""
+    heading = SCREEN_HEADING.get(screen)
+    if not heading:
+        return ""
+    text = FUNCTION_NOTE.read_text(encoding="utf-8")
+    block = re.search(r"##\s*Screens have jobs\s*\n(.+?)(?:\n##|\Z)", text, re.S)
+    if not block:
+        return ""
+    for entry in re.split(r"\n(?=- \*\*)", block.group(1)):
+        if entry.strip().startswith(f"- **{heading}**"):
+            return " ".join(entry.replace("**", "").strip().lstrip("- ").split())
+    return ""
 
 
 def style_guide(widget_class: Optional[str] = None) -> str:
@@ -154,6 +197,34 @@ def style_guide(widget_class: Optional[str] = None) -> str:
     guide += [
         "    Interface text carries no terminal punctuation and no ALL CAPS shouting.",
         "    A key is written ST_UI.<Name>; the text never contains the key.",
+        "",
+        "RULE 4 — FUNCTION (vault/07-ui-and-controls/ui-constraints.md)",
+        "Sounding right is not enough. Every string is a beat with four parts, and one",
+        "missing part makes it decoration or documentation:",
+        "    GLANCE  it is seen without being looked for.",
+        "    GRASP   it lands in one pass. REREADING IS THE FAILURE.",
+        "    ACT     it changes a decision. 'What does the player do differently because",
+        "            they read this?' must have an answer.",
+        "    TRUST   it tells the truth about the state of the game, every time.",
+        "",
+        "So a menu label NAMES THE ACTION IT PERFORMS. A player must be able to predict",
+        "what happens on press without pressing it. Evocative wording that leaves the",
+        "action unclear fails GRASP and ACT no matter how well it fits the register.",
+        "",
+        "And the copy must serve ITS OWN SCREEN's job:",
+    ]
+    job = _screen_job(WIDGET_SCREEN.get(widget_class or ""))
+    if job:
+        guide.append(f"    {job}")
+    if widget_class in ("ClassTagline", "ClassName"):
+        guide.append(
+            "    A class tagline therefore names what is UNIQUE to its class. If the line "
+            "would sit equally well under the other class, it previews no fantasy and fails.")
+    guide += [
+        "",
+        "The most common copy failure in this project is text that is correct, clear and",
+        "could belong to any game ever shipped. The second is text so voiced that it stops",
+        "doing its job. Rule 2 guards the first; this rule guards the second.",
     ]
     return "\n".join(guide)
 
@@ -247,6 +318,21 @@ Any banned placeholder, any region reference, or any string over its cap keeps
 the score at 6 or below no matter how good the writing is: those three ship
 broken.
 
+The same ceiling applies to Rule 4, and you must apply it against your own taste.
+Text that sounds exactly right and leaves a player unsure what a control does has
+failed, and scoring it highly is the specific mistake this rule exists to stop.
+Before awarding 9 or 10, answer these in your reason:
+
+  - If this is a menu label: can a player predict what pressing it does, without
+    pressing it? If not, cap the score at 6 however good the voice is.
+  - If this is a class tagline: would it sit equally well under the OTHER class?
+    If yes, it previews no fantasy — cap at 6.
+  - Whatever it is: does it do its own screen's job, or a different screen's?
+
+A string that is beautiful and useless is worth less than one that is plain and
+clear, because the plain one can be given voice and the useless one has to be
+thrown away.
+
 Output EXACTLY this shape and nothing else:
 
 SCORE: [X/10]
@@ -267,6 +353,10 @@ Rules of the rewrite:
   them and leave a sentence that says less.
 - Author the Spanish as Spanish. Spanish runs longer, so if a cap is the problem
   it is usually the Spanish that has to be re-thought, not padded down.
+- NEVER buy register with clarity. A menu label still has to name its action and
+  a tagline still has to name what is unique to its class. If a length cap and
+  the world's voice cannot both be served, the label stays plain: a pause menu
+  with voice in it is a pause menu getting in the way.
 
 Emit ONLY the corrected JSON object, in the same shape as the input."""
 

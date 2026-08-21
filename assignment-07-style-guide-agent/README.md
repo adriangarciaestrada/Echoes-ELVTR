@@ -29,7 +29,7 @@ Architects' register and carries no Destiny placeholder.**
 
 ## The style guide is not written here — it is assembled from the game's own contracts
 
-Three constraint types, each read live at runtime from the vault note that owns
+Four constraint types, each read live at runtime from the vault note that owns
 it. Nothing is restated: a style rule copied into a second place is a rule that
 will eventually disagree with itself, and the one that gets obeyed is whichever
 document the reader happened to open.
@@ -39,6 +39,7 @@ document the reader happened to open.
 | 1 | **Vocabulary & IP** | `vault/00-core/terminology-guard.md` | banned working placeholders, banned region references |
 | 2 | **Tone** | `vault/05-lore/architects-cosmology.md` | the narrative register |
 | 3 | **Format & length** | `vault/07-ui-and-controls/ui-budgets.md` | per-widget character caps, in both languages |
+| 4 | **Function** | `vault/07-ui-and-controls/ui-constraints.md` | the string still has to do its job |
 
 ### 1 — Vocabulary and IP
 
@@ -88,6 +89,29 @@ longer, so **Spanish is the language that decides whether a string fits**.
 | `ClassTagline` | 48 |
 | `ProseBlock` | 240 |
 
+### 4 — Function
+
+The first three rules make text *sound* like Echoes. This one makes it *work*.
+`ui-constraints.md` states the beat every string has to hit:
+
+> **GLANCE** — it is seen without being looked for.
+> **GRASP** — it lands in one pass. **Rereading is the failure.**
+> **ACT** — it changes a decision. *"What does the player do differently because
+> they read this?"* has to have an answer.
+> **TRUST** — it tells the truth about the state of the game, every time.
+
+The agent also loads **the job of the screen the string belongs to**, because
+copy that serves a different screen's job is wrong even when well written. A
+`MenuLabel` is judged against Pause's job — *"plain where plain is correct; a
+pause menu with voice in it is a pause menu getting in the way"* — while a
+`ClassTagline` is judged against Class Select's, which is to preview two
+fantasies, agility and force.
+
+This rule was added after the first run of this assignment shipped text that
+scored a perfect 10 and could not be used. Section
+"[The failure that made Rule 4](#the-failure-that-made-rule-4)" below is that
+episode in full.
+
 ---
 
 ## The loop
@@ -113,13 +137,22 @@ go into the evaluator's prompt as facts it must account for. The judge still
 owns the score, but it cannot invent a vocabulary violation that is not there or
 miss one that is, and its reason is anchored to something a human can check.
 
-**Tone gets no findings at all**, because no regex reaches it. That is where the
-judge earns its place, and Example 2 below is the proof: zero deterministic
-findings, and it still caught five distinct violations.
+**Rules 2 and 4 get no findings at all**, because no regex reaches tone and none
+reaches whether a label can be understood. That is where the judge earns its
+place, and Example 2 is the proof: zero deterministic findings, and it still
+caught five distinct violations.
 
-Scores are floored, not merely weighted: any banned placeholder, any region
-reference, or any string over its cap holds the score at 6 or below regardless of
-how good the writing is, because those three ship broken.
+Scores are floored, not merely weighted. Any banned placeholder, region reference
+or over-cap string holds the score at 6 regardless of how good the writing is,
+because those three ship broken — and the same ceiling now applies to Rule 4,
+which the evaluator must argue against its own taste before awarding a 9 or 10:
+
+> *If this is a menu label: can a player predict what pressing it does, without
+> pressing it? If not, cap the score at 6 however good the voice is.*
+> *If this is a class tagline: would it sit equally well under the OTHER class?*
+
+That instruction exists because the loop failed exactly there once — see
+"The failure that made Rule 4" below.
 
 ---
 
@@ -131,14 +164,15 @@ loop with no intervention. Full transcript with every score and reason:
 
 | # | Violation class | Widget | Score | Attempts |
 |---|---|---|---|---|
-| 1 | Vocabulary & IP | `ProseBlock` | **2 → 10** | 2 |
-| 2 | Tone | `ClassTagline` | **3 → 10** | 2 |
-| 3 | Format & length | `MenuLabel` | **2 → 10** | 2 |
+| 1 | Vocabulary & IP | `ProseBlock` | **1 → 9** | 2 |
+| 2 | Tone | `ClassTagline` | **2 → 10** | 2 |
+| 3 | Format & length | `MenuLabel` | **2 → 9** | 2 |
 
 Every "after" was then re-measured independently by the deterministic checker:
-**zero findings on all three**. The 10/10s are verified, not self-reported.
+**zero findings on all three**. Two of the three settle at 9 rather than 10,
+which is the rubric grading its own output honestly rather than flattering it.
 
-### Example 1 — Vocabulary and IP · run-complete prose · 2/10 → 10/10
+### Example 1 — Vocabulary and IP · run-complete prose · 1/10 → 9/10
 
 **Before**
 > EN — The Light guided your Ghost through the Hive nest, Guardian. The Traveler watched over this Mexican valley and its pyramid.
@@ -148,84 +182,106 @@ Fourteen deterministic findings across the two languages: six banned placeholder
 in English, six in Spanish, and a region reference in each.
 
 **Evaluator's reason (excerpt)**
-> This text is Destiny placeholder material that has not been adapted to Echoes, violating Rule 1 repeatedly and systematically across both languages. Banned placeholders in text_en: 'Light' (should be Architects or Weave), 'Ghost' (Beacon), 'Hive' (Remnants or Facets), 'Guardian' (Weaver), 'Traveler' (Architects). Identical violations in text_es. Region reference 'Mexican' / 'mexicano' violates the core setting rule (…
+> This text violates Rule 1 catastrophically and is unshippable. Every banned placeholder is present: "Light" (→Weave), "Ghost" (→Beacon), "Hive" (→Remnants/Facets), "Traveler" (→Architects) in both languages. Both texts also contain prohibited region references: "Mexican" and "pyramid" in English, "mexicano" and "pirámide" in Spanish. Rule 1 has no exceptions; these terms must be replaced before th…
 
 **After**
-> EN — The Weave drew the Weaver onward. The Architects' vigil lies silent here—stone corridors, threads of light, the echo of ages long surrendered
-> ES — La Trama atrajo al Tejedor adelante. La vigilancia de los Arquitectos yace silenciosa aquí—pasillos de piedra, hilos de luz, el eco de épocas ya cedidas
+> EN — This traverse leaves passages unexplored, their depths beyond sight. The Weave holds what remains unread. Return to the Architects' halls, and doorways will open where before they were sealed
+> ES — Este recorrido deja pasajes sin explorar, sus profundidades fuera de vista. La Trama guarda lo que permanece sin leer. Regresa a los salones de los Arquitectos, y las puertas se abrirán donde antes estaban cerradas
 
-Every placeholder is replaced by its approved term rather than deleted — Weave,
-Weaver, Architects — and the valley keeps its identity through geology and light
-instead of being named. 141 and 152 characters against a 240 cap.
+Every placeholder is replaced by its approved term rather than deleted, and the
+valley keeps its identity through geology instead of being named. Note what Rule 4
+added: Run-Complete's job is *to sell the second run*, so the line now ends on the
+doors that will open — a replay hook, not just atmosphere.
 
-### Example 2 — Tone · Titan class tagline · 3/10 → 10/10
+### Example 2 — Tone · Titan class tagline · 2/10 → 10/10
 
-This is the case with **no deterministic findings at all**. Both strings were
+This is the case with **no deterministic findings at all**. Both strings sat
 comfortably under the 48-character cap and carried no banned term. A gate built
-only on measurement would have passed this text.
+only on measurement passes this text.
 
 **Before**
 > EN — Awesome tank build, champ!
 > ES — ¡Tanque increíble, campeón!
 
 **Evaluator's reason**
-> Rule 2 is systematically violated. The tone is cheerful and congratulatory ("Awesome," "increíble"), belonging to a modern game's reward UI rather than Echoes' sci-fi melancholic world. Exclamation marks are banned; neither "Awesome tank build, champ!" nor "¡Tanque increíble, campeón!" should use them. The text addresses the player casually ("champ"/"campeón") and as a gamer ("tank build"), treating them as external to the world rather than speaking from inside it. "Awesome" and "increíble" are marketing register, not the diegetically grounded voice required. The entire piece reads as a modern FPS UI congratulating a loadout choice, not as text from an ancient, silent, decaying civilization.
+> This text fails multiple rules and is off-brand at the concept level.
+
+**Rule 2 (Tone):** The text violates nearly every tonal requirement. It is cheerful and congratulatory ("Awesome… champ!"), uses exclamation marks (prohibited), addresses the player directly as a player, employs modern casual idiom ("Awesome", "champ"), and speaks from outside the world commenting on the player's choice rather than from inside the world. The register is upbeat marketing copy, not "sci-fi melancholic, ancient architectural mystery." The Spanish "¡Tanque increíble, campeón!" mirrors these failures.
+
+**Rule 3 (Format):** Interface text carries no terminal punctuation. Both languages end with exclamation marks, which is a direct violation.
+
+**Rule 4 (Function):** This text could sit unchanged under the Hunter class (or under any tank character in any game ever shipped) and fails the core requirement that 
 
 **After**
-> EN — The Weaver of echoes
-> ES — La Tejedora de ecos
+> EN — Stone against the unraveling
+> ES — Piedra contra lo que se deshace
 
-Five distinct violations that no regex reaches: the exclamation marks, the
-congratulatory register, "champ" addressing the player from outside the world,
-"tank build" speaking to them as a gamer rather than a Weaver, and "Awesome" as
-marketing voice. This is the whole argument for scoring rather than matching.
+Violations no regex reaches: the exclamation marks, the congratulatory register,
+"champ" addressing the player from outside the world, "tank build" speaking to
+them as a gamer rather than a Weaver, "Awesome" as marketing voice. And the
+replacement satisfies Rule 4 as well as Rule 2 — *stone* is force, which is the
+Titan's fantasy and not the Hunter's.
 
-### Example 3 — Format and length · pause-menu label · 2/10 → 10/10
+### Example 3 — Format and length · pause-menu label · 2/10 → 9/10
 
 **Before**
 > EN — Abandon the current run and return to the main menu! — 52 characters
 > ES — Abandonar la partida actual y volver al menú principal para empezar de nuevo! — 77 characters
 
 A `MenuLabel` caps at 20 per language. The Spanish also broke the overflow
-allowance at 77 against an English 52 — the exact failure mode the bilingual rule
-exists to catch, since Spanish is the language that decides whether a label fits.
-
-**Evaluator's reason (excerpt)**
-> The string breaks three rules fatally and cannot ship.
-
-**Rule 3 (Length):** English 52 characters vs. cap 20 (32 over); Spanish 77 characters vs. cap 20 (57 over). As stated in the guide, any string over its cap is a hard-ship blocker. MenuLabel is a constrained widget and this text is nearly 4× the width allowed.
-
-**Rule 3 (Punctuation):** "Interface text carries no terminal …
+allowance at 77 against an English 52 — the exact failure the bilingual rule
+exists to catch, since Spanish decides whether a label fits.
 
 **After**
-> EN — Unweave — 7 characters
-> ES — Destejer — 8 characters
+> EN — Exit to Menu — 12 characters
+> ES — Salir a Menú — 12 characters
+
+Plain, and a player knows what pressing it does. That is Rule 4 and the Pause
+screen's own job agreeing: this is the one screen where plain is correct.
 
 ---
 
-## What the loop got right, and one thing worth arguing with
+## The failure that made Rule 4
 
-The refiner did the hard half of its brief: it replaced placeholders with their
-approved terms instead of deleting them, and it re-thought the Spanish as Spanish
-rather than trimming it down to fit.
+The first version of this agent had three rules, and it produced text that scored
+a perfect 10 and could not be used.
 
-But Example 3's result deserves scrutiny rather than applause. `Unweave` /
-`Destejer` scores a clean 10 — on register, on length, on vocabulary — and it is
-**less clear than the string it replaced**. A player scanning a pause menu knows
-what "Exit Run" does; "Unweave" is beautiful and ambiguous.
+| Widget | Accepted at 10/10 under three rules | The problem |
+|---|---|---|
+| `MenuLabel` | `Unweave` / `Destejer` | flawless register; a player scanning a pause menu cannot tell it means *abandon the run* |
+| `ClassTagline` | `The Weaver of echoes` | sits equally well under the Hunter, so it previews neither fantasy |
 
-Example 2 shows the same pattern from another angle. `The Weaver of echoes` is
-perfectly in register — and it is a **class tagline that does not distinguish the
-class**. It would sit as comfortably under the Hunter as under the Titan, which
-is precisely what a tagline on a class-select screen exists not to do.
+The diagnosis was initially wrong. The write-up said the missing rule *"is not in
+`ui-budgets.md` yet"* — but it was never missing. `ui-constraints.md` already
+required GRASP and ACT, and already told the Pause screen to stay plain. **The
+contract was right and the agent had not been given it.**
 
-That is a real property of this kind of loop, not a bug in this run: **an agent
-optimising hard against a style score will trade function for register**, because
-the guide it was given measures voice and says nothing about whether a menu label
-can be understood at a glance or a tagline tells two classes apart. The rules
-that would catch both — a label names its action, a tagline names what is unique
-to its class — are not in `ui-budgets.md` yet. They should be, and they are the
-natural next constraints to add.
+That distinction matters more than the fix. A style agent is only as good as the
+share of the law it is handed, and a guide assembled from three of four notes
+will confidently approve text the fourth forbids — while sounding entirely
+correct about the three it read.
 
-Stated plainly: this agent makes text sound like Echoes. It does not make text
-usable, and it should not be trusted to notice the difference.
+Both strings were re-judged under the four-rule guide:
+
+- `Unweave` — **10 → 6**. *"Beautifully voiced… but prioritizes voice over
+  function at the cost of clarity."*
+- `The Weaver of echoes` — **10 → 5**. *"Applies equally to both classes — any
+  Weaver weaves echoes — and offers no reason for a player to choose Titan."*
+
+The scoring rubric now floors any string that fails GRASP or ACT at 6 **however
+good the voice**, and the refiner is explicitly forbidden from buying register
+with clarity. The re-run above is the result: `Exit to Menu` instead of
+`Unweave`, and `Stone against the unraveling` instead of a line that fitted
+either class.
+
+---
+
+## What this agent does and does not do
+
+It makes text sound like Echoes **and** hold its job on the screen it belongs to.
+It cannot tell whether the underlying design decision was right: a perfectly
+worded label for a menu entry that should not exist still scores 10.
+
+The general lesson is the one Rule 4 came from. An agent optimising against a
+guide will find the cheapest thing that guide accepts, so every clause you leave
+out is a clause it will happily violate — persuasively, and at full marks.
