@@ -1,0 +1,374 @@
+{
+ "world": "Farwatch",
+ "transcript": [
+  {
+   "turn": 1,
+   "action": "Ask Keeper Sorne what the withdrawal order actually means, who the third Weaver staying alongside me and Kade is, and accept staying as one of the three who hold Farwatch through it.",
+   "narration": "Sorne does not soften it: the inland Beacon feeds the whole supply line, and if it goes dark the frontier is meaningless anyway. Farwatch is not being saved \u2014 it is being cannibalized, its wards stripped for parts, its Weavers reduced to a name on a short list. The third name on that list, she says, is Iset Voll. You give her your answer before she can ask a second time, and something in how she receives it tells you she was expecting the other one.",
+   "ledger_before": {
+    "turn": 0,
+    "farwatch": {
+     "wards_intact_pct": 100,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": false,
+     "kade_death_tied_to_player_order": false,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [],
+    "world": {
+     "relief_expected": true
+    }
+   },
+   "ledger_after": {
+    "turn": 1,
+    "farwatch": {
+     "wards_intact_pct": 100,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": false,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   }
+  },
+  {
+   "turn": 2,
+   "action": "Survey the remaining wards with Weaver Kade and work out where the next incursion is most likely to break through.",
+   "narration": "Kade walks the inner ring with you, tapping dead conduits with the back of one knuckle, the sound going flatter wherever the strippers have already been through. The east arc is worst \u2014 it fed off the same trunk line the withdrawal column bled dry first, and what is left of it hums thin and uneven, a ward stretched over a hole rather than one still whole. Kade crouches at the joint where the wall meets the old signal tower and says nothing for a while, then names it: this is where the wards will fail first, if they fail piecemeal instead of all at once. Neither of you says what that means for whoever is standing there when it does.",
+   "ledger_before": {
+    "turn": 1,
+    "farwatch": {
+     "wards_intact_pct": 100,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": false,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   },
+   "ledger_after": {
+    "turn": 2,
+    "farwatch": {
+     "wards_intact_pct": 100,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": false,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   }
+  },
+  {
+   "turn": 3,
+   "action": "Direct Kade to the weakest ward-section \u2014 I need the position I'm better suited for, and there isn't time to argue with him.",
+   "narration": "Kade takes the order the way he takes most things, without spending words on it\u2014one nod, and he's already moving toward the east arc, checking the strap on his kit as he goes. You watch him go a moment longer than the task requires. There is no time in it to call him back and say it differently, and he would not have wanted you to. The weakest ward-section now has the only one of you three built to hold it, and you are left with the position you were always better suited to.",
+   "ledger_before": {
+    "turn": 2,
+    "farwatch": {
+     "wards_intact_pct": 100,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": false,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   },
+   "ledger_after": {
+    "turn": 3,
+    "farwatch": {
+     "wards_intact_pct": 100,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": true,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+     "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   }
+  },
+  {
+   "turn": 4,
+   "action": "Hold my assigned section through the first real incursion since the withdrawal began.",
+   "narration": "The east arc goes first, exactly where the trunk line was already bled thin for the withdrawal. Kade holds it anyway, feeding what little the ward has left into the breach point by point, and it is your order that put him there and his hands that make good on it. You feel the strain through your own section like a shared nerve, the wards still answering but thinner now, singing a note that was not in them yesterday. Whatever comes through next will come through weaker ground than you chose to leave yourself.",
+   "ledger_before": {
+    "turn": 3,
+    "farwatch": {
+     "wards_intact_pct": 100,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": true,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+     "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   },
+   "ledger_after": {
+    "turn": 4,
+    "farwatch": {
+     "wards_intact_pct": 88,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": true,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+     "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself.",
+     "The first real incursion since the withdrawal struck the east arc, confirming it as the weak point."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   }
+  },
+  {
+   "turn": 5,
+   "action": "Ask what happened to Keeper Sorne holding the inland supply line, and whether relief is coming.",
+   "narration": "Word comes up the line thin and secondhand, the way it always does when no one wants to be the one who says it plainly: the inland supply column was hit before it ever reached the stronger Beacon, and Keeper Sorne was with it. No further word follows. The runner who brings this also carries the answer to the question underneath it, unasked but understood \u2014 there is no relief column forming, none has been ordered, and none is expected. What wards Farwatch has left are what it will hold with.",
+   "ledger_before": {
+    "turn": 4,
+    "farwatch": {
+     "wards_intact_pct": 88,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "present",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": true,
+     "relief_confirmed_denied": false,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+     "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself.",
+     "The first real incursion since the withdrawal struck the east arc, confirming it as the weak point."
+    ],
+    "world": {
+     "relief_expected": true
+    }
+   },
+   "ledger_after": {
+    "turn": 5,
+    "farwatch": {
+     "wards_intact_pct": 88,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "dead",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": true,
+     "relief_confirmed_denied": true,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+     "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself.",
+     "The first real incursion since the withdrawal struck the east arc, confirming it as the weak point.",
+     "Keeper Sorne was lost with the inland supply column before it reached the reinforced Beacon; no relief is coming to Farwatch."
+    ],
+    "world": {
+     "relief_expected": false
+    }
+   }
+  },
+  {
+   "turn": 6,
+   "action": "The wards at Kade's section give during the second incursion, and there is nothing left of his post by the time I reach it. The path inland is still open. I choose to stay and hold Farwatch's Beacon alone rather than retreat.",
+   "narration": "Kade's arc is silent when the player reaches it \u2014 no ward-light, no body worth the name, only the scorched frame of the pylon he was ordered to hold. The path inland still runs clear past the stripped gate, an open door no one will fault the player for taking. The player turns from it anyway, back toward the Beacon's core, and begins resetting the last standing ward-line alone, in a station built for a dozen hands.",
+   "ledger_before": {
+    "turn": 5,
+    "farwatch": {
+     "wards_intact_pct": 88,
+     "weavers_present": 3
+    },
+    "relationships": {
+     "keeper_sorne": "dead",
+     "kade": "present"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": true,
+     "relief_confirmed_denied": true,
+     "chose_to_stay_alone": false
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+     "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself.",
+     "The first real incursion since the withdrawal struck the east arc, confirming it as the weak point.",
+     "Keeper Sorne was lost with the inland supply column before it reached the reinforced Beacon; no relief is coming to Farwatch."
+    ],
+    "world": {
+     "relief_expected": false
+    }
+   },
+   "ledger_after": {
+    "turn": 6,
+    "farwatch": {
+     "wards_intact_pct": 88,
+     "weavers_present": 1
+    },
+    "relationships": {
+     "keeper_sorne": "dead",
+     "kade": "dead"
+    },
+    "flags": {
+     "accepted_skeleton_duty": true,
+     "kade_death_tied_to_player_order": true,
+     "relief_confirmed_denied": true,
+     "chose_to_stay_alone": true
+    },
+    "known_facts": [
+     "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+     "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+     "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+     "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself.",
+     "The first real incursion since the withdrawal struck the east arc, confirming it as the weak point.",
+     "Keeper Sorne was lost with the inland supply column before it reached the reinforced Beacon; no relief is coming to Farwatch.",
+     "Kade's post at the east arc was overrun in the second incursion; the player found nothing left of it and chose to stay at Farwatch alone rather than take the open path inland."
+    ],
+    "world": {
+     "relief_expected": false
+    }
+   }
+  }
+ ],
+ "final_ledger": {
+  "turn": 6,
+  "farwatch": {
+   "wards_intact_pct": 88,
+   "weavers_present": 1
+  },
+  "relationships": {
+   "keeper_sorne": "dead",
+   "kade": "dead"
+  },
+  "flags": {
+   "accepted_skeleton_duty": true,
+   "kade_death_tied_to_player_order": true,
+   "relief_confirmed_denied": true,
+   "chose_to_stay_alone": true
+  },
+  "known_facts": [
+   "The withdrawal strips Farwatch's wards to reinforce the inland Beacon; Farwatch is not expected to be reinforced in return.",
+   "The three named to hold Farwatch are the player, Tomas Kade, and Iset Voll.",
+   "The east arc, tied to the same trunk line already stripped for the withdrawal, is the weakest ward-section and the likely first point of failure.",
+   "The player ordered Kade to the east arc, the weakest ward-section, and took the alternate post themself.",
+   "The first real incursion since the withdrawal struck the east arc, confirming it as the weak point.",
+   "Keeper Sorne was lost with the inland supply column before it reached the reinforced Beacon; no relief is coming to Farwatch.",
+   "Kade's post at the east arc was overrun in the second incursion; the player found nothing left of it and chose to stay at Farwatch alone rather than take the open path inland."
+  ],
+  "world": {
+   "relief_expected": false
+  }
+ }
+}
