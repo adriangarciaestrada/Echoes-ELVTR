@@ -1,0 +1,417 @@
+{
+  "tool": "loom adversarial QA agent",
+  "schema": 1,
+  "summary": {
+    "started": "2026-08-27T06:02:35.536Z",
+    "finished": "2026-08-27T06:10:22.048Z",
+    "seconds": 467,
+    "core_steps": 73169,
+    "core_runs": 1868,
+    "browser_cycles": 31,
+    "browser_tactics": [
+      "banish_then_take",
+      "advance_wave",
+      "deep_market_banish",
+      "drag_dump",
+      "double_click_storm",
+      "speed_lang_thrash",
+      "key_mash",
+      "ghost_clicks",
+      "ult_mash",
+      "boundary_carpet",
+      "resize_churn",
+      "storage_poison"
+    ],
+    "page_errors": 0,
+    "findings": 6,
+    "by_severity": {
+      "critical": 1,
+      "high": 4,
+      "medium": 1,
+      "low": 0
+    }
+  },
+  "findings": [
+    {
+      "id": "LOOM-ADV-001",
+      "code": "BANISH_UPGRADES_THE_NEXT_CARD",
+      "error_type": "economy_exploit",
+      "severity": "critical",
+      "location": {
+        "surface": "core-fuzz",
+        "system": "market / banish",
+        "file": "src/core/run.ts",
+        "symbol": "Run.removeFromPool"
+      },
+      "game_context": {
+        "surface": "core-fuzz",
+        "tactic": "probe: banishing a card cannot upgrade the card below it",
+        "class": "n/a",
+        "seed": null,
+        "phase": "n/a",
+        "wave": 0,
+        "level": 0,
+        "gold": 0,
+        "beacon_hp": 0,
+        "beacon_max": 0,
+        "relics": 0,
+        "cells": 0,
+        "buffs": 0,
+        "enemies_alive": null,
+        "battle_elapsed": null,
+        "steps_to_reproduce": [
+          "run = new Run(\"hunter\", seed)   // search seeds for a shelf whose top card outranks the one below it",
+          "run.wave = 30; run.rollOffers()  // deep enough that the market deals mixed rarities",
+          "record offers[] and offerTiers[]",
+          "run.removeFromPool(offers[0].id)   // the Banish button on the TOP card; costs nothing",
+          "read offers[] and offerTiers[] again — the card that moved up now carries the banished card's tier"
+        ]
+      },
+      "expected": "banishing a card removes its tier along with it; every card left keeps the rarity it was rolled at, and the only way to raise a relic's tier is to merge two of them",
+      "observed": "seed 1, wave 30: shelf was [burst_bomb@2, construct_node@1, construct_turret@1]. Banishing the top card — which is free — moved construct_node up a slot and handed it tier 2 instead of 1: 17 damage / 1.98s became 29 damage / 1.782s. offerTiers is never spliced (offers=2, offerTiers=3), so every surviving card inherits the tier of the slot above it, and a player can chain banishes to hand the last card the best tier on the shelf",
+      "occurrences": 3,
+      "witnessed_by": [
+        {
+          "surface": "core-fuzz",
+          "tactic": "probe: banishing a card cannot upgrade the card below it",
+          "phase": "n/a",
+          "wave": 0,
+          "note": "seed 1, wave 30: shelf was [burst_bomb@2, construct_node@1, construct_turret@1]. Banishing the top card — which is free — moved construct_node up a slot and handed it tier 2 instead of 1: 17 damage / 1.98s became 29 damage / 1.782s. offerTiers is never spliced"
+        },
+        {
+          "surface": "browser-ui",
+          "tactic": "deep_market_banish",
+          "phase": "market",
+          "wave": 22,
+          "note": "wave 22: the offer column read [Uncommon, Common, Common] before the Banish click on the TOP card and [Uncommon, Common] after it. bolt_long, which the player never touched, went from tier 0 to 1 — a free rarity upgrade, and banishing costs nothing (offers=2, "
+        }
+      ],
+      "evidence": [
+        "shots/banish-before.png",
+        "shots/banish-after.png"
+      ],
+      "first_seen": "2026-08-27T06:02:35.635Z",
+      "last_seen": "2026-08-27T06:07:16.668Z",
+      "reproduced": true
+    },
+    {
+      "id": "LOOM-ADV-004",
+      "code": "OFFER_TIER_DESYNC",
+      "error_type": "state_desync",
+      "severity": "high",
+      "location": {
+        "surface": "core-fuzz",
+        "system": "market / relic offers",
+        "file": "src/core/run.ts",
+        "symbol": "Run.removeFromPool"
+      },
+      "game_context": {
+        "surface": "core-fuzz",
+        "tactic": "banish_storm",
+        "class": "warden",
+        "seed": 7002,
+        "phase": "market",
+        "wave": 1,
+        "level": 1,
+        "gold": 0,
+        "beacon_hp": 100,
+        "beacon_max": 100,
+        "relics": 1,
+        "cells": 9,
+        "buffs": 0,
+        "enemies_alive": null,
+        "battle_elapsed": null,
+        "steps_to_reproduce": [
+          "new Run(\"warden\", 7002)  [hostile]",
+          "removeFromPool(\"bolt_heavy\")  [banish slot 2]"
+        ]
+      },
+      "expected": "offers and offerTiers stay the same length; offerTiers[i] is the tier of offers[i]",
+      "observed": "offers=2 (burst_arc,construct_orbit) but offerTiers=3 (0,0,0)",
+      "occurrences": 30211,
+      "witnessed_by": [
+        {
+          "surface": "core-fuzz",
+          "tactic": "banish_storm",
+          "phase": "market",
+          "wave": 1,
+          "note": "offers=2 (burst_arc,construct_orbit) but offerTiers=3 (0,0,0)"
+        },
+        {
+          "surface": "core-fuzz",
+          "tactic": "market",
+          "phase": "market",
+          "wave": 3,
+          "note": "offers=1 (bolt_long) but offerTiers=2 (0,0)"
+        },
+        {
+          "surface": "core-fuzz",
+          "tactic": "mixed",
+          "phase": "battle",
+          "wave": 3,
+          "note": "offers=1 (bolt_long) but offerTiers=2 (0,0)"
+        },
+        {
+          "surface": "core-fuzz",
+          "tactic": "ult_spam",
+          "phase": "battle",
+          "wave": 3,
+          "note": "offers=1 (bolt_long) but offerTiers=2 (0,0)"
+        },
+        {
+          "surface": "core-fuzz",
+          "tactic": "battle",
+          "phase": "over",
+          "wave": 5,
+          "note": "offers=0 () but offerTiers=1 (0)"
+        },
+        {
+          "surface": "browser-ui",
+          "tactic": "banish_then_take",
+          "phase": "market",
+          "wave": 1,
+          "note": "offers=1 (bolt_long) but offerTiers=2 (0,0)"
+        },
+        {
+          "surface": "browser-ui",
+          "tactic": "deep_market_banish",
+          "phase": "market",
+          "wave": 22,
+          "note": "offers=2 (bolt_long,bolt_needle) but offerTiers=3 (1,0,0)"
+        },
+        {
+          "surface": "browser-ui",
+          "tactic": "drag_dump",
+          "phase": "market",
+          "wave": 22,
+          "note": "offers=1 (bolt_needle) but offerTiers=2 (0,0)"
+        }
+      ],
+      "evidence": [
+        "shots/LOOM-ADV-004-OFFER_TIER_DESYNC.png"
+      ],
+      "first_seen": "2026-08-27T06:02:35.652Z",
+      "last_seen": "2026-08-27T06:10:06.369Z",
+      "reproduced": null
+    },
+    {
+      "id": "LOOM-ADV-005",
+      "code": "OFFER_TIER_MUTATED",
+      "error_type": "state_desync",
+      "severity": "high",
+      "location": {
+        "surface": "core-fuzz",
+        "system": "market / relic offers",
+        "file": "src/core/run.ts",
+        "symbol": "Run.removeFromPool"
+      },
+      "game_context": {
+        "surface": "core-fuzz",
+        "tactic": "economy_drain",
+        "class": "hunter",
+        "seed": 7018,
+        "phase": "market",
+        "wave": 9,
+        "level": 7,
+        "gold": 10,
+        "beacon_hp": 137,
+        "beacon_max": 140,
+        "relics": 8,
+        "cells": 21,
+        "buffs": 3,
+        "enemies_alive": 0,
+        "battle_elapsed": 16.9,
+        "steps_to_reproduce": [
+          "buy(\"reroll\")",
+          "buy(\"reroll\")",
+          "buy(\"reroll\")",
+          "buy(\"reroll\")",
+          "buy(\"reroll\")",
+          "buy(\"reroll\")",
+          "buy(\"study\")",
+          "buy(\"study\")",
+          "buy(\"study\")",
+          "buy(\"study\")",
+          "buy(\"study\")",
+          "buy(\"study\")"
+        ]
+      },
+      "expected": "an offer's tier does not change while the offer stays on the shelf",
+      "observed": "construct_turret in slot 0 went tier 0 -> 1",
+      "occurrences": 1211,
+      "witnessed_by": [
+        {
+          "surface": "core-fuzz",
+          "tactic": "economy_drain",
+          "phase": "market",
+          "wave": 9,
+          "note": "construct_turret in slot 0 went tier 0 -> 1"
+        },
+        {
+          "surface": "core-fuzz",
+          "tactic": "market",
+          "phase": "market",
+          "wave": 17,
+          "note": "bolt_long in slot 1 went tier 0 -> 1"
+        }
+      ],
+      "evidence": [],
+      "first_seen": "2026-08-27T06:02:36.954Z",
+      "last_seen": "2026-08-27T06:04:05.637Z",
+      "reproduced": null
+    },
+    {
+      "id": "LOOM-ADV-002",
+      "code": "END_BATTLE_NOT_IDEMPOTENT",
+      "error_type": "state_desync",
+      "severity": "high",
+      "location": {
+        "surface": "core-fuzz",
+        "system": "run / phase machine",
+        "file": "src/core/run.ts",
+        "symbol": "Run.endBattle"
+      },
+      "game_context": {
+        "surface": "core-fuzz",
+        "tactic": "probe: endBattle settles a finished wave exactly once",
+        "class": "n/a",
+        "seed": null,
+        "phase": "n/a",
+        "wave": 0,
+        "level": 0,
+        "gold": 0,
+        "beacon_hp": 0,
+        "beacon_max": 0,
+        "relics": 0,
+        "cells": 0,
+        "buffs": 0,
+        "enemies_alive": null,
+        "battle_elapsed": null,
+        "steps_to_reproduce": [
+          "run = new Run(\"hunter\", 11)",
+          "playMarket(); b = run.startBattle(); b.runToEnd()",
+          "run.endBattle()   // the renderer's own call",
+          "run.endBattle()   // a second call, as a stale handler would make"
+        ]
+      },
+      "expected": "settling a battle a second time is a no-op — the same guard settlePhase() already carries against a stale caller",
+      "observed": "one extra call took wave 2->3, gold 12->24, exp 12->4, level 1->2, phase market->buff: the wave's reward is paid twice and the next wave is skipped without being fought",
+      "occurrences": 1,
+      "witnessed_by": [
+        {
+          "surface": "core-fuzz",
+          "tactic": "probe: endBattle settles a finished wave exactly once",
+          "phase": "n/a",
+          "wave": 0,
+          "note": "one extra call took wave 2->3, gold 12->24, exp 12->4, level 1->2, phase market->buff: the wave's reward is paid twice and the next wave is skipped without being fought"
+        }
+      ],
+      "evidence": [],
+      "first_seen": "2026-08-27T06:02:35.636Z",
+      "last_seen": "2026-08-27T06:02:35.636Z",
+      "reproduced": true
+    },
+    {
+      "id": "LOOM-ADV-003",
+      "code": "UNEARNED_BUFF_ACCEPTED",
+      "error_type": "rule_violation",
+      "severity": "high",
+      "location": {
+        "surface": "core-fuzz",
+        "system": "progression / buffs",
+        "file": "src/core/run.ts",
+        "symbol": "Run.takeBuff"
+      },
+      "game_context": {
+        "surface": "core-fuzz",
+        "tactic": "probe: a buff can only be taken against a grant that was earned",
+        "class": "n/a",
+        "seed": null,
+        "phase": "n/a",
+        "wave": 0,
+        "level": 0,
+        "gold": 0,
+        "beacon_hp": 0,
+        "beacon_max": 0,
+        "relics": 0,
+        "cells": 0,
+        "buffs": 0,
+        "enemies_alive": null,
+        "battle_elapsed": null,
+        "steps_to_reproduce": [
+          "run = new Run(\"warden\", 9)   // pendingBuffChoices === 0",
+          "run.takeBuff(BUFFS[0]) x3",
+          "count run.buffs"
+        ]
+      },
+      "expected": "takeBuff refuses when pendingBuffChoices is 0, the way buy() refuses when the gold is not there",
+      "observed": "0 buffs became 3 with nothing owed — the only thing standing between one stale buff-card click zone and unlimited permanent buffs is the renderer remembering to destroy it (see Centre.zones, which had exactly that leak)",
+      "occurrences": 1,
+      "witnessed_by": [
+        {
+          "surface": "core-fuzz",
+          "tactic": "probe: a buff can only be taken against a grant that was earned",
+          "phase": "n/a",
+          "wave": 0,
+          "note": "0 buffs became 3 with nothing owed — the only thing standing between one stale buff-card click zone and unlimited permanent buffs is the renderer remembering to destroy it (see Centre.zones, which had exactly that leak)"
+        }
+      ],
+      "evidence": [],
+      "first_seen": "2026-08-27T06:02:35.636Z",
+      "last_seen": "2026-08-27T06:02:35.636Z",
+      "reproduced": true
+    },
+    {
+      "id": "LOOM-ADV-006",
+      "code": "SCORE_SCREEN_BRICKED_BY_STORED_STATE",
+      "error_type": "crash",
+      "severity": "medium",
+      "location": {
+        "surface": "browser-ui",
+        "system": "score screen / persistence",
+        "file": "src/game/main.ts",
+        "symbol": "LoomScene.recordBest"
+      },
+      "game_context": {
+        "surface": "browser-ui",
+        "tactic": "storage_poison",
+        "class": "hunter",
+        "seed": null,
+        "phase": "over",
+        "wave": 1,
+        "level": 1,
+        "gold": 0,
+        "beacon_hp": -1,
+        "beacon_max": 100,
+        "relics": 1,
+        "cells": 9,
+        "buffs": 0,
+        "enemies_alive": 1,
+        "battle_elapsed": 0.33,
+        "steps_to_reproduce": [
+          "localStorage[\"loom.best\"] = \"not json\"",
+          "reload, start a run, lose it",
+          "the score screen never builds and there is no way back to the menu"
+        ]
+      },
+      "expected": "a stored best-score value the game cannot read is discarded, the way loom.lang and loom.speed already validate what they read",
+      "observed": "with localStorage[\"loom.best\"] = \"not json\", losing the run threw SyntaxError: Unexpected token 'o', \"not json\" is not valid JSON and left phase=\"over\" with no Play-again button and no score screen: the run cannot be seen or restarted without clearing the site's data",
+      "occurrences": 3,
+      "witnessed_by": [
+        {
+          "surface": "browser-ui",
+          "tactic": "storage_poison",
+          "phase": "over",
+          "wave": 1,
+          "note": "with localStorage[\"loom.best\"] = \"not json\", losing the run threw SyntaxError: Unexpected token 'o', \"not json\" is not valid JSON and left phase=\"over\" with no Play-again button and no score screen: the run cannot be seen or restarted without clearing the site"
+        }
+      ],
+      "evidence": [
+        "shots/storage-poison.png"
+      ],
+      "first_seen": "2026-08-27T06:10:12.163Z",
+      "last_seen": "2026-08-27T06:10:22.009Z",
+      "reproduced": true
+    }
+  ]
+}
