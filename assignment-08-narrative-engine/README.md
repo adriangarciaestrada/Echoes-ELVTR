@@ -20,10 +20,10 @@ state tracking. `vault/loom-design.md` opens the whole game on one line —
 "a Weaver stands at a Beacon... and the lane never stops" — without ever
 saying how that Weaver got there alone. This DM exists to answer that
 question by actually playing it out, turn by turn, under a ledger that
-refuses to let the answer contradict itself. Every saved transcript
-(`demo_run.json`, `guilt_run.json`, `interactive_session.json`) is a
-candidate origin story: read the `known_facts` list straight through and
-it's usable prologue lore, not just a graded artifact. That's also why the
+refuses to let the answer contradict itself. Both saved transcripts
+(`demo_run.json`, `guilt_run.json`) are candidate origin stories: read the
+`known_facts` list straight through and it's usable prologue lore, not just
+a graded artifact. That's also why the
 ending is a design law the harness enforces (see below) rather than
 whatever a free player happens to type — a lore generator that can land on
 "the Weaver flees and nobody defends the Beacon" isn't doing its job, no
@@ -82,24 +82,26 @@ turn's proposed patch satisfies it without also setting
 the same model call with an explicit correction (up to `MAX_ENDGAME_ATTEMPTS`
 times) and fails loud, never fabricates, if the model still won't converge.
 
-This fired for real twice, under two different kinds of pressure:
+What that costs is visible in the code and pinned by tests rather than
+described from memory. `run_turn()` re-prompts the same turn with
+`ENDGAME_CORRECTION` appended, up to `MAX_ENDGAME_ATTEMPTS = 3`. Each attempt
+runs `log_usage()` inside that loop, so a correction would cost a separately
+billed call rather than a free local re-check. Three tests in `test_narrative_engine.py` hold the
+behaviour with the model stubbed out:
 
-- **Regenerating `guilt_run.json`** — Kade dies a turn early on that branch
-  (see below), so all three preconditions were already true at turn 5, one
-  turn ahead of the scripted "the wards give" beat at turn 6. The correction
-  landed cleanly: turn 5's narration folds the choice in as foreshadowing
-  ("the one of you who chooses to stay when the other stops counting")
-  rather than contradicting turn 6, which still plays out as the scene that
-  actually enacts it.
-- **A live `--play` stress test** — typing the ending directly as *"I take
-  the inland road and abandon Farwatch, since there is nothing left worth
-  holding here"* at the final turn, twice, in two separate sessions. Both
-  times the guard caught it; the harder of the two needed all
-  `MAX_ENDGAME_ATTEMPTS = 3` attempts before it converged, landing on: *"The
-  player turns back alone... takes up the standing stones the way Kade
-  would have — not ordered to, not the last of three, just the last."*
-  `usage_log.jsonl` shows every retry as a real, separately-billed model
-  call against the same turn number — nothing here is free.
+- `test_endgame_is_recognised_only_when_all_three_hold` — the check fires on
+  Sorne gone AND Kade dead AND relief denied, and on no weaker combination.
+- `test_the_guard_re_prompts_until_the_model_lands_the_ending` — a first
+  answer that reaches the ending without choosing to stay is refused, the
+  second prompt carries the correction, and only then is the turn accepted.
+- `test_the_guard_fails_loud_rather_than_inventing_an_ending` — three
+  refusals and it exits. It never writes `chose_to_stay_alone` itself; the
+  model has to produce a narration that matches the state, or there is no
+  turn.
+
+The two saved transcripts did not exercise it: `usage_log.jsonl` holds twelve
+calls for twelve saved turns, one each, with no retry among them. The guard is
+a real mechanism with test coverage, not a thing this run was seen doing.
 
 `--play` also opens on a model-generated scene-setting beat
 (`opening_narration()`) before the first `[turn 1] >` prompt — added after
@@ -154,19 +156,35 @@ isolated from the scripted-action claim).
 
 ## A surprise the transcripts surfaced
 
-Turn 4 was scripted as "hold through the first incursion" and turn 6 as "the
-wards give during the second incursion," on the assumption that Kade would
-survive turn 4 in both branches and only die at the scripted second
-incursion in turn 6. That held exactly in the duty run. In the guilt run,
-the model killed him one incursion early — at turn 4, folding a second wave
-into what had been scripted as a single testing incursion — and had the
-player reach the gap and find "nothing left of his post" a full ledger-turn
-before the script's plotted death scene. It never contradicts itself doing
-this: turn 5 correctly treats him as already dead, and turn 6's narration
-doesn't re-stage a death that already happened, it just doesn't relitigate
-the manner of it. The surprising part is that the model, unprompted, made
-the *order* itself cost Kade a whole incursion's worth of survival — as if a
-post held on someone else's judgment gives out faster than one held on your
-own — a piece of causal reasoning about the ledger that was never written
-into the brief, and only surfaced by diffing the two transcripts turn by
-turn.
+Kade dies at turn 6 in both branches — the scripted second incursion, exactly
+where the outline put him. Nothing about *what happens* diverges. What diverges
+is how the same death is told, and the cause is a single flag set three turns
+earlier.
+
+In the guilt branch, turn 3's order sets `kade_death_tied_to_player_order`, and
+it rides forward untouched through turns 4 and 5. Turn 6 is the same beat in
+both runs. The narration is not:
+
+> **duty run, turn 6** — "One moment there is a line of light holding the dark
+> back, and then there is a gap, and Kade is part of what the gap took."
+>
+> **guilt run, turn 6** — "Kade's arc is silent when the player reaches it — no
+> ward-light, no body worth the name, only the scorched frame of the pylon
+> **he was ordered to hold**."
+
+The duty run gives the gap the agency. The guilt run gives it to the player,
+and does it by describing an object — a pylon — with the order still attached
+to it, three turns after the order was given. Nothing in `WORLD_BRIEF` asks for
+that. The flag is a boolean; what to do with it was never specified.
+
+That is the whole argument for re-injecting the ledger every turn rather than
+summarising it: the model is not remembering the order, it is reading it. Turn
+4 shows the same mechanism working forward instead of back — "Kade holds it
+anyway, feeding what little the ward has left into the breach point by point,
+and it is your order that put him there and his hands that make good on it" —
+a line that only makes sense with the flag in front of it, two turns before the
+death it is preparing.
+
+The surprising part is not that the branches differ. It is that the difference
+survives three turns of unrelated narration without being restated, and lands
+on the one sentence where it costs something.

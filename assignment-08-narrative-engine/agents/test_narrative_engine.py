@@ -119,3 +119,91 @@ def test_duty_and_guilt_produce_different_outcomes():
     # on which ledger history it's read against.
     assert duty["transcript"][5]["action"] == guilt["transcript"][5]["action"]
     assert duty["transcript"][5]["narration"] != guilt["transcript"][5]["narration"]
+
+
+# ---------------------------------------------------------------------------
+# The endgame guard, with the model stubbed out.
+#
+# This is the one part of the engine that decides something on its own rather
+# than merging what the model proposed, and until these tests it was the part
+# with no evidence at all: the README described it firing during real sessions,
+# and the usage log holds exactly one call per saved turn, with no room for
+# them. A claim that cannot be checked is worth less than a test that can, so
+# the behaviour is pinned here instead — no model, no cost, no flakiness.
+# ---------------------------------------------------------------------------
+
+def _at_the_ending(**flags):
+    """A ledger one patch away from the required ending."""
+    led = initial_ledger()
+    led["relationships"]["kade"] = "dead"
+    led["relationships"]["keeper_sorne"] = "gone"
+    led["flags"]["relief_confirmed_denied"] = True
+    led["flags"].update(flags)
+    return led
+
+
+def test_endgame_is_recognised_only_when_all_three_hold():
+    from narrative_engine import endgame_reached
+    assert endgame_reached(_at_the_ending())
+    for missing in ("kade", "keeper_sorne"):
+        led = _at_the_ending()
+        led["relationships"][missing] = "present"
+        assert not endgame_reached(led), f"{missing} still present is not the ending"
+    led = _at_the_ending()
+    led["flags"]["relief_confirmed_denied"] = False
+    assert not endgame_reached(led), "relief still expected is not the ending"
+
+
+def test_the_guard_re_prompts_until_the_model_lands_the_ending(monkeypatch):
+    """A turn that reaches the ending WITHOUT choosing to stay is refused and
+    re-prompted, and the correction is what changes the second answer."""
+    import narrative_engine as ne
+
+    seen = []
+    replies = [
+        # First: reaches the ending but leaves the choice unmade.
+        json.dumps({"narration": "The player walks toward the inland road.",
+                    "ledger_patch": {"relationships": {"kade": "dead", "keeper_sorne": "gone"},
+                                     "flags": {"relief_confirmed_denied": True}}}),
+        # Second, after the correction: the same state, choice made.
+        json.dumps({"narration": "The player turns back alone.",
+                    "ledger_patch": {"relationships": {"kade": "dead", "keeper_sorne": "gone"},
+                                     "flags": {"relief_confirmed_denied": True,
+                                               "chose_to_stay_alone": True}}}),
+    ]
+
+    def fake_call(system, user):
+        seen.append(user)
+        return replies[len(seen) - 1], {"cost_usd": 0.0}
+
+    monkeypatch.setattr(ne, "call_claude", fake_call)
+    monkeypatch.setattr(ne, "log_usage", lambda *a, **k: None)
+
+    ledger, narration, _ = ne.run_turn(initial_ledger(), "leave Farwatch")
+    assert len(seen) == 2, "the first answer should have been refused"
+    assert ne.ENDGAME_CORRECTION.strip()[:30] in seen[1], "the retry must carry the correction"
+    assert seen[0] != seen[1], "the second prompt is not the first one repeated"
+    assert ledger["flags"]["chose_to_stay_alone"] is True
+    assert narration == "The player turns back alone."
+
+
+def test_the_guard_fails_loud_rather_than_inventing_an_ending(monkeypatch):
+    """Three refusals and it exits. It never writes the flag itself — the model
+    has to produce a narration that matches the state, or there is no turn."""
+    import narrative_engine as ne
+
+    calls = []
+
+    def stubborn(system, user):
+        calls.append(user)
+        return json.dumps({"narration": "The player leaves for good.",
+                           "ledger_patch": {"relationships": {"kade": "dead", "keeper_sorne": "gone"},
+                                            "flags": {"relief_confirmed_denied": True}}}), {}
+
+    monkeypatch.setattr(ne, "call_claude", stubborn)
+    monkeypatch.setattr(ne, "log_usage", lambda *a, **k: None)
+
+    with pytest.raises(SystemExit) as exit_info:
+        ne.run_turn(initial_ledger(), "leave Farwatch")
+    assert len(calls) == ne.MAX_ENDGAME_ATTEMPTS
+    assert "would not converge" in str(exit_info.value)
