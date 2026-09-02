@@ -46,16 +46,24 @@ sentence each.
 | **Narrative engine** (Farwatch) | A DM agent that keeps the world in a JSON ledger outside the chat and re-injects it every turn; it answered the game's own opening premise by playing it out. | [`agents/lore/narrative_engine.py`](agents/lore/narrative_engine.py) |
 | **Art pipeline** | Spec → generate → deterministic sprite checks (size, palette, transparent background) → import with a provenance sidecar. | [`agents/art/`](agents/art/) |
 | **Adversarial QA agent** | Drives the built game in a real browser, fuzzes input, and checks an oracle of invariants rather than screenshots; the only agent whose findings changed the game's rules. | [`agents/qa/`](agents/qa/) |
+| **Balance simulator** | Runs the game's own core headless with the frame cap removed, playing full runs under scripted policies; it is what turns "wave 12 is fair" into a measurement, and every balance figure below comes from it. | [`agents/sim/`](agents/sim/) |
 | **Shared model wrapper** | One `claude`-CLI headless call path for every agent above: fails loud, never fabricates a response, and logs each call's usage and cost. | [`agents/ai_call.py`](agents/ai_call.py) |
 
 The folder is self-contained: [`vault/`](vault/) carries the design law the
-retriever searches and the writer is pinned to, and [`engine/`](engine/) the
-string table the pipeline writes into. Both stages run from inside it:
+retriever searches and the writer is pinned to, and [`engine/core/`](engine/core/)
+the game's rules — the string table the copy pipeline writes into, and the
+battle, grid and wave modules the simulator measures. Everything runs from
+inside this folder:
 
 ```bash
 cd agents/content
 python3 retriever.py --query "what a Warden knot buff should say" --k 2
-python3 gate.py --check-generated     # 109 shipped records, 0 errors
+python3 gate.py --check-generated          # 109 shipped records, 0 errors
+
+cd ../..
+npx tsx agents/sim/run.ts 3 greedy         # full runs, headless, no model
+python3 -m pytest agents/lore/test_narrative_engine.py -q
+python3 -m pytest agents/art/test_sprite_rules.py -q
 ```
 
 A complete run is committed as evidence, not just described:

@@ -122,7 +122,7 @@ def check_generated() -> int:
     """Validate every record already shipped in strings.generated.ts."""
     # The engine table this pipeline writes into, vendored beside the agents
     # so the self-check runs from inside the deliverable.
-    path = Path(__file__).resolve().parent.parent.parent / "engine" / "strings.generated.ts"
+    path = Path(__file__).resolve().parent.parent.parent / "engine" / "core" / "strings.generated.ts"
     text = path.read_text(encoding="utf-8")
     # The table is a plain JS object literal; pull key/en/es out with a regex
     # rather than a real TS parser, which is all a read-only check needs.
