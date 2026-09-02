@@ -1,0 +1,200 @@
+[
+ {
+  "id": "relic_bolt_needle",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Swift Fang",
+  "detail": "Precise piercing bolts that strike single targets quickly.",
+  "category": "Bolt"
+ },
+ {
+  "id": "relic_bolt_long",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Rending Bolt",
+  "detail": "Long-range bolts that shred armor and weaken defenses.",
+  "category": "Bolt"
+ },
+ {
+  "id": "relic_bolt_heavy",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Heavy Hitter",
+  "detail": "Powerful bolts that knock back Remnants and deal heavy damage.",
+  "category": "Bolt"
+ },
+ {
+  "id": "relic_burst_bomb",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Shock Burst",
+  "detail": "Close-range burst that stuns and slows Remnants.",
+  "category": "Burst"
+ },
+ {
+  "id": "relic_burst_arc",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Burning Arc",
+  "detail": "Medium-range cone that burns Remnants over time.",
+  "category": "Burst"
+ },
+ {
+  "id": "relic_burst_field",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Flame Field",
+  "detail": "Wide-angle cone that burns Remnants over a large area.",
+  "category": "Burst"
+ },
+ {
+  "id": "relic_construct_node",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Sentry Node",
+  "detail": "Basic construct that deals steady damage to nearby Remnants.",
+  "category": "Construct"
+ },
+ {
+  "id": "relic_construct_orbit",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Orbital Guard",
+  "detail": "Swift swarm that slows Remnants with rapid strikes.",
+  "category": "Construct"
+ },
+ {
+  "id": "relic_construct_turret",
+  "kind": "relic",
+  "width": 32,
+  "height": 32,
+  "subject": "Focus Turret",
+  "detail": "Precise turret that pierces armor with focused fire.",
+  "category": "Construct"
+ },
+ {
+  "id": "enemy_walker",
+  "kind": "enemy",
+  "width": 32,
+  "height": 32,
+  "subject": "walker",
+  "detail": "a Remnant that walks the lane to the Beacon",
+  "category": null
+ },
+ {
+  "id": "enemy_gunner",
+  "kind": "enemy",
+  "width": 32,
+  "height": 32,
+  "subject": "gunner",
+  "detail": "a Remnant that halts up the lane and attacks from there",
+  "category": null
+ },
+ {
+  "id": "enemy_bulwark",
+  "kind": "boss",
+  "width": 64,
+  "height": 64,
+  "subject": "bulwark",
+  "detail": "a Remnant that walks the lane to the Beacon",
+  "category": null
+ },
+ {
+  "id": "enemy_splitter",
+  "kind": "boss",
+  "width": 64,
+  "height": 64,
+  "subject": "splitter",
+  "detail": "a Remnant that walks the lane to the Beacon",
+  "category": null
+ },
+ {
+  "id": "enemy_disruptor",
+  "kind": "boss",
+  "width": 64,
+  "height": 64,
+  "subject": "disruptor",
+  "detail": "a Remnant that halts up the lane and attacks from there",
+  "category": null
+ },
+ {
+  "id": "weaver_hunter_card",
+  "kind": "weaver_card",
+  "width": 348,
+  "height": 400,
+  "subject": "the hunter Weaver",
+  "detail": "",
+  "category": null
+ },
+ {
+  "id": "weaver_titan_card",
+  "kind": "weaver_card",
+  "width": 348,
+  "height": 400,
+  "subject": "the titan Weaver",
+  "detail": "",
+  "category": null
+ },
+ {
+  "id": "weaver_warden_card",
+  "kind": "weaver_card",
+  "width": 348,
+  "height": 400,
+  "subject": "the warden Weaver",
+  "detail": "",
+  "category": null
+ },
+ {
+  "id": "weaver_hunter_back",
+  "kind": "weaver_back",
+  "width": 96,
+  "height": 112,
+  "subject": "the hunter Weaver from behind",
+  "detail": "",
+  "category": null
+ },
+ {
+  "id": "weaver_titan_back",
+  "kind": "weaver_back",
+  "width": 96,
+  "height": 112,
+  "subject": "the titan Weaver from behind",
+  "detail": "",
+  "category": null
+ },
+ {
+  "id": "weaver_warden_back",
+  "kind": "weaver_back",
+  "width": 96,
+  "height": 112,
+  "subject": "the warden Weaver from behind",
+  "detail": "",
+  "category": null
+ },
+ {
+  "id": "beacon",
+  "kind": "beacon",
+  "width": 128,
+  "height": 64,
+  "subject": "the Beacon",
+  "detail": "the gateway the Weaver defends",
+  "category": null
+ },
+ {
+  "id": "battlefield",
+  "kind": "battlefield",
+  "width": 399,
+  "height": 424,
+  "subject": "the battlefield ground",
+  "detail": "the lane the Remnants approach down, drawn from directly above",
+  "category": null
+ }
+]

@@ -1,0 +1,15 @@
+{
+ "key": "buff.hold_warden.label",
+ "status": "REVISE",
+ "findings": [
+  {
+   "code": "ES_TRANSLATED",
+   "message": "The EN copy's mechanic is duration ('grinds longer' = the effect persists in time before failure), consistent with combat-model.md's sustained-zone framing. The ES copy shifts the axis to intensity ('aprieta más' = squeezes/holds tighter) rather than time, and 'antes de soltarse' reads as the knot coming undone rather than breaking under wear. A Spanish-reading player picking this buff for its stated duration benefit gets a string that actually promises more grip strength — the two languages describe different levers on the same buff, which is a parity failure the gate cannot see since it only checks length and placeholders.",
+   "quote_from_source": "combat-model.md#A sustained zone beats a burst at equal cost, and by a lot",
+   "suggestion": {
+    "text_en": "The knot grinds longer before it breaks.",
+    "text_es": "El nudo resiste más tiempo antes de romperse."
+   }
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+{
+ "key": "buff.hold_warden.label",
+ "widget_class": "BuffLabel",
+ "text_en": "The knot grinds longer before it breaks.",
+ "text_es": "El nudo aprieta más antes de soltarse.",
+ "source_chunks": [
+  "loom-design.md#The classes",
+  "combat-model.md#A sustained zone beats a burst at equal cost, and by a lot",
+  "combat-model.md#The ultimate is never weakened on purpose"
+ ]
+}

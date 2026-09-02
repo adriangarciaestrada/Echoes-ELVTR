@@ -1,0 +1,6 @@
+{
+ "key": "buff.hold_warden.label",
+ "widget_class": "BuffLabel",
+ "verdict": "PASS",
+ "errors": []
+}
