@@ -4,7 +4,7 @@
 **Student:** Adrián García Estrada
 
 **▶ Play it: https://adrianhawkmoon.itch.io/the-loom**
-**Pipeline source: https://github.com/adriangarciaestrada/the-loom**
+**Pipeline source: [`agents/`](agents/) — everything in this folder.**
 
 An endless inventory-management autobattler. The player packs relics of
 different footprints onto a 7×7 grid — the Loom — then watches them fight on
@@ -34,9 +34,8 @@ letterboxed or cropped, and the session raises no console errors.
 
 ## 2. Pipeline source code
 
-The source is included in this folder under [`agents/`](agents/), and lives
-in the game's own repository at the paths named below. One sentence each, in
-the order they run.
+Everything below is in [`agents/`](agents/), in the order it runs. One
+sentence each.
 
 | Agent / stage | What it does | Where |
 |---|---|---|
@@ -49,15 +48,26 @@ the order they run.
 | **Adversarial QA agent** | Drives the built game in a real browser, fuzzes input, and checks an oracle of invariants rather than screenshots; the only agent whose findings changed the game's rules. | [`agents/qa/`](agents/qa/) |
 | **Shared model wrapper** | One `claude`-CLI headless call path for every agent above: fails loud, never fabricates a response, and logs each call's usage and cost. | [`agents/ai_call.py`](agents/ai_call.py) |
 
+The folder is self-contained: [`vault/`](vault/) carries the design law the
+retriever searches and the writer is pinned to, and [`engine/`](engine/) the
+string table the pipeline writes into. Both stages run from inside it:
+
+```bash
+cd agents/content
+python3 retriever.py --query "what a Warden knot buff should say" --k 2
+python3 gate.py --check-generated     # 109 shipped records, 0 errors
+```
+
 A complete run is committed as evidence, not just described:
 [`production/output/`](production/output/) holds the writer's record, the
 gate's verdict, the reviewer's finding, and `usage_log.jsonl` — where every
 cost figure below comes from — alongside the narrative engine's saved
 transcripts. [`production/screenshots/`](production/screenshots/) has the
-build's three store captures. Reproduce the copy run with:
+build's three store captures. Reproduce the full copy run — the one the cost
+figures come from — with:
 
 ```bash
-cd loom/tools/content
+cd agents/content
 python3 pipeline.py --key "buff.hold_warden.label" --widget-class BuffLabel \
     --brief "a buff that makes the Warden's Knot ultimate grind longer \
              before releasing" --out demo_test
@@ -104,9 +114,11 @@ named.
 ### What manual steps remain
 
 1. **Image generation is manual.** Art is generated through the Gemini web
-   interface and a human picks the candidate. The PixelLab API path exists and
-   works, but was abandoned: its `skeleton_keypoints` could not reliably
-   control a back-view pose.
+   interface and a human picks the candidate; everything after that point —
+   crop, downscale, background cut, deterministic checks, provenance sidecar —
+   is `import_gemini.py`. An earlier generation API was tried and dropped
+   because it could not reliably control a back-view pose, so no image in this
+   build came from an API call.
 2. **Cutting a generated image into a sprite sometimes needs hand
    measurement.** Automatic background separation works when subject and
    backdrop differ in colour; it failed on the HUD banner, where face and
@@ -155,7 +167,7 @@ instead of in an unstated default.
 ## 5. Cost analysis
 
 Measured, not estimated: every figure comes from
-`loom/tools/content/output/usage_log.jsonl`, written by `ai_call.py` from the
+[`production/output/usage_log.jsonl`](production/output/usage_log.jsonl), written by `ai_call.py` from the
 API's own usage reporting.
 
 | Step | Model | Tokens (in / cache read / cache write / out) | Cost |

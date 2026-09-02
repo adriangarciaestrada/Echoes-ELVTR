@@ -6,8 +6,8 @@ they are 1900-2800px on a side, JPEG, and (for the back sprites) still carry
 their flat backdrop. This does the mechanical half of turning one into what
 `art-specs.json` actually asks for — center-crop to the target aspect ratio,
 downscale to the exact pixel size, cut the background on back sprites, export
-PNG — and then runs the same deterministic checks the PixelLab pipeline runs,
-so a sprite that doesn't fit the board is reported rather than shipped quietly.
+PNG — and then runs the deterministic checks in `sprite_rules.py`, so a
+sprite that doesn't fit the board is reported rather than shipped quietly.
 
 It does NOT make these pixel art. A downscaled photo-shaded image keeps its
 gradients and colour count; `sprite_rules.check()` below will say so. Fixing
@@ -51,9 +51,9 @@ def fit(img: Image.Image, width: int, height: int) -> Image.Image:
 
     A plain resize would stretch a landscape source into a portrait sprite.
     Cropping first keeps the figure's proportions the way it was drawn; the
-    downscale is real information loss (this is not the 1:1 generation the
-    PixelLab side of the pipeline insists on), so this is a concept-art import,
-    not a native-resolution sprite.
+    downscale is real information loss — the source is generated at a far
+    larger size than the sprite needs — so this is a concept-art import, not a
+    native-resolution sprite.
     """
     target_ratio = width / height
     w, h = img.size

@@ -32,7 +32,9 @@ from collections import Counter
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent / "loom-vault"
+# The design law this pipeline is grounded in, vendored into the
+# deliverable so the retriever runs from inside this folder.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent / "vault"
 
 # BM25, standard parameters. k1 damps how much a repeated term keeps paying;
 # b is how hard a long chunk is penalised for its length.
