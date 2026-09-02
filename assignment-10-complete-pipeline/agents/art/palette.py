@@ -12,7 +12,9 @@ import re
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-THEME = Path(__file__).resolve().parents[2] / "src" / "game" / "theme.ts"
+# The game's palette, vendored beside the agents so the sprite rules and
+# their tests run from inside this deliverable.
+THEME = Path(__file__).resolve().parents[2] / "engine" / "game" / "theme.ts"
 
 RGB = Tuple[int, int, int]
 
