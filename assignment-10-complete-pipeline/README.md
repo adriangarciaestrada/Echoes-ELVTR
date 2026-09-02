@@ -188,7 +188,29 @@ API's own usage reporting.
 That is one complete record: one bilingual string written from pinned law plus
 retrieved fact, gated, and reviewed.
 
-**Most expensive step:** the writer, $0.2671 — **77% of the run**. It carries
+### What the other pipelines cost
+
+Not every stage here spends money, and where the spend is zero it is by
+design rather than by luck.
+
+| Pipeline | Model spend | What it costs instead |
+|---|---|---|
+| Copy (writer + reviewer) | **$0.3485** per record | the only stage that pays per unit of output |
+| Adversarial QA | **$0.00** | 467 seconds of CPU: 73,169 core steps across 1,868 headless runs, plus 31 browser cycles over 12 attack tactics |
+| Balance simulator | **$0.00** | minutes of CPU per sweep, scaling with runs requested |
+| Narrative engine | not measured | ran before usage logging existed |
+| Art | not measured | generated through a web interface that bills no API and reports no tokens |
+
+The QA agent is the one worth stating explicitly. It found six defects in
+that run — one critical, and three exploits that were fixed in the game's
+core — for no model spend at all, because what decides whether a build is
+broken is an oracle of invariants evaluated in code, not a model asked for
+an opinion. A judge would have cost money per run and returned a verdict
+nobody could diff; arithmetic returns the same answer twice and costs
+nothing to repeat. That is the cheapest thing in this project and the one
+that changed the game's rules.
+
+**Most expensive step:** the writer, $0.2671 — **77% of the metered run**. It carries
 the largest prompt (three pinned law documents plus retrieved context) and runs
 on the most capable model of the three stages.
 
