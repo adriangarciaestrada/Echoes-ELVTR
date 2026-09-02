@@ -88,7 +88,7 @@ python3 pipeline.py --key "buff.hold_warden.label" --widget-class BuffLabel \
 **Target engine:** Phaser 3 (WebGL/Canvas), TypeScript, Vite, HTML5 on itch.io.
 
 An approved `StringRecord` is already in the engine's own shape: a key plus
-its `en`/`es` pair is exactly a row of `src/core/strings.generated.ts`, the
+its `en`/`es` pair is exactly a row of [`engine/core/strings.generated.ts`](engine/core/strings.generated.ts), the
 table the game imports and every scene reads through `t()`. There is no
 reformatting step between the two, and two tests keep it that way —
 `strings.test.ts` fails on a key the content does not define or content the
@@ -108,16 +108,17 @@ named.
 
 ### What the pipeline produced, present in the playable build
 
-- **110 bilingual UI records** in `src/core/strings.generated.ts` — every word
+- **109 bilingual UI records** in [`engine/core/strings.generated.ts`](engine/core/strings.generated.ts) — every word
   a player reads: class cards, relic and buff names and descriptions, market
   and battle prompts, the score screen.
 - **The prologue premise**, played out under a JSON ledger by the narrative
   engine and distilled into `loom-vault/prologue-origin.md`, which the
   class-select copy is written against.
-- **20 sprites** in `public/sprites/`: three Weaver cards, three battle backs,
-  the battlefield lane, two Remnant tokens, and eleven UI chrome assets — the
-  wall, panel and card frames, button plaques, the HUD lintel, offer and buff
-  cards, the ultimate's frame.
+- **24 sprites** shipped in the build: three Weaver cards, three battle backs,
+  the battlefield lane, two Remnant tokens, and fifteen interface assets — the
+  wall, the panel and card frames, four button plaques, the HUD lintel, the
+  offer card and its three category gems, the buff plaque and its spine, and
+  the ultimate's frame.
 
 ### What manual steps remain
 
@@ -215,7 +216,7 @@ the largest prompt (three pinned law documents plus retrieved context) and runs
 on the most capable model of the three stages.
 
 **Sustainable for a solo dev / small team: yes, for this class of content.** At
-$0.35 per approved record, the game's entire 110-record catalogue costs roughly
+$0.35 per approved record, the game's entire 109-record catalogue costs roughly
 $38 to generate with full review — a rounding error against the time it
 replaces, and a one-time cost per string rather than a running one. The honest
 caveat: this covers the copy pipeline only. The narrative engine ran before
